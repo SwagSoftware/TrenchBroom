@@ -177,7 +177,10 @@ namespace TrenchBroom {
             
             Notifier<> textureUsageCountsDidChangeNotifier;
 
+            Notifier<> entityDefinitionsWillChangeNotifier;
             Notifier<> entityDefinitionsDidChangeNotifier;
+            
+            Notifier<> modsWillChangeNotifier;
             Notifier<> modsDidChangeNotifier;
 
             Notifier<> pointFileWasLoadedNotifier;
