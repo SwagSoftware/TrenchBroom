@@ -136,7 +136,8 @@ namespace TrenchBroom {
         }
 
         std::string StandardMapParser::BrushPrimitiveId = "brushDef";
-        std::string StandardMapParser::PatchId = "patchDef2";
+        std::string StandardMapParser::PatchId2 = "patchDef2";
+		std::string StandardMapParser::PatchId3 = "patchDef3";
 
         StandardMapParser::StandardMapParser(std::string_view str) :
         m_tokenizer(QuakeMapTokenizer(std::move(str))),
@@ -329,7 +330,6 @@ namespace TrenchBroom {
 
             if (m_format == Model::MapFormat::Doom3) {
                 StandardMapParser::BrushPrimitiveId = "brushDef3";
-                StandardMapParser::PatchId = "patchDef3";
             }
 
             token = m_tokenizer.peekToken();
@@ -338,11 +338,13 @@ namespace TrenchBroom {
                 // We expect either a brush primitive, a patch or a regular brush.
                 expect(QuakeMapToken::String | QuakeMapToken::OParenthesis, token);
                 if (token.hasType(QuakeMapToken::String)) {
-                    expect(std::vector<std::string>({ BrushPrimitiveId, PatchId }), token);
+                    expect(std::vector<std::string>({ BrushPrimitiveId, PatchId2, PatchId3 }), token);
                     if (token.data() == BrushPrimitiveId) {
                         parseBrushPrimitive(status, startLine);
+                    } else if (token.data() == PatchId3) {
+                        parseDoom3Patch3(status, startLine);
                     } else {
-                        parsePatch(status, startLine);
+                        parseDoom3Patch2(status, startLine);
                     }
                 } else {
                     parseBrush(status, startLine, false);
@@ -352,8 +354,8 @@ namespace TrenchBroom {
                 // We expect either a patch or a regular brush.
                 expect(QuakeMapToken::String | QuakeMapToken::OParenthesis, token);
                 if (token.hasType(QuakeMapToken::String)) {
-                    expect(PatchId, token);
-                    parsePatch(status, startLine);
+                    expect(PatchId2, token);
+                    parseQuake3Patch(status, startLine);
                 } else {
                     parseBrush(status, startLine, false);
                 }
@@ -661,20 +663,13 @@ namespace TrenchBroom {
             valveBrushFace(line, m_format, p1, p2, p3, attribs, texX, texY, status);
         }
 
-        void StandardMapParser::parsePatch(ParserStatus& status, const size_t startLine) {
+        void StandardMapParser::parseQuake3Patch(ParserStatus& status, const size_t startLine) {
             auto token = expect(QuakeMapToken::String, m_tokenizer.nextToken());
-            expect(PatchId, token);
+            expect(PatchId2, token);
             expect(QuakeMapToken::OBrace, m_tokenizer.nextToken());
 
             parseTextureName(status);
             expect(QuakeMapToken::OParenthesis, m_tokenizer.nextToken());
-
-            token = expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
-            auto h = token.toInteger<int>();
-            if (h < 0) {
-                status.warn(token.line(), token.column(), "Negative patch height, assuming 0");
-                h = 0;
-            }
 
             token = expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
             auto w = token.toInteger<int>();
@@ -683,15 +678,144 @@ namespace TrenchBroom {
                 w = 0;
             }
 
+			token = expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            auto h = token.toInteger<int>();
+            if (h < 0) {
+                status.warn(token.line(), token.column(), "Negative patch height, assuming 0");
+                h = 0;
+            }
+
+			// explicitSubdivisions = false
+
+			// contents, flags, value )
             expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
             expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
             expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
             expect(QuakeMapToken::CParenthesis, m_tokenizer.nextToken());
 
             expect(QuakeMapToken::OParenthesis, m_tokenizer.nextToken());
-            for (size_t i = 0; i < size_t(h); ++i) {
+            for (size_t i = 0; i < size_t(w); ++i) {
                 expect(QuakeMapToken::OParenthesis, m_tokenizer.nextToken());
-                for (size_t j = 0; j < size_t(w); ++j) {
+                for (size_t j = 0; j < size_t(h); ++j) {
+                    parseFloatVector<5>(QuakeMapToken::OParenthesis, QuakeMapToken::CParenthesis);
+                }
+                expect(QuakeMapToken::CParenthesis, m_tokenizer.nextToken());
+            }
+            expect(QuakeMapToken::CParenthesis, m_tokenizer.nextToken());
+
+            expect(QuakeMapToken::CBrace, m_tokenizer.nextToken());
+
+            // TODO 2428: create the actual patch
+            status.warn(startLine, "Skipping patch: currently not supported");
+        }
+
+        void StandardMapParser::parseDoom3Patch2(ParserStatus& status, const size_t startLine) {
+            auto token = expect(QuakeMapToken::String, m_tokenizer.nextToken());
+            expect(PatchId2, token);
+            expect(QuakeMapToken::OBrace, m_tokenizer.nextToken());
+
+            //parseTextureName(status);
+
+            // "textures/object/paperdec1" or whatever quoted string
+            token = m_tokenizer.nextToken();
+            assert(token.type() == QuakeMapToken::String);
+            const auto textureName = token.data();
+
+            expect(QuakeMapToken::OParenthesis, m_tokenizer.nextToken());
+
+            token = expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            auto w = token.toInteger<int>();
+            if (w < 0) {
+                status.warn(token.line(), token.column(), "Negative patch width, assuming 0");
+                w = 0;
+            }
+
+			token = expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            auto h = token.toInteger<int>();
+            if (h < 0) {
+                status.warn(token.line(), token.column(), "Negative patch height, assuming 0");
+                h = 0;
+            }
+
+			// explicitSubdivisions = false
+
+			// contents, flags, value )
+            expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            expect(QuakeMapToken::CParenthesis, m_tokenizer.nextToken());
+
+            expect(QuakeMapToken::OParenthesis, m_tokenizer.nextToken());
+            for (size_t i = 0; i < size_t(w); ++i) {
+                expect(QuakeMapToken::OParenthesis, m_tokenizer.nextToken());
+                for (size_t j = 0; j < size_t(h); ++j) {
+                    parseFloatVector<5>(QuakeMapToken::OParenthesis, QuakeMapToken::CParenthesis);
+                }
+                expect(QuakeMapToken::CParenthesis, m_tokenizer.nextToken());
+            }
+            expect(QuakeMapToken::CParenthesis, m_tokenizer.nextToken());
+
+            expect(QuakeMapToken::CBrace, m_tokenizer.nextToken());
+
+            // TODO 2428: create the actual patch
+            status.warn(startLine, "Skipping patch: currently not supported");
+        }
+
+		void StandardMapParser::parseDoom3Patch3(ParserStatus& status, const size_t startLine) {
+            auto token = expect(QuakeMapToken::String, m_tokenizer.nextToken());
+            expect(PatchId3, token);
+            expect(QuakeMapToken::OBrace, m_tokenizer.nextToken());
+
+            //parseTextureName(status);
+
+            // "textures/object/paperdec1" or whatever quoted string
+            token = m_tokenizer.nextToken();
+            assert(token.type() == QuakeMapToken::String);
+            const auto textureName = token.data();
+
+            expect(QuakeMapToken::OParenthesis, m_tokenizer.nextToken());
+
+            token = expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            auto w = token.toInteger<int>();
+            if (w < 0) {
+                status.warn(token.line(), token.column(), "Negative patch width, assuming 0");
+                w = 0;
+            }
+
+			token = expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            auto h = token.toInteger<int>();
+            if (h < 0) {
+                status.warn(token.line(), token.column(), "Negative patch height, assuming 0");
+                h = 0;
+            }
+
+			// explicit subdivisions
+			token = expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            auto horzSubdivisions = token.toInteger<int>();
+            if (horzSubdivisions < 0) {
+                status.warn(token.line(), token.column(), "Negative horizontal subdivisions, assuming 0");
+                horzSubdivisions = 0;
+            }
+
+			token = expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            auto vertSubdivisions = token.toInteger<int>();
+            if (vertSubdivisions < 0) {
+                status.warn(token.line(), token.column(), "Negative horizontal subdivisions, assuming 0");
+                vertSubdivisions = 0;
+            }
+
+			// explicitSubdivisions = true
+
+			// contents, flags, value )
+            expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            expect(QuakeMapToken::Integer, m_tokenizer.nextToken());
+            expect(QuakeMapToken::CParenthesis, m_tokenizer.nextToken());
+
+            expect(QuakeMapToken::OParenthesis, m_tokenizer.nextToken());
+            for (size_t i = 0; i < size_t(w); ++i) {
+                expect(QuakeMapToken::OParenthesis, m_tokenizer.nextToken());
+                for (size_t j = 0; j < size_t(h); ++j) {
                     parseFloatVector<5>(QuakeMapToken::OParenthesis, QuakeMapToken::CParenthesis);
                 }
                 expect(QuakeMapToken::CParenthesis, m_tokenizer.nextToken());
