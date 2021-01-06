@@ -103,6 +103,9 @@ namespace TrenchBroom {
             bool setSurfaceValue(const std::optional<float>& surfaceValue);
             bool setColor(const std::optional<Color>& color);
 
+            bool hasBrushPrimitMode() const {
+                return m_bpMode;
+            }
             bool setBrushPrimitMatrix(const vm::mat4x4f& matrix);
         };
     }
