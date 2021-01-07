@@ -105,6 +105,7 @@ namespace TrenchBroom {
                 return m_bpMode;
             }
             bool setBrushPrimitMatrix(const vm::mat4x4f& matrix);
+            const vm::mat4x4f& bpMatrix() const;
         };
     }
 }
