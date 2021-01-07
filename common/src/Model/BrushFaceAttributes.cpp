@@ -81,7 +81,10 @@ namespace TrenchBroom {
                     lhs.m_surfaceContents == rhs.m_surfaceContents &&
                     lhs.m_surfaceFlags == rhs.m_surfaceFlags &&
                     lhs.m_surfaceValue == rhs.m_surfaceValue &&
-                    lhs.m_color == rhs.m_color);
+                    lhs.m_color == rhs.m_color && 
+                    lhs.m_bpMode == rhs.m_bpMode && 
+                    lhs.m_bpMatrix == rhs.m_bpMatrix
+                );
         }
 
         bool operator!=(const BrushFaceAttributes& lhs, const BrushFaceAttributes& rhs) {
@@ -111,6 +114,10 @@ namespace TrenchBroom {
             swap(lhs.m_surfaceFlags, rhs.m_surfaceFlags);
             swap(lhs.m_surfaceValue, rhs.m_surfaceValue);
             swap(lhs.m_color, rhs.m_color);
+            swap(lhs.m_bpMode, rhs.m_bpMode);
+            swap(lhs.m_bpMatrix, rhs.m_bpMatrix);
+            result.m_bpMode = m_bpMode;
+            result.m_bpMatrix = m_bpMatrix;
         }
 
         const std::string& BrushFaceAttributes::textureName() const {
@@ -293,6 +300,10 @@ namespace TrenchBroom {
                 m_bpMatrix = matrix;
                 return true;
             }
+        }
+
+        const vm::mat4x4f& BrushFaceAttributes::bpMatrix() const {
+            return m_bpMatrix;
         }
     }
 }
