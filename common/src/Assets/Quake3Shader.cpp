@@ -94,7 +94,7 @@ namespace TrenchBroom {
         }
 
         bool Quake3ShaderStage::operator==(const Quake3ShaderStage& other) const {
-            return map == other.map && blendFunc == other.blendFunc;
+            return map == other.map && blendFunc == other.blendFunc && lighting == other.lighting;
         }
 
         bool Quake3Shader::operator==(const Quake3Shader& other) const {
