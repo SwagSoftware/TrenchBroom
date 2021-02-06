@@ -330,7 +330,7 @@ namespace TrenchBroom {
                         break;
                     case QuakeMapToken::OParenthesis:
                         // TODO 2427: handle brush primitives
-                        if (!beginBrushCalled && !primitive) {
+                        if (!beginBrushCalled /*&& !primitive*/) {
                             onBeginBrush(startLine, status);
                             beginBrushCalled = true;
                         }
