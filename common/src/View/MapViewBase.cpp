@@ -28,9 +28,10 @@
 #include "Assets/EntityDefinitionManager.h"
 #include "Model/BrushNode.h"
 #include "Model/BrushFace.h"
+#include "Model/ChangeBrushFaceAttributesRequest.h"
 #include "Model/EditorContext.h"
 #include "Model/EntityNode.h"
-#include "Model/EntityAttributes.h"
+#include "Model/EntityProperties.h"
 #include "Model/GroupNode.h"
 #include "Model/Hit.h"
 #include "Model/HitAdapter.h"
@@ -493,6 +494,29 @@ namespace TrenchBroom {
             return clockwise ? angle : -angle;
         }
 
+        void MapViewBase::flipTextures(const vm::direction direction) {
+            auto document = kdl::mem_lock(m_document);
+            if (document->hasSelectedBrushFaces()) {
+                document->flipTextures(doGetCamera().up(), doGetCamera().right(), direction);
+            }
+        }
+
+        void MapViewBase::resetTextures() {
+            Model::ChangeBrushFaceAttributesRequest request;
+
+            auto document = kdl::mem_lock(m_document);
+            request.resetAll(document->game()->defaultFaceAttribs());
+            document->setFaceAttributes(request);
+        }
+
+        void MapViewBase::resetTexturesToWorld() {
+            Model::ChangeBrushFaceAttributesRequest request;
+
+            auto document = kdl::mem_lock(m_document);
+            request.resetAllToParaxial(document->game()->defaultFaceAttribs());
+            document->setFaceAttributes(request);
+        }
+
         void MapViewBase::createComplexBrush() {
             if (m_toolBox.createComplexBrushToolActive()) {
                 m_toolBox.performCreateComplexBrush();
@@ -861,7 +885,11 @@ namespace TrenchBroom {
             const int height = static_cast<int>(viewport.height * r);
             glAssert(glViewport(x, y, width, height))
 
-            glAssert(glEnable(GL_MULTISAMPLE))
+            if (pref(Preferences::EnableMSAA)) {
+                glAssert(glEnable(GL_MULTISAMPLE))
+            } else {
+                glAssert(glDisable(GL_MULTISAMPLE))
+            }
             glAssert(glEnable(GL_BLEND))
             glAssert(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA))
             glAssert(glShadeModel(GL_SMOOTH))
@@ -987,7 +1015,7 @@ namespace TrenchBroom {
             }
             mergeGroupAction->setEnabled(canMergeGroups());
 
-            QAction* renameAction = menu.addAction(tr("Rename"), mapFrame, &MapFrame::renameSelectedGroups);
+            QAction* renameAction = menu.addAction(tr("Rename Groups"), mapFrame, &MapFrame::renameSelectedGroups);
             renameAction->setEnabled(mapFrame->canRenameSelectedGroups());
 
             if (newGroup != nullptr && newGroup != currentGroup) {
@@ -1042,6 +1070,10 @@ namespace TrenchBroom {
                 document->isolateLayers(selectedObjectLayers);
             });
             isolateLayersAction->setEnabled(document->canIsolateLayers(selectedObjectLayers));
+            QAction* selectAllInLayersAction = menu.addAction(tr("Select All in Layers"), this, [=](){
+                document->selectAllInLayers(selectedObjectLayers);
+            });
+            selectAllInLayersAction->setEnabled(document->canSelectAllInLayers(selectedObjectLayers));
 
             menu.addSeparator();
 
@@ -1095,7 +1127,7 @@ namespace TrenchBroom {
          * Forward drag and drop events from QWidget to ToolBoxConnector
          */
         void MapViewBase::dragEnterEvent(QDragEnterEvent* dragEnterEvent) {
-            dragEnter(dragEnterEvent->pos().x(), dragEnterEvent->pos().y(), dragEnterEvent->mimeData()->text().toStdString());
+            dragEnter(static_cast<float>(dragEnterEvent->posF().x()), static_cast<float>(dragEnterEvent->posF().y()), dragEnterEvent->mimeData()->text().toStdString());
             dragEnterEvent->acceptProposedAction();
         }
 
@@ -1104,12 +1136,12 @@ namespace TrenchBroom {
         }
 
         void MapViewBase::dragMoveEvent(QDragMoveEvent* dragMoveEvent) {
-            dragMove(dragMoveEvent->pos().x(), dragMoveEvent->pos().y(), dragMoveEvent->mimeData()->text().toStdString());
+            dragMove(static_cast<float>(dragMoveEvent->posF().x()), static_cast<float>(dragMoveEvent->posF().y()), dragMoveEvent->mimeData()->text().toStdString());
             dragMoveEvent->acceptProposedAction();
         }
 
         void MapViewBase::dropEvent(QDropEvent* dropEvent) {
-            dragDrop(dropEvent->pos().x(), dropEvent->pos().y(), dropEvent->mimeData()->text().toStdString());
+            dragDrop(static_cast<float>(dropEvent->posF().x()), static_cast<float>(dropEvent->posF().y()), dropEvent->mimeData()->text().toStdString());
             dropEvent->acceptProposedAction();
         }
 
@@ -1134,7 +1166,7 @@ namespace TrenchBroom {
 
                 std::vector<Assets::EntityDefinition*> filteredDefinitions;
                 for (auto* definition : definitions) {
-                    if (!kdl::cs::str_is_equal(definition->name(), Model::AttributeValues::WorldspawnClassname)) {
+                    if (!kdl::cs::str_is_equal(definition->name(), Model::PropertyValues::WorldspawnClassname)) {
                         filteredDefinitions.push_back(definition);
                     }
                 }

@@ -72,8 +72,10 @@ namespace TrenchBroom {
         }
 
         TEST_CASE_METHOD(RepeatableActionsTest, "RepeatableActionsTest.repeatRotate") {
-            auto* entityNode = new Model::EntityNode();
-            REQUIRE(entityNode->transform(document->worldBounds(), vm::translation_matrix(vm::vec3(1, 2, 3)), false).is_success());
+            auto entity = Model::Entity();
+            entity.transform(vm::translation_matrix(vm::vec3(1, 2, 3)));
+
+            auto* entityNode = new Model::EntityNode(std::move(entity));
 
             document->addNode(entityNode, document->parentForNodes());
             document->select(entityNode);
@@ -186,7 +188,7 @@ namespace TrenchBroom {
             CHECK(document->canRepeatCommands());
 
             // this command will not clear the repeat stack
-            document->setAttribute("this", "that");
+            document->setProperty("this", "that");
             CHECK(document->canRepeatCommands());
 
             // this command will replace the command on the repeat stack

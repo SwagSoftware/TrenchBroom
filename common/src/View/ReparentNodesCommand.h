@@ -17,11 +17,10 @@
  along with TrenchBroom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TrenchBroom_ReparentNodesCommand
-#define TrenchBroom_ReparentNodesCommand
+#pragma once
 
 #include "Macros.h"
-#include "View/DocumentCommand.h"
+#include "View/UndoableCommand.h"
 
 #include <map>
 #include <memory>
@@ -33,7 +32,7 @@ namespace TrenchBroom {
     }
 
     namespace View {
-        class ReparentNodesCommand : public DocumentCommand {
+        class ReparentNodesCommand : public UndoableCommand {
         public:
             static const CommandType Type;
         private:
@@ -54,4 +53,3 @@ namespace TrenchBroom {
     }
 }
 
-#endif /* defined(TrenchBroom_ReparentNodesCommand) */

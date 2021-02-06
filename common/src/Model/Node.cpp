@@ -75,10 +75,6 @@ namespace TrenchBroom {
             return doCloneRecursively(worldBounds);
         }
 
-        NodeSnapshot* Node::takeSnapshot() {
-            return doTakeSnapshot();
-        }
-
         void Node::cloneAttributes(Node* node) const {
             node->setVisibilityState(m_visibilityState);
             node->setLockState(m_lockState);
@@ -249,32 +245,28 @@ namespace TrenchBroom {
 
         void Node::descendantWillBeAdded(Node* newParent, Node* node, const size_t depth) {
             doDescendantWillBeAdded(newParent, node, depth);
-            if (shouldPropagateDescendantEvents() && m_parent != nullptr)
+            if (m_parent != nullptr)
                 m_parent->descendantWillBeAdded(newParent, node, depth + 1);
         }
 
         void Node::descendantWasAdded(Node* node, const size_t depth) {
             doDescendantWasAdded(node, depth);
-            if (shouldPropagateDescendantEvents() && m_parent != nullptr)
+            if (m_parent != nullptr)
                 m_parent->descendantWasAdded(node, depth + 1);
             invalidateIssues();
         }
 
         void Node::descendantWillBeRemoved(Node* node, const size_t depth) {
             doDescendantWillBeRemoved(node, depth);
-            if (shouldPropagateDescendantEvents() && m_parent != nullptr)
+            if (m_parent != nullptr)
                 m_parent->descendantWillBeRemoved(node, depth + 1);
         }
 
         void Node::descendantWasRemoved(Node* oldParent, Node* node, const size_t depth) {
             doDescendantWasRemoved(oldParent, node, depth);
-            if (shouldPropagateDescendantEvents() && m_parent != nullptr)
+            if (m_parent != nullptr)
                 m_parent->descendantWasRemoved(oldParent, node, depth + 1);
             invalidateIssues();
-        }
-
-        bool Node::shouldPropagateDescendantEvents() const {
-            return doShouldPropagateDescendantEvents();
         }
 
         void Node::incDescendantCount(const size_t delta) {
@@ -354,20 +346,18 @@ namespace TrenchBroom {
         }
 
         Node::NotifyPhysicalBoundsChange::NotifyPhysicalBoundsChange(Node* node) :
-        m_node(node),
-        m_oldBounds(m_node->physicalBounds()) {
+        m_node(node) {
             ensure(m_node != nullptr, "node is null");
         }
         
         Node::NotifyPhysicalBoundsChange::~NotifyPhysicalBoundsChange() {
-            m_node->nodePhysicalBoundsDidChange(m_oldBounds);
+            m_node->nodePhysicalBoundsDidChange();
         }
 
-        // notice that we take a copy here so that we can safely propagate the old bounds up
-        void Node::nodePhysicalBoundsDidChange(const vm::bbox3 oldBounds) {
+        void Node::nodePhysicalBoundsDidChange() {
             doNodePhysicalBoundsDidChange();
             if (m_parent != nullptr)
-                m_parent->childPhysicalBoundsDidChange(this, oldBounds);
+                m_parent->childPhysicalBoundsDidChange(this);
         }
 
         void Node::childWillChange(Node* node) {
@@ -382,7 +372,7 @@ namespace TrenchBroom {
 
         void Node::descendantWillChange(Node* node) {
             doDescendantWillChange(node);
-            if (shouldPropagateDescendantEvents() && m_parent != nullptr) {
+            if (m_parent != nullptr) {
                 m_parent->descendantWillChange(node);
             }
             invalidateIssues();
@@ -390,27 +380,22 @@ namespace TrenchBroom {
 
         void Node::descendantDidChange(Node* node) {
             doDescendantDidChange(node);
-            if (shouldPropagateDescendantEvents() && m_parent != nullptr) {
+            if (m_parent != nullptr) {
                 m_parent->descendantDidChange(node);
             }
             invalidateIssues();
         }
 
-        void Node::childPhysicalBoundsDidChange(Node* node, const vm::bbox3& oldBounds) {
-            const vm::bbox3 myOldBounds = physicalBounds();
-            if (!myOldBounds.encloses(oldBounds) && !myOldBounds.encloses(node->physicalBounds())) {
-                // Our bounds will change only if the child's bounds potentially contributed to our own bounds.
-                nodePhysicalBoundsDidChange(myOldBounds);
-            }
-
+        void Node::childPhysicalBoundsDidChange(Node* node) {
+            nodePhysicalBoundsDidChange();
             doChildPhysicalBoundsDidChange();
-            descendantPhysicalBoundsDidChange(node, oldBounds, 1);
+            descendantPhysicalBoundsDidChange(node, 1);
         }
 
-        void Node::descendantPhysicalBoundsDidChange(Node* node, const vm::bbox3& oldBounds, const size_t depth) {
+        void Node::descendantPhysicalBoundsDidChange(Node* node, const size_t depth) {
             doDescendantPhysicalBoundsDidChange(node);
-            if (shouldPropagateDescendantEvents() && m_parent != nullptr) {
-                m_parent->descendantPhysicalBoundsDidChange(node, oldBounds, depth + 1);
+            if (m_parent != nullptr) {
+                m_parent->descendantPhysicalBoundsDidChange(node, depth + 1);
             }
         }
 
@@ -636,30 +621,26 @@ namespace TrenchBroom {
             kdl::vec_clear_and_delete(m_issues);
         }
 
-        void Node::findAttributableNodesWithAttribute(const std::string& name, const std::string& value, std::vector<AttributableNode*>& result) const {
-            return doFindAttributableNodesWithAttribute(name, value, result);
+        void Node::findEntityNodesWithProperty(const std::string& key, const std::string& value, std::vector<EntityNodeBase*>& result) const {
+            return doFindEntityNodesWithProperty(key, value, result);
         }
 
-        void Node::findAttributableNodesWithNumberedAttribute(const std::string& prefix, const std::string& value, std::vector<AttributableNode*>& result) const {
-            return doFindAttributableNodesWithNumberedAttribute(prefix, value, result);
+        void Node::findEntityNodesWithNumberedProperty(const std::string& prefix, const std::string& value, std::vector<EntityNodeBase*>& result) const {
+            return doFindEntityNodesWithNumberedProperty(prefix, value, result);
         }
 
-        void Node::addToIndex(AttributableNode* attributable, const std::string& name, const std::string& value) {
-            doAddToIndex(attributable, name, value);
+        void Node::addToIndex(EntityNodeBase* node, const std::string& key, const std::string& value) {
+            doAddToIndex(node, key, value);
         }
 
-        void Node::removeFromIndex(AttributableNode* attributable, const std::string& name, const std::string& value) {
-            doRemoveFromIndex(attributable, name, value);
+        void Node::removeFromIndex(EntityNodeBase* node, const std::string& key, const std::string& value) {
+            doRemoveFromIndex(node, key, value);
         }
 
         Node* Node::doCloneRecursively(const vm::bbox3& worldBounds) const {
             Node* clone = Node::clone(worldBounds);
             clone->addChildren(Node::cloneRecursively(worldBounds, children()));
             return clone;
-        }
-
-        NodeSnapshot* Node::doTakeSnapshot() {
-            return nullptr;
         }
 
         void Node::doChildWillBeAdded(Node* /* node */) {}
@@ -671,7 +652,6 @@ namespace TrenchBroom {
         void Node::doDescendantWasAdded(Node* /* node */, const size_t /* depth */) {}
         void Node::doDescendantWillBeRemoved(Node* /* node */, const size_t /* depth */) {}
         void Node::doDescendantWasRemoved(Node* /* oldParent */, Node* /* node */, const size_t /* depth */) {}
-        bool Node::doShouldPropagateDescendantEvents() const { return true; }
 
         void Node::doParentWillChange() {}
         void Node::doParentDidChange() {}
@@ -687,24 +667,24 @@ namespace TrenchBroom {
         void Node::doDescendantWillChange(Node* /* node */) {}
         void Node::doDescendantDidChange(Node* /* node */)  {}
 
-        void Node::doFindAttributableNodesWithAttribute(const std::string& name, const std::string& value, std::vector<AttributableNode*>& result) const {
+        void Node::doFindEntityNodesWithProperty(const std::string& key, const std::string& value, std::vector<EntityNodeBase*>& result) const {
             if (m_parent != nullptr)
-                m_parent->findAttributableNodesWithAttribute(name, value, result);
+                m_parent->findEntityNodesWithProperty(key, value, result);
         }
 
-        void Node::doFindAttributableNodesWithNumberedAttribute(const std::string& prefix, const std::string& value, std::vector<AttributableNode*>& result) const {
+        void Node::doFindEntityNodesWithNumberedProperty(const std::string& prefix, const std::string& value, std::vector<EntityNodeBase*>& result) const {
             if (m_parent != nullptr)
-                m_parent->findAttributableNodesWithNumberedAttribute(prefix, value, result);
+                m_parent->findEntityNodesWithNumberedProperty(prefix, value, result);
         }
 
-        void Node::doAddToIndex(AttributableNode* attributable, const std::string& name, const std::string& value) {
+        void Node::doAddToIndex(EntityNodeBase* node, const std::string& key, const std::string& value) {
             if (m_parent != nullptr)
-                m_parent->addToIndex(attributable, name, value);
+                m_parent->addToIndex(node, key, value);
         }
 
-        void Node::doRemoveFromIndex(AttributableNode* attributable, const std::string& name, const std::string& value) {
+        void Node::doRemoveFromIndex(EntityNodeBase* node, const std::string& key, const std::string& value) {
             if (m_parent != nullptr)
-                m_parent->removeFromIndex(attributable, name, value);
+                m_parent->removeFromIndex(node, key, value);
         }
     }
 }

@@ -17,8 +17,7 @@
  along with TrenchBroom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TrenchBroom_Polyhedron_ConvexHull_h
-#define TrenchBroom_Polyhedron_ConvexHull_h
+#pragma once
 
 #include "Macros.h"
 
@@ -811,10 +810,10 @@ namespace TrenchBroom {
                     if (firstFace->maximumVertexDistance(secondFace->plane()) <
                         secondFace->maximumVertexDistance(firstFace->plane())) {
                         // firstFace->plane() will introduce a smaller error, so merge secondFace into firstFace
-                        mergeNeighbours(edge->firstEdge(), nullptr);
+                        assertResult(mergeNeighbours(edge->firstEdge()));
                     } else {
                         // secondFace->plane() will introduce a smaller error, so merge firstFace into secondFace
-                        mergeNeighbours(edge->secondEdge(), nullptr);
+                        assertResult(mergeNeighbours(edge->secondEdge()));
                     }
                     
                     if (hasThreeIncidentEdges) {
@@ -853,5 +852,3 @@ namespace TrenchBroom {
         }
     }
 }
-
-#endif
