@@ -63,7 +63,7 @@ namespace TrenchBroom {
                 const auto x = w / 2.0f;
                 const auto y = h / 2.0f;
 
-                auto& frame = model.loadFrame(frameIndex, m_name, vm::bbox3f{vm::vec3f{0, 0, 0}, vm::vec3f{w, h, 0}});
+                auto& frame = model.loadFrame(frameIndex, m_name, vm::bbox3f{vm::vec3f{-x, -y, 0}, vm::vec3f{x, y, 0}});
 
                 const auto triangles = std::vector<Assets::EntityModelVertex>{
                     Assets::EntityModelVertex{{-x, -y, 0}, {0, 1}},
