@@ -292,37 +292,45 @@ namespace TrenchBroom {
             m_entityModelManager.prepare(vboManager());
 
             auto shader = Renderer::ActiveShader{shaderManager(), Renderer::Shaders::EntityModelShader};
-            shader.set("ApplyTinting", false);
-            shader.set("Brightness", pref(Preferences::Brightness));
-            shader.set("GrayScale", false);
-
             shader.set("CameraPosition", CameraPosition);
             shader.set("CameraDirection", CameraDirection);
             shader.set("CameraRight", vm::cross(CameraDirection, CameraUp));
             shader.set("CameraUp", CameraUp);
             shader.set("ViewMatrix", transformation.viewMatrix());
 
-            for (const auto& group : layout.groups()) {
-                if (group.intersectsY(y, height)) {
-                    for (const auto& row : group.rows()) {
-                        if (row.intersectsY(y, height)) {
-                            for (const auto& cell : row.cells()) {
-                                auto* modelRenderer = cellData(cell).modelRenderer;
+            const auto doRenderModels = [&](const auto orientation, const auto& shaderConfig) {
+                auto shader = Renderer::ActiveShader{shaderManager(), shaderConfig};
+                shader.set("ApplyTinting", false);
+                shader.set("Brightness", pref(Preferences::Brightness));
+                shader.set("GrayScale", false);
 
-                                if (modelRenderer != nullptr) {
+                for (const auto& group : layout.groups()) {
+                    if (group.intersectsY(y, height)) {
+                        for (const auto& row : group.rows()) {
+                            if (row.intersectsY(y, height)) {
+                                for (const auto& cell : row.cells()) {
+                                    if (cellData(cell).modelOrientation == orientation) {
+                                        auto* modelRenderer = cellData(cell).modelRenderer;
+
+                                        if (modelRenderer != nullptr) {
                                     shader.set("Orientation", static_cast<int>(cellData(cell).modelOrientation));
 
-                                    const auto itemTrans = itemTransformation(cell, y, height);
+                                            const auto itemTrans = itemTransformation(cell, y, height);
                                     shader.set("ModelMatrix", itemTrans);
 
-                                    Renderer::MultiplyModelMatrix multMatrix(transformation, itemTrans);
-                                    modelRenderer->render();
+                                            Renderer::MultiplyModelMatrix multMatrix(transformation, itemTrans);
+                                            modelRenderer->render();
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
+            };
+
+            doRenderModels(Assets::Orientation::Fixed, Renderer::Shaders::FixedEntityModelShader);
+            doRenderModels(Assets::Orientation::Billboard, Renderer::Shaders::BillboardEntityModelShader);
         }
 
         void EntityBrowserView::renderNames(Layout& layout, const float y, const float height, const vm::mat4x4f& projection) {
