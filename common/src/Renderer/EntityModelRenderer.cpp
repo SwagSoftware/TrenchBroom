@@ -153,15 +153,15 @@ namespace TrenchBroom {
             glAssert(glEnable(GL_TEXTURE_2D));
             glAssert(glActiveTexture(GL_TEXTURE0));
 
-            shader.set("Brightness", prefs.get(Preferences::Brightness));
-            shader.set("ApplyTinting", m_applyTinting);
-            shader.set("TintColor", m_tintColor);
-            shader.set("GrayScale", false);
-            shader.set("Texture", 0);
-            shader.set("ShowSoftMapBounds", !renderContext.softMapBounds().is_empty());
-            shader.set("SoftMapBoundsMin", renderContext.softMapBounds().min);
-            shader.set("SoftMapBoundsMax", renderContext.softMapBounds().max);
-            shader.set("SoftMapBoundsColor", vm::vec4f{prefs.get(Preferences::SoftMapBoundsColor).r(),
+                shader.set("Brightness", prefs.get(Preferences::Brightness));
+                shader.set("ApplyTinting", m_applyTinting);
+                shader.set("TintColor", m_tintColor);
+                shader.set("GrayScale", false);
+                shader.set("Texture", 0);
+                shader.set("ShowSoftMapBounds", !renderContext.softMapBounds().is_empty());
+                shader.set("SoftMapBoundsMin", renderContext.softMapBounds().min);
+                shader.set("SoftMapBoundsMax", renderContext.softMapBounds().max);
+                shader.set("SoftMapBoundsColor", vm::vec4f{prefs.get(Preferences::SoftMapBoundsColor).r(),
                                                     prefs.get(Preferences::SoftMapBoundsColor).g(),
                                                     prefs.get(Preferences::SoftMapBoundsColor).b(),
                                                     0.1f});
@@ -171,9 +171,9 @@ namespace TrenchBroom {
             shader.set("CameraRight", renderContext.camera().right());
             shader.set("CameraUp", renderContext.camera().up());
             shader.set("ViewMatrix", renderContext.camera().viewMatrix());
-                if (!m_showHiddenEntities && !m_editorContext.visible(entityNode)) {
-                    continue;
-                }
+                    if (!m_showHiddenEntities && !m_editorContext.visible(entityNode)) {
+                        continue;
+                    }
 
                 const auto* model = entityNode->entity().model();
                 if (!model) {
@@ -182,13 +182,20 @@ namespace TrenchBroom {
 
                 shader.set("Orientation", static_cast<int>(model->orientation()));
 
-                const auto transformation = vm::mat4x4f{entityNode->entity().modelTransformation()};
-                const auto multMatrix = MultiplyModelMatrix{renderContext.transformation(), transformation};
+                    const auto transformation = vm::mat4x4f{entityNode->entity().modelTransformation()};
+                    const auto multMatrix = MultiplyModelMatrix{renderContext.transformation(), transformation};
 
-                shader.set("ModelMatrix", transformation);
+                    shader.set("ModelMatrix", transformation);
 
-                renderer->render();
-            }
+                    renderer->render();
+                }
+            };
+
+            glAssert(glEnable(GL_TEXTURE_2D));
+            glAssert(glActiveTexture(GL_TEXTURE0));
+
+            renderModels(getEntities(m_entities, Assets::Orientation::Fixed), Shaders::FixedEntityModelShader);
+            renderModels(getEntities(m_entities, Assets::Orientation::Billboard), Shaders::BillboardEntityModelShader);
         }
     }
 }
