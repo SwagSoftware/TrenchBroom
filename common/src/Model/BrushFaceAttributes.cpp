@@ -104,6 +104,23 @@ namespace TrenchBroom {
             return str;
         }
 
+        bool operator!=(const BrushFaceAttributes& lhs, const BrushFaceAttributes& rhs) {
+            return !(lhs == rhs);
+        }
+
+        std::ostream& operator<<(std::ostream& str, const BrushFaceAttributes& attrs) {
+            str << "BrushFaceAttributes{"
+                << "textureName: " << attrs.m_textureName << ", "
+                << "offset: " << attrs.m_offset << ", "
+                << "scale: " << attrs.m_scale << ", "
+                << "rotation: " << attrs.m_rotation << ", "
+                << "surfaceContents: " << kdl::opt_to_string(attrs.m_surfaceContents) << ", "
+                << "surfaceFlags: " << kdl::opt_to_string(attrs.m_surfaceFlags) << ", "
+                << "surfaceValue: " << kdl::opt_to_string(attrs.m_surfaceValue) << ", "
+                << "color: " << kdl::opt_to_string(attrs.m_color) << "}";
+            return str;
+        }
+
         void swap(BrushFaceAttributes& lhs, BrushFaceAttributes& rhs) {
             using std::swap;
             swap(lhs.m_textureName, rhs.m_textureName);
