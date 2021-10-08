@@ -98,7 +98,10 @@ namespace TrenchBroom {
             }
 
             m_logger.info() << "Linking shaders...";
-            linkTextures(allImages, shaders);
+            
+            // RB: Doom 3 doesn't scan for textures to create implicit materials
+            //linkTextures(allImages, shaders);
+
             linkStandaloneShaders(shaders);
         }
 
