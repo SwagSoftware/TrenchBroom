@@ -3657,6 +3657,12 @@ Do not use in game. For testing only.
 	anim(string) : "" : "idle"
 ]
 
+@PointClass color(0 0 255) size(-8 -8 -8, 8 8 8) = env_probe : "Environment probe for Image Based Lighting
+"
+[
+	spawnclass(string) : "" : "EnvironmentProbe"
+]
+
 @PointClass color(255 127 0) size(-8 -8 -8, 8 8 8) model({ "path": "_tb/models/md5/monsters/archvile/archvile.obj" }) = env_ragdoll_archvile : "Ragdoll for monster_demon_archvile
 "
 [
@@ -6692,7 +6698,7 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	head_joint(string) : "" : "Shoulders"
 ]
 
-@PointClass color(255 255 0) size(-4 -4 -4, 4 4 4) = info_location : "Place one of these in each door-separated area for naming the gameplay sections
+@PointClass color(255 255 0) size(-4 -4 -4, 4 4 4) model({ "path": "sprites/info_location.png" }) = info_location : "Place one of these in each door-separated area for naming the gameplay sections
 "
 [
 	spawnclass(string) : "" : "idLocationEntity"
@@ -6700,7 +6706,7 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	location(string) : "use this when you have two locations with the same name."
 ]
 
-@PointClass color(255 255 0) size(-16 -16 -16, 16 16 16) = info_locationseparator : "Touch a vis-portal with this to break location name flood filling without using a door
+@PointClass color(255 255 0) size(-16 -16 -16, 16 16 16) model({ "path": "sprites/info_location.png" }) = info_locationseparator : "Touch a vis-portal with this to break location name flood filling without using a door
 "
 [
 	spawnclass(string) : "" : "idLocationSeparatorEntity"
@@ -6739,13 +6745,13 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	triggered(string) : "This portal sky will be inactive at start, and must be triggered to become active.  All additional portalsky areas must have this flag set."
 ]
 
-@PointClass color(255 255 0) size(-4 -4 -4, 4 4 4) = info_vacuum : "Place one of these in an outside area in each map for vacuum flooding
+@PointClass color(255 255 0) size(-4 -4 -4, 4 4 4) model({ "path": "sprites/air-conditioning.png" }) = info_vacuum : "Place one of these in an outside area in each map for vacuum flooding
 "
 [
 	spawnclass(string) : "" : "idVacuumEntity"
 ]
 
-@PointClass color(255 255 0) size(-16 -16 -16, 16 16 16) = info_vacuumseparator : "Touch a vis-portal with this to break air/vacuum flood filling at windows.  Trigger it to allow vacuum to flood through.
+@PointClass color(255 255 0) size(-16 -16 -16, 16 16 16) model({ "path": "sprites/air-conditioning.png" }) = info_vacuumseparator : "Touch a vis-portal with this to break air/vacuum flood filling at windows.  Trigger it to allow vacuum to flood through.
 "
 [
 	spawnclass(string) : "" : "idVacuumSeparatorEntity"
@@ -7140,7 +7146,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	snd_acquire(string) : "" : "videocd_pickup"
 ]
 
-@PointClass color(0 255 0) size(-8 -8 -8, 8 8 8) = light : "Light source.  If health is set, light becomes breakable and turns off when shot.
+@PointClass color(0 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/light-bulb.png" }) = light : "Light source.  If health is set, light becomes breakable and turns off when shot.
 "
 [
 	light(integer) : "light radius" : 300
@@ -14290,7 +14296,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	model(string) : "" : "npcgroup_cinematic_scientist2"
 ]
 
-@PointClass base(path_default) = path_anim : "Character will play the specified animation.  Set angles to direction to face.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_anim : "Character will play the specified animation.  Set angles to direction to face.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14299,13 +14305,13 @@ Only add model, model_detonate or model_burn or health to override defaults
 	head_anim(string) : "if set, waits for animation in head to finish, instead of the body."
 ]
 
-@PointClass base(path_default) = path_attack : "Character will attack the character specified by 'enemy' key.  Character will go to next path when enemy dies or when activated.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_attack : "Character will attack the character specified by 'enemy' key.  Character will go to next path when enemy dies or when activated.
 "
 [
 	enemy(string) : "Character to attack."
 ]
 
-@PointClass base(path_default) = path_conversation : "Conversation node.  Character speaks a line of dialog and looks at a specific entity.  When talked to, conversation will end for all characters listening to conversation and they'll begin following path entities after all conversation nodes.  When finished, character will tell all listening characters to go to their next conversation node.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_conversation : "Conversation node.  Character speaks a line of dialog and looks at a specific entity.  When talked to, conversation will end for all characters listening to conversation and they'll begin following path entities after all conversation nodes.  When finished, character will tell all listening characters to go to their next conversation node.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14315,7 +14321,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	snd_dialog(string) : "Name of sound shader to play."
 ]
 
-@PointClass base(path_default) = path_conversation_listen : "Conversation node.  Character listens to entity 'focus' and waits for him to finish.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_conversation_listen : "Conversation node.  Character listens to entity 'focus' and waits for him to finish.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14325,12 +14331,12 @@ Only add model, model_detonate or model_burn or health to override defaults
 	no_look(string) : "If set, character doesn't look at the speaker."
 ]
 
-@PointClass base(path_default) size(-24 -24 0, 24 24 82) = path_corner : "Character will walk to this entity
+@PointClass base(path_default) size(-24 -24 0, 24 24 82) model({ "path": "sprites/waypoint.png" }) = path_corner : "Character will walk to this entity
 "
 [
 ]
 
-@PointClass base(path_default) = path_cycleanim : "Character will loop the specified animation and wait until triggered, or until time specified by 'wait' has elapsed.  Set angles to direction to face.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_cycleanim : "Character will loop the specified animation and wait until triggered, or until time specified by 'wait' has elapsed.  Set angles to direction to face.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14339,7 +14345,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	wait(string) : "how long to play the animation.  if 0, or not set, then waits until character is triggered."
 ]
 
-@PointClass color(178 76 255) size(-8 -8 -8, 8 8 8) = path_default : "No description"
+@PointClass color(178 76 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_default : "No description"
 [
 	spawnclass(string) : "" : "idPathCorner"
 	target(string) : "next path entity."
@@ -14349,7 +14355,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	skip(string) : "skip to next path when talked to or hearing gunshot."
 ]
 
-@PointClass base(path_default) = path_headanim : "starts playing an animation on the head immediately goes to next path.  used for playing talk anims while walking.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_headanim : "starts playing an animation on the head immediately goes to next path.  used for playing talk anims while walking.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "2"
@@ -14357,19 +14363,19 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim(string) : "Name of animation to play."
 ]
 
-@PointClass base(path_default) = path_hide : "Makes the character invisible and non-solid.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_hide : "Makes the character invisible and non-solid.
 "
 [
 ]
 
-@PointClass base(path_default) = path_jump : "Character will jump to the next path entity (regardless of type).  Will cause error if character doesn't have jumping ability.  If jump is failing, you can manually specify velocity of the jump using 'up' and 'forward'.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_jump : "Character will jump to the next path entity (regardless of type).  Will cause error if character doesn't have jumping ability.  If jump is failing, you can manually specify velocity of the jump using 'up' and 'forward'.
 "
 [
 	up(string) : "How much upward velocity the monster will jump with."
 	forward(string) : "How much forward velocity the monster will jump with."
 ]
 
-@PointClass base(path_default) = path_lookat : "Causes character to look at an entity for a certain length of time or until triggered.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_lookat : "Causes character to look at an entity for a certain length of time or until triggered.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14379,7 +14385,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	wait(string) : "how long to look at the entity.  if 0, or not set, then only waits until character is triggered."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) = path_sentry_ignore_player : "Tells sentry to stop leading the player to his destination.  Imediately goes to next path entity.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_ignore_player : "Tells sentry to stop leading the player to his destination.  Imediately goes to next path entity.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14387,7 +14393,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) = path_sentry_lead_player : "Tells sentry to start leading the player to his destination.  Imediately goes to next path entity.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_lead_player : "Tells sentry to start leading the player to his destination.  Imediately goes to next path entity.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14395,7 +14401,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) = path_sentry_light_off : "Tells sentry to turn on his flashlight.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_light_off : "Tells sentry to turn on his flashlight.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14403,7 +14409,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) = path_sentry_light_on : "Tells sentry to turn on his flashlight.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_light_on : "Tells sentry to turn on his flashlight.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14411,7 +14417,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) = path_sentry_shutdown : "Tells sentry to shutdown until triggered again.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_shutdown : "Tells sentry to shutdown until triggered again.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14419,7 +14425,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) = path_sentry_unlock_door : "Sentry walks to this location and plays the unlock door animation.  Set 'trigger' to name of target_lock entity that unlocks the door.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_unlock_door : "Sentry walks to this location and plays the unlock door animation.  Set 'trigger' to name of target_lock entity that unlocks the door.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14427,49 +14433,49 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass base(path_default) = path_show : "Makes the character visible and solid.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_show : "Makes the character visible and solid.
 "
 [
 ]
 
-@PointClass base(path_default) = path_talk : "forces character to talk to the player
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_talk : "forces character to talk to the player
 "
 [
 ]
 
-@PointClass base(path_default) = path_talk_primary : "forces character to say his primary talk anim to the player
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_talk_primary : "forces character to say his primary talk anim to the player
 "
 [
 ]
 
-@PointClass base(path_default) = path_talk_secondary : "forces character to say his secondary talk anim to the player
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_talk_secondary : "forces character to say his secondary talk anim to the player
 "
 [
 ]
 
-@PointClass base(path_default) = path_talk_triggered : "forces character to say his triggered talk anim to the player
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_talk_triggered : "forces character to say his triggered talk anim to the player
 "
 [
 ]
 
-@PointClass base(path_default) = path_turn : "Character will turn to the direction specified in entity.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_turn : "Character will turn to the direction specified in entity.
 "
 [
 ]
 
-@PointClass base(path_default) = path_wait : "Character will wait specified amount of time before continuing on path.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_wait : "Character will wait specified amount of time before continuing on path.
 "
 [
 	wait(string) : "how long to wait." : "2"
 ]
 
-@PointClass base(path_default) = path_waitforheadanim : "waits for animation on the head from path_headanim finish.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_waitforheadanim : "waits for animation on the head from path_headanim finish.
 "
 [
 	focus(string) : "Name of entity to look at."
 ]
 
-@PointClass base(path_default) = path_waitfortrigger : "Character will wait until they're triggered again before continuing on path.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_waitfortrigger : "Character will wait until they're triggered again before continuing on path.
 "
 [
 ]
@@ -15400,7 +15406,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim3(string) : "" : "space_c"
 ]
 
-@PointClass color(0 255 0) size(-8 -8 -8, 8 8 8) = speaker : "
+@PointClass color(0 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/speaker.png" }) = speaker : "
 "
 [
 	spawnclass(string) : "" : "idSound"
@@ -15896,7 +15902,7 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	call(string) : "" : "say_triggered"
 ]
 
-@PointClass color(255 255 0) size(-6 -6 -6, 6 6 6) = target_null : "Generic target to point camera views at
+@PointClass color(255 255 0) size(-6 -6 -6, 6 6 6) model({ "path": "sprites/info_notnull.png" }) = target_null : "Generic target to point camera views at
 "
 [
 	spawnclass(string) : "" : "idTarget"
