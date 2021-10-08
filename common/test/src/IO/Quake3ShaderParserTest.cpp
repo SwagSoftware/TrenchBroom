@@ -498,6 +498,5 @@ waterBubble
                 }
             }));
         }
-                    IO::Path(), // diffuseImage
     }
 }
