@@ -42,7 +42,8 @@ namespace TrenchBroom {
             const std::string Angles                    = "angles";
             const std::string Mangle                    = "mangle";
             const std::string Target                    = "target";
-            const std::string Targetname                = "targetname";
+            const std::string Targetname                = "name"; // FIXME change back to targetname so it doesn't break stuff
+            const std::string Name                      = "name"; // RB: Doom 3 targetname 
             const std::string Killtarget                = "killtarget";
             const std::string ProtectedEntityProperties = "_tb_protected_properties";
             const std::string GroupType                 = "_tb_type";
