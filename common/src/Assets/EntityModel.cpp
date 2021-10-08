@@ -132,6 +132,9 @@ namespace TrenchBroom {
                 case Renderer::PrimType::Polygon:
                 case Renderer::PrimType::TriangleFan: {
                     assert(count > 2);
+#if 0
+                    // Loaded model models\mapobjects\sponza\sponza.obj in 304965ms
+
                     m_tris.reserve(m_tris.size() + (count - 2) * 3);
 
                     const auto& p1 = Renderer::getVertexComponent<0>(vertices[index]);
@@ -149,6 +152,65 @@ namespace TrenchBroom {
                         m_tris.push_back(p3);
                         m_spacialTree->insert(bounds.bounds(), triIndex);
                     }
+#elif 1
+                    // Loaded model 'models\mapobjects\sponza\sponza.obj' in 262910ms
+
+                    m_tris.reserve(m_tris.size() + (count - 2) * 3);
+
+                    vm::bbox3f::builder bounds;
+
+                    const auto& p1 = Renderer::getVertexComponent<0>(vertices[index]);
+                    for (size_t i = 1; i < count - 1; ++i) {    
+                        const auto& p2 = Renderer::getVertexComponent<0>(vertices[index + i]);
+                        const auto& p3 = Renderer::getVertexComponent<0>(vertices[index + i + 1]);
+                        bounds.add(p1);
+                        bounds.add(p2);
+                        bounds.add(p3);
+
+                        const size_t triIndex = m_tris.size() / 3u;
+                        m_tris.push_back(p1);
+                        m_tris.push_back(p2);
+                        m_tris.push_back(p3);
+                    }
+
+                    m_spacialTree->insert(bounds.bounds(), index);
+
+#else
+                    // Loaded model _tb\models\md5\monsters\hellknight\hellknight.obj in 98ms
+
+                    const size_t triStart = m_tris.size() / 3u;
+
+                    std::vector<vm::vec3f> backup;
+                    backup.resize(m_tris.size());
+                    
+                    for (size_t i = 0; i < m_tris.size(); ++i) {
+                        backup[i] = m_tris[i];
+                    }
+
+                    m_tris.resize(m_tris.size() + (count - 2) * 3);
+
+                    for (size_t i = 0; i < backup.size(); ++i) {
+                        m_tris[i] = backup[i];
+                    }
+
+                    vm::bbox3f::builder bounds;
+                    const auto& p1 = Renderer::getVertexComponent<0>(vertices[index]);
+                    for (size_t i = 1; i < count - 1; ++i) {
+                        
+                        const auto& p2 = Renderer::getVertexComponent<0>(vertices[index + i]);
+                        const auto& p3 = Renderer::getVertexComponent<0>(vertices[index + i + 1]);
+                        bounds.add(p1);
+                        bounds.add(p2);
+                        bounds.add(p3);
+
+                        const size_t triIndex = triStart + (i - 1);
+                        m_tris[triIndex * 3 + 0] = p1;
+                        m_tris[triIndex * 3 + 1] = p2;
+                        m_tris[triIndex * 3 + 2] = p3;
+                        
+                    }
+                    m_spacialTree->insert(bounds.bounds(), index);
+#endif
                     break;
                 }
                 case Renderer::PrimType::Quads:
