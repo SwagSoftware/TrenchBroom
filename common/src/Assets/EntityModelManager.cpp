@@ -151,7 +151,14 @@ namespace TrenchBroom {
 
         std::unique_ptr<EntityModel> EntityModelManager::loadModel(const IO::Path& path) const {
             ensure(m_loader != nullptr, "loader is null");
-            return m_loader->initializeModel(path, m_logger);
+
+            const auto startTime = std::chrono::high_resolution_clock::now();
+            auto model = m_loader->initializeModel(path, m_logger);
+            const auto endTime = std::chrono::high_resolution_clock::now();
+
+            m_logger.info() << "Loaded model '" << path << "' in "
+                                         << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms";
+            return model;
         }
 
         void EntityModelManager::loadFrame(const Assets::ModelSpecification& spec, Assets::EntityModel& model) const {
