@@ -86,6 +86,7 @@ waterBubble
                 {
                     IO::Path("textures/eerie/ironcrosslt2_10000"), // shaderPath
                     IO::Path("textures/gothic_light/ironcrosslt2.tga"), // editorImage
+                    IO::Path(), // diffuseImage
                     IO::Path(), // lightImage
                     Assets::Quake3Shader::Culling::Front, // culling
                     {}, // surfaceParms
