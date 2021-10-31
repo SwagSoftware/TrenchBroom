@@ -137,7 +137,6 @@ namespace TrenchBroom {
                 entity.addOrUpdateProperty(config, "something", "else");
                 CHECK(entity.modelTransformation() == vm::scaling_matrix(vm::vec3{2, 2, 2}));
             }
-            }
         }
 
         TEST_CASE("EntityTest.renameProperty") {
@@ -192,10 +191,6 @@ namespace TrenchBroom {
                 entity.renameProperty(config, "modelscale", "not modelscale");
                 CHECK(entity.modelTransformation() == vm::scaling_matrix(vm::vec3{2, 2, 2}));
             }
-
-                entity.renameProperty(config, "modelscale", "not modelscale");
-                CHECK(entity.modelTransformation() == vm::scaling_matrix(vm::vec3{2, 2, 2}));
-            }
         }
 
         TEST_CASE("EntityTest.removeProperty") {
@@ -234,10 +229,6 @@ namespace TrenchBroom {
                 entity.setDefinition(config, &definition);
                 entity.addOrUpdateProperty(config, "modelscale", "1 2 3");
                 REQUIRE(entity.modelTransformation() == vm::scaling_matrix(vm::vec3{1, 2, 3}));
-
-                entity.removeProperty(config, "modelscale");
-                CHECK(entity.modelTransformation() == vm::scaling_matrix(vm::vec3{2, 2, 2}));
-            }
 
                 entity.removeProperty(config, "modelscale");
                 CHECK(entity.modelTransformation() == vm::scaling_matrix(vm::vec3{2, 2, 2}));
@@ -401,10 +392,6 @@ namespace TrenchBroom {
                 entity.setOrigin(config, vm::vec3{9, 8, 7});
                 REQUIRE(entity.modelTransformation() == vm::translation_matrix(vm::vec3{9, 8, 7}) * vm::scaling_matrix(vm::vec3{2, 2, 2}));
             }
-
-                entity.setOrigin(config, vm::vec3{9, 8, 7});
-                REQUIRE(entity.modelTransformation() == vm::translation_matrix(vm::vec3{9, 8, 7}) * vm::scaling_matrix(vm::vec3{2, 2, 2}));
-            }
         }
 
         TEST_CASE("EntityTest.transform") {
@@ -480,7 +467,6 @@ namespace TrenchBroom {
 
                 entity.transform(config, vm::translation_matrix(vm::vec3{8, 7, 6}));
                 CHECK(entity.modelTransformation() == vm::translation_matrix(vm::vec3{8, 7, 6}) * vm::scaling_matrix(vm::vec3{2, 2, 2}));
-            }
             }
         }
     }

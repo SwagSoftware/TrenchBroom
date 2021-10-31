@@ -132,7 +132,7 @@ namespace TrenchBroom {
                 case Renderer::PrimType::Polygon:
                 case Renderer::PrimType::TriangleFan: {
                     assert(count > 2);
-#if 0
+#if 1
                     // Loaded model models\mapobjects\sponza\sponza.obj in 304965ms
 
                     m_tris.reserve(m_tris.size() + (count - 2) * 3);

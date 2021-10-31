@@ -87,10 +87,7 @@ namespace TrenchBroom {
                 );
         }
 
-        bool operator!=(const BrushFaceAttributes& lhs, const BrushFaceAttributes& rhs) {
-            return !(lhs == rhs);
-        }
-
+		/*
         std::ostream& operator<<(std::ostream& str, const BrushFaceAttributes& attrs) {
             str << "BrushFaceAttributes{"
                 << "textureName: " << attrs.m_textureName << ", "
@@ -103,6 +100,7 @@ namespace TrenchBroom {
                 << "color: " << kdl::opt_to_string(attrs.m_color) << "}";
             return str;
         }
+        */
 
         bool operator!=(const BrushFaceAttributes& lhs, const BrushFaceAttributes& rhs) {
             return !(lhs == rhs);
