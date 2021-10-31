@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2010-2017 Kristian Duske
+ Copyright (C) 2021 Kristian Duske
 
  This file is part of TrenchBroom.
 
@@ -19,37 +19,90 @@
 
 #include "Expressions.h"
 
+#include "EL/ELExceptions.h"
 #include "Ensure.h"
 #include "Macros.h"
 #include "EL/EvaluationContext.h"
 
-#include <kdl/overload.h>
+#include <kdl/collection_utils.h>
+#include <kdl/map_utils.h>
 #include <kdl/vector_utils.h>
 
 #include <algorithm>
+#include <cmath>
 #include <sstream>
 #include <string>
 
 namespace TrenchBroom {
     namespace EL {
+        ExpressionImpl::~ExpressionImpl() = default;
+
+        size_t ExpressionImpl::precedence() const {
+            return 13u;
+        }
+
+        bool ExpressionImpl::operator!=(const ExpressionImpl& rhs) const {
+            return !(*this == rhs);
+        }
+
+        bool ExpressionImpl::operator==(const LiteralExpression&) const {
+            return false;
+        }
+
+        bool ExpressionImpl::operator==(const VariableExpression&) const {
+            return false;
+        }
+
+        bool ExpressionImpl::operator==(const ArrayExpression&) const {
+            return false;
+        }
+
+        bool ExpressionImpl::operator==(const MapExpression&) const {
+            return false;
+        }
+
+        bool ExpressionImpl::operator==(const UnaryExpression&) const {
+            return false;
+        }
+
+        bool ExpressionImpl::operator==(const BinaryExpression&) const {
+            return false;
+        }
+
+        bool ExpressionImpl::operator==(const SubscriptExpression&) const {
+            return false;
+        }
+
+        bool ExpressionImpl::operator==(const SwitchExpression&) const {
+            return false;
+        }
+
+        std::ostream& operator<<(std::ostream& lhs, const ExpressionImpl& rhs) {
+            rhs.appendToStream(lhs);
+            return lhs;
+        }
+
         LiteralExpression::LiteralExpression(Value value) :
         m_value{std::move(value)} {}
         
-        const Value& LiteralExpression::evaluate(const EvaluationContext&) const {
+        Value LiteralExpression::evaluate(const EvaluationContext&) const {
             return m_value;
         }
         
-        bool operator==(const LiteralExpression& lhs, const LiteralExpression& rhs) {
-            return lhs.m_value == rhs.m_value;
+        std::unique_ptr<ExpressionImpl> LiteralExpression::optimize() const {
+            return std::make_unique<LiteralExpression>(m_value);
         }
 
-        bool operator!=(const LiteralExpression& lhs, const LiteralExpression& rhs) {
-            return !(lhs == rhs);
+        bool LiteralExpression::operator==(const ExpressionImpl& rhs) const {
+            return rhs == *this;
         }
 
-        std::ostream& operator<<(std::ostream& str, const LiteralExpression& exp) {
-            str << exp.m_value;
-            return str;
+        bool LiteralExpression::operator==(const LiteralExpression& rhs) const {
+            return m_value == rhs.m_value;
+        }
+
+        void LiteralExpression::appendToStream(std::ostream& str) const {
+            str << m_value;
         }
 
         VariableExpression::VariableExpression(std::string variableName) :
@@ -58,18 +111,21 @@ namespace TrenchBroom {
         Value VariableExpression::evaluate(const EvaluationContext& context) const {
             return context.variableValue(m_variableName);
         }
-        
-        bool operator==(const VariableExpression& lhs, const VariableExpression& rhs) {
-            return lhs.m_variableName == rhs.m_variableName;
+
+        std::unique_ptr<ExpressionImpl> VariableExpression::optimize() const {
+            return std::make_unique<VariableExpression>(m_variableName);
         }
 
-        bool operator!=(const VariableExpression& lhs, const VariableExpression& rhs) {
-            return !(lhs == rhs);
+        bool VariableExpression::operator==(const ExpressionImpl& rhs) const {
+            return rhs == *this;
         }
 
-        std::ostream& operator<<(std::ostream& str, const VariableExpression& exp) {
-            str << exp.m_variableName;
-            return str;
+        bool VariableExpression::operator==(const VariableExpression& rhs) const {
+            return m_variableName == rhs.m_variableName;
+        }
+
+        void VariableExpression::appendToStream(std::ostream& str) const {
+            str << m_variableName;
         }
 
         ArrayExpression::ArrayExpression(std::vector<Expression> elements) :
@@ -96,7 +152,7 @@ namespace TrenchBroom {
             return Value{std::move(array)};
         }
         
-        ExpressionVariant ArrayExpression::optimize() const {
+        std::unique_ptr<ExpressionImpl> ArrayExpression::optimize() const {
             auto optimizedExpressions = kdl::vec_transform(m_elements, [](const auto& expression) {
                 return expression.optimize();
             });
@@ -109,36 +165,35 @@ namespace TrenchBroom {
                 if (auto value = expression.evaluate(evaluationContext); value != Value::Undefined) {
                     values.push_back(std::move(value));
                 } else {
-                    return ArrayExpression{std::move(optimizedExpressions)};
+                    return std::make_unique<ArrayExpression>(std::move(optimizedExpressions));
                 }
 
             }
             
-            return LiteralExpression{Value{std::move(values)}};
+            return std::make_unique<LiteralExpression>(Value{std::move(values)});
         }
 
-        bool operator==(const ArrayExpression& lhs, const ArrayExpression& rhs) {
-            return lhs.m_elements == rhs.m_elements;
+        bool ArrayExpression::operator==(const ExpressionImpl& rhs) const {
+            return rhs == *this;
         }
 
-        bool operator!=(const ArrayExpression& lhs, const ArrayExpression& rhs) {
-            return !(lhs == rhs);
+        bool ArrayExpression::operator==(const ArrayExpression& rhs) const {
+            return m_elements == rhs.m_elements;
         }
 
-        std::ostream& operator<<(std::ostream& str, const ArrayExpression& exp) {
+        void ArrayExpression::appendToStream(std::ostream& str) const {
             str << "[ ";
             size_t i = 0u;
-            for (const auto& expression : exp.m_elements) {
+            for (const auto& expression : m_elements) {
                 str << expression;
-                if (i < exp.m_elements.size() - 1u) {
+                if (i < m_elements.size() - 1u) {
                     str << ", ";
                 }
                 ++i;
             }
             str << " ]";
-            return str;
         }
-        
+
         MapExpression::MapExpression(std::map<std::string, Expression> elements) :
         m_elements{std::move(elements)} {}
 
@@ -151,7 +206,7 @@ namespace TrenchBroom {
             return Value{std::move(map)};
         }
         
-        ExpressionVariant MapExpression::optimize() const {
+        std::unique_ptr<ExpressionImpl> MapExpression::optimize() const {
             auto optimizedExpressions = std::map<std::string, Expression>{};
             for (const auto& [key, expression] : m_elements) {
                 optimizedExpressions.emplace(key, expression.optimize());
@@ -164,38 +219,101 @@ namespace TrenchBroom {
                 if (auto value = expression.evaluate(evaluationContext); value != Value::Undefined) {
                     values.emplace(key, std::move(value));
                 } else {
-                    return MapExpression{std::move(optimizedExpressions)};
+                    return std::make_unique<MapExpression>(std::move(optimizedExpressions));
                 }
             }
             
-            return LiteralExpression{Value{std::move(values)}};
+            return std::make_unique<LiteralExpression>(Value{std::move(values)});
         }
 
-        bool operator==(const MapExpression& lhs, const MapExpression& rhs) {
-            return lhs.m_elements == rhs.m_elements;
+        bool MapExpression::operator==(const ExpressionImpl& rhs) const {
+            return rhs == *this;
         }
 
-        bool operator!=(const MapExpression& lhs, const MapExpression& rhs) {
-            return !(lhs == rhs);
+        bool MapExpression::operator==(const MapExpression& rhs) const {
+            return m_elements == rhs.m_elements;
         }
 
-        std::ostream& operator<<(std::ostream& str, const MapExpression& exp) {
+        void MapExpression::appendToStream(std::ostream& str) const {
             str << "{ ";
             size_t i = 0u;
-            for (const auto& [key, expression] : exp.m_elements) {
+            for (const auto& [key, expression] : m_elements) {
                 str << "\"" << key << "\": " << expression;
-                if (i < exp.m_elements.size() - 1u) {
+                if (i < m_elements.size() - 1u) {
                     str << ", ";
                 }
                 ++i;
             }
             str << " }";
-            return str;
         }
 
         UnaryExpression::UnaryExpression(const UnaryOperator i_operator, Expression operand) :
         m_operator{i_operator},
         m_operand{std::move(operand)} {}
+
+        static Value evaluateUnaryPlus(const Value& v) {
+            switch (v.type()) {
+                case ValueType::Boolean:
+                case ValueType::Number:
+                    return Value{v.convertTo(ValueType::Number).numberValue()};
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Null:
+                case ValueType::Undefined:
+                    break;
+            }
+            throw EvaluationError{"Cannot apply unary plus to value '" + v.describe() + "' of type '" + v.typeName()};
+        }
+
+        static Value evaluateUnaryMinus(const Value& v) {
+            switch (v.type()) {
+                case ValueType::Boolean:
+                case ValueType::Number:
+                    return Value{-v.convertTo(ValueType::Number).numberValue()};
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Null:
+                case ValueType::Undefined:
+                    break;
+            }
+            throw EvaluationError{"Cannot apply unary minus to value '" + v.describe() + "' of type '" + v.typeName()};
+        }
+
+        static Value evaluateLogicalNegation(const Value& v) {
+            switch (v.type()) {
+                case ValueType::Boolean:
+                    return Value{!v.booleanValue()};
+                case ValueType::Number:
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Null:
+                case ValueType::Undefined:
+                    break;
+            }
+            throw EvaluationError{"Cannot apply logical negation to value '" + v.describe() + "' of type '" + v.typeName()};
+        }
+
+        static Value evaluateBitwiseNegation(const Value& v) {
+            switch (v.type()) {
+                case ValueType::Number:
+                    return Value{~v.integerValue()};
+                case ValueType::Boolean:
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Null:
+                case ValueType::Undefined:
+                    break;
+            }
+            throw EvaluationError{"Cannot apply bitwise negation to value '" + v.describe() + "' of type '" + v.typeName()};
+        }
 
         static Value evaluateUnaryExpression(const UnaryOperator& operator_, const Value& operand) {
             if (operand == Value::Undefined) {
@@ -204,13 +322,13 @@ namespace TrenchBroom {
 
             switch (operator_) {
                 case UnaryOperator::Plus:
-                    return Value{+operand};
+                    return evaluateUnaryPlus(operand);
                 case UnaryOperator::Minus:
-                    return Value{-operand};
+                    return evaluateUnaryMinus(operand);
                 case UnaryOperator::LogicalNegation:
-                    return Value{!operand};
+                    return evaluateLogicalNegation(operand);
                 case UnaryOperator::BitwiseNegation:
-                    return Value{~operand};
+                    return evaluateBitwiseNegation(operand);
                 case UnaryOperator::Group:
                     return Value{operand};
                 switchDefault();
@@ -221,42 +339,42 @@ namespace TrenchBroom {
             return evaluateUnaryExpression(m_operator, m_operand.evaluate(context));
         }
         
-        ExpressionVariant UnaryExpression::optimize() const {
+        std::unique_ptr<ExpressionImpl> UnaryExpression::optimize() const {
             auto optimizedOperand = m_operand.optimize();
             if (auto value = evaluateUnaryExpression(m_operator, optimizedOperand.evaluate(EvaluationContext{})); value != Value::Undefined) {
-                return LiteralExpression{std::move(value)};
+                return std::make_unique<LiteralExpression>(std::move(value));
             }
-            return UnaryExpression{m_operator, std::move(optimizedOperand)};
+
+            return std::make_unique<UnaryExpression>(m_operator, std::move(optimizedOperand));
         }
 
-        bool operator==(const UnaryExpression& lhs, const UnaryExpression& rhs) {
-            return lhs.m_operator == rhs.m_operator && lhs.m_operand == rhs.m_operand;
+        bool UnaryExpression::operator==(const ExpressionImpl& rhs) const {
+            return rhs == *this;
         }
 
-        bool operator!=(const UnaryExpression& lhs, const UnaryExpression& rhs) {
-            return !(lhs == rhs);
+        bool UnaryExpression::operator==(const UnaryExpression& rhs) const {
+            return m_operator == rhs.m_operator && m_operand == rhs.m_operand;
         }
 
-        std::ostream& operator<<(std::ostream& str, const UnaryExpression& exp) {
-            switch (exp.m_operator) {
+        void UnaryExpression::appendToStream(std::ostream& str) const {
+            switch (m_operator) {
                 case UnaryOperator::Plus:
-                    str << "+" << exp.m_operand;
+                    str << "+" << m_operand;
                     break;
                 case UnaryOperator::Minus:
-                    str << "-" << exp.m_operand;
+                    str << "-" << m_operand;
                     break;
                 case UnaryOperator::LogicalNegation:
-                    str << "!" << exp.m_operand;
+                    str << "!" << m_operand;
                     break;
                 case UnaryOperator::BitwiseNegation:
-                    str << "~" << exp.m_operand;
+                    str << "~" << m_operand;
                     break;
                 case UnaryOperator::Group:
-                    str << "( " << exp.m_operand << " )";
+                    str << "( " << m_operand << " )";
                     break;
                 switchDefault();
             }
-            return str;
         }
 
         BinaryExpression::BinaryExpression(const BinaryOperator i_operator, Expression leftOperand, Expression rightOperand) :
@@ -274,6 +392,431 @@ namespace TrenchBroom {
             return Expression{BinaryExpression{BinaryOperator::Range, std::move(leftOperand), std::move(rightOperand)}, line, column};
         }
 
+        static Value evaluateAddition(const Value& lhs, const Value& rhs) {
+            switch (lhs.type()) {
+                case ValueType::Boolean:
+                case ValueType::Number:
+                    switch (rhs.type()) {
+                        case ValueType::Boolean:
+                        case ValueType::Number:
+                            return Value{lhs.convertTo(ValueType::Number).numberValue() + rhs.convertTo(ValueType::Number).numberValue()};
+                        case ValueType::String:
+                        case ValueType::Array:
+                        case ValueType::Map:
+                        case ValueType::Range:
+                        case ValueType::Null:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::String:
+                    switch (rhs.type()) {
+                        case ValueType::String:
+                            return Value{lhs.convertTo(ValueType::String).stringValue() + rhs.convertTo(ValueType::String).stringValue()};
+                        case ValueType::Boolean:
+                        case ValueType::Number:
+                        case ValueType::Array:
+                        case ValueType::Map:
+                        case ValueType::Range:
+                        case ValueType::Null:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::Array:
+                    switch (rhs.type()) {
+                        case ValueType::Array:
+                            return Value{kdl::vec_concat(lhs.arrayValue(), rhs.arrayValue())};
+                        case ValueType::Boolean:
+                        case ValueType::Number:
+                        case ValueType::String:
+                        case ValueType::Map:
+                        case ValueType::Range:
+                        case ValueType::Null:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::Map:
+                    switch (rhs.type()) {
+                        case ValueType::Map:
+                            return Value{kdl::map_union(lhs.mapValue(), rhs.mapValue())};
+                        case ValueType::Boolean:
+                        case ValueType::Number:
+                        case ValueType::String:
+                        case ValueType::Array:
+                        case ValueType::Range:
+                        case ValueType::Null:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::Range:
+                case ValueType::Null:
+                case ValueType::Undefined:
+                    break;
+            }
+
+            throw EvaluationError{"Cannot add '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " to '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateSubtraction(const Value& lhs, const Value& rhs) {
+            switch (lhs.type()) {
+                case ValueType::Boolean:
+                case ValueType::Number:
+                    switch (rhs.type()) {
+                        case ValueType::Boolean:
+                        case ValueType::Number:
+                            return Value{lhs.convertTo(ValueType::Number).numberValue() - rhs.convertTo(ValueType::Number).numberValue()};
+                        case ValueType::String:
+                        case ValueType::Array:
+                        case ValueType::Map:
+                        case ValueType::Range:
+                        case ValueType::Null:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Null:
+                case ValueType::Undefined:
+                    break;
+            }
+
+            throw EvaluationError{"Cannot subtract '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + " from '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + "'"};
+        }
+
+        static Value evaluateMultiplication(const Value& lhs, const Value& rhs) {
+            switch (lhs.type()) {
+                case ValueType::Boolean:
+                case ValueType::Number:
+                    switch (rhs.type()) {
+                        case ValueType::Boolean:
+                        case ValueType::Number:
+                            return Value{lhs.convertTo(ValueType::Number).numberValue() * rhs.convertTo(ValueType::Number).numberValue()};
+                        case ValueType::String:
+                        case ValueType::Array:
+                        case ValueType::Map:
+                        case ValueType::Range:
+                        case ValueType::Null:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Null:
+                case ValueType::Undefined:
+                    break;
+            }
+
+            throw EvaluationError{"Cannot multiply '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " by '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateDivision(const Value& lhs, const Value& rhs) {
+            switch (lhs.type()) {
+                case ValueType::Boolean:
+                case ValueType::Number:
+                    switch (rhs.type()) {
+                        case ValueType::Boolean:
+                        case ValueType::Number:
+                            return Value{lhs.convertTo(ValueType::Number).numberValue() / rhs.convertTo(ValueType::Number).numberValue()};
+                        case ValueType::String:
+                        case ValueType::Array:
+                        case ValueType::Map:
+                        case ValueType::Range:
+                        case ValueType::Null:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Null:
+                case ValueType::Undefined:
+                    break;
+            }
+
+            throw EvaluationError{"Cannot divide '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " by '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateModulus(const Value& lhs, const Value& rhs) {
+            switch (lhs.type()) {
+                case ValueType::Boolean:
+                case ValueType::Number:
+                    switch (rhs.type()) {
+                        case ValueType::Boolean:
+                        case ValueType::Number:
+                            return Value{std::fmod(lhs.convertTo(ValueType::Number).numberValue(), rhs.convertTo(ValueType::Number).numberValue())};
+                        case ValueType::String:
+                        case ValueType::Array:
+                        case ValueType::Map:
+                        case ValueType::Range:
+                        case ValueType::Null:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Null:
+                case ValueType::Undefined:
+                    break;
+            }
+
+            throw EvaluationError{"Cannot apply operator % to '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " and '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateLogicalAnd(const Value& lhs, const Value& rhs) {
+            switch (lhs.type()) {
+                case ValueType::Boolean:
+                case ValueType::Null:
+                    switch (rhs.type()) {
+                        case ValueType::Boolean:
+                        case ValueType::Null:
+                            return Value{lhs.convertTo(ValueType::Boolean).booleanValue() && rhs.convertTo(ValueType::Boolean).booleanValue()};
+                        case ValueType::Number:
+                        case ValueType::String:
+                        case ValueType::Array:
+                        case ValueType::Map:
+                        case ValueType::Range:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::Number:
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Undefined:
+                    break;
+            }
+
+            throw EvaluationError{"Cannot apply operator && to '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " and '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateLogicalOr(const Value& lhs, const Value& rhs) {
+            switch (lhs.type()) {
+                case ValueType::Boolean:
+                case ValueType::Null:
+                    switch (rhs.type()) {
+                        case ValueType::Boolean:
+                        case ValueType::Null:
+                            return Value{lhs.convertTo(ValueType::Boolean).booleanValue() || rhs.convertTo(ValueType::Boolean).booleanValue()};
+                        case ValueType::Number:
+                        case ValueType::String:
+                        case ValueType::Array:
+                        case ValueType::Map:
+                        case ValueType::Range:
+                        case ValueType::Undefined:
+                            break;
+                    }
+                    break;
+                case ValueType::Number:
+                case ValueType::String:
+                case ValueType::Array:
+                case ValueType::Map:
+                case ValueType::Range:
+                case ValueType::Undefined:
+                    break;
+            }
+
+            throw EvaluationError{"Cannot apply operator || to '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " and '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateBitwiseAnd(const Value& lhs, const Value& rhs) {
+            if (lhs.convertibleTo(ValueType::Number) && rhs.convertibleTo(ValueType::Number)) {
+                const IntegerType lhsInt = lhs.convertTo(ValueType::Number).integerValue();
+                const IntegerType rhsInt = rhs.convertTo(ValueType::Number).integerValue();
+                return Value{lhsInt & rhsInt};
+            }
+            throw EvaluationError{"Cannot apply operator & to '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " and '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateBitwiseXOr(const Value& lhs, const Value& rhs) {
+            if (lhs.convertibleTo(ValueType::Number) && rhs.convertibleTo(ValueType::Number)) {
+                const IntegerType lhsInt = lhs.convertTo(ValueType::Number).integerValue();
+                const IntegerType rhsInt = rhs.convertTo(ValueType::Number).integerValue();
+                return Value{lhsInt ^ rhsInt};
+            }
+            throw EvaluationError{"Cannot apply operator ^ to '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " and '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateBitwiseOr(const Value& lhs, const Value& rhs) {
+            if (lhs.convertibleTo(ValueType::Number) && rhs.convertibleTo(ValueType::Number)) {
+                const IntegerType lhsInt = lhs.convertTo(ValueType::Number).integerValue();
+                const IntegerType rhsInt = rhs.convertTo(ValueType::Number).integerValue();
+                return Value{lhsInt | rhsInt};
+            }
+            throw EvaluationError{"Cannot apply operator | to '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " and '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateBitwiseShiftLeft(const Value& lhs, const Value& rhs) {
+            if (lhs.convertibleTo(ValueType::Number) && rhs.convertibleTo(ValueType::Number)) {
+                const IntegerType lhsInt = lhs.convertTo(ValueType::Number).integerValue();
+                const IntegerType rhsInt = rhs.convertTo(ValueType::Number).integerValue();
+                return Value{lhsInt << rhsInt};
+            }
+            throw EvaluationError{"Cannot apply operator << to '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " and '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static Value evaluateBitwiseShiftRight(const Value& lhs, const Value& rhs) {
+            if (lhs.convertibleTo(ValueType::Number) && rhs.convertibleTo(ValueType::Number)) {
+                const IntegerType lhsInt = lhs.convertTo(ValueType::Number).integerValue();
+                const IntegerType rhsInt = rhs.convertTo(ValueType::Number).integerValue();
+                return Value{lhsInt >> rhsInt};
+            }
+            throw EvaluationError{"Cannot apply operator >> to '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " and '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+        }
+
+        static int compareAsBooleans(const Value& lhs, const Value& rhs) {
+            const bool lhsValue = lhs.convertTo(ValueType::Boolean).booleanValue();
+            const bool rhsValue = rhs.convertTo(ValueType::Boolean).booleanValue();
+            if (lhsValue == rhsValue) {
+                return 0;
+            } else if (lhsValue) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+
+        static int compareAsNumbers(const Value& lhs, const Value& rhs) {
+            const NumberType diff = lhs.convertTo(ValueType::Number).numberValue() - rhs.convertTo(ValueType::Number).numberValue();
+            if (diff < 0.0) {
+                return -1;
+            } else if (diff > 0.0) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        static int evaluateCompare(const Value& lhs, const Value& rhs) {
+            try {
+                switch (lhs.type()) {
+                    case ValueType::Boolean:
+                        switch (rhs.type()) {
+                            case ValueType::Boolean:
+                            case ValueType::Number:
+                            case ValueType::String:
+                                return compareAsBooleans(lhs, rhs);
+                            case ValueType::Null:
+                            case ValueType::Undefined:
+                                return 1;
+                            case ValueType::Array:
+                            case ValueType::Map:
+                            case ValueType::Range:
+                                break;
+                        }
+                        break;
+                    case ValueType::Number:
+                        switch (rhs.type()) {
+                            case ValueType::Boolean:
+                                return compareAsBooleans(lhs, rhs);
+                            case ValueType::Number:
+                            case ValueType::String:
+                                return compareAsNumbers(lhs, rhs);
+                            case ValueType::Null:
+                            case ValueType::Undefined:
+                                return 1;
+                            case ValueType::Array:
+                            case ValueType::Map:
+                            case ValueType::Range:
+                                break;
+                        }
+                        break;
+                    case ValueType::String:
+                        switch (rhs.type()) {
+                            case ValueType::Boolean:
+                                return compareAsBooleans(lhs, rhs);
+                            case ValueType::Number:
+                                return compareAsNumbers(lhs, rhs);
+                            case ValueType::String:
+                                return lhs.stringValue().compare(rhs.convertTo(ValueType::String).stringValue());
+                            case ValueType::Null:
+                            case ValueType::Undefined:
+                                return 1;
+                            case ValueType::Array:
+                            case ValueType::Map:
+                            case ValueType::Range:
+                                break;
+                        }
+                        break;
+                    case ValueType::Null:
+                        if (rhs.type() == ValueType::Null) {
+                            return 0;
+                        } else {
+                            return -1;
+                        }
+                    case ValueType::Undefined:
+                        if (rhs.type() == ValueType::Undefined) {
+                            return 0;
+                        } else {
+                            return -1;
+                        }
+                    case ValueType::Array:
+                        switch (rhs.type()) {
+                            case ValueType::Array:
+                                return kdl::col_lexicographical_compare(lhs.arrayValue(), rhs.arrayValue(), [](const auto& l, const auto& r) { return evaluateCompare(l, r) < 0; });
+                            case ValueType::Null:
+                            case ValueType::Undefined:
+                                return 1;
+                            case ValueType::Boolean:
+                            case ValueType::Number:
+                            case ValueType::String:
+                            case ValueType::Map:
+                            case ValueType::Range:
+                                break;
+                        }
+                        break;
+                    case ValueType::Map:
+                        switch (rhs.type()) {
+                            case ValueType::Map:
+                                return kdl::map_lexicographical_compare(lhs.mapValue(), rhs.mapValue(), [](const auto& l, const auto& r) { return evaluateCompare(l, r) < 0; });
+                            case ValueType::Null:
+                            case ValueType::Undefined:
+                                return 1;
+                            case ValueType::Boolean:
+                            case ValueType::Number:
+                            case ValueType::String:
+                            case ValueType::Array:
+                            case ValueType::Range:
+                                break;
+                        }
+                        break;
+                    case ValueType::Range:
+                        switch (rhs.type()) {
+                            case ValueType::Range:
+                                return kdl::col_lexicographical_compare(lhs.rangeValue(), rhs.rangeValue());
+                            case ValueType::Null:
+                            case ValueType::Undefined:
+                                return 1;
+                            case ValueType::Boolean:
+                            case ValueType::Number:
+                            case ValueType::String:
+                            case ValueType::Array:
+                            case ValueType::Map:
+                                break;
+                        }
+                        break;
+                }
+                throw EvaluationError{"Cannot compare value '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " to value '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "'"};
+            } catch (const ConversionError& c) {
+                throw EvaluationError{"Cannot compare value '" + lhs.describe() + "' of type '" + typeName(lhs.type()) + " to value '" + rhs.describe() + "' of type '" + typeName(rhs.type()) + "': " + c.what()};
+            }
+        }
+
         static Value evaluateBinaryExpression(const BinaryOperator operator_, const Value& leftOperand, const Value& rightOperand) {
             if (leftOperand == Value::Undefined || rightOperand == Value::Undefined) {
                 return Value::Undefined;
@@ -281,41 +824,41 @@ namespace TrenchBroom {
 
             switch (operator_) {
                 case BinaryOperator::Addition:
-                    return Value{leftOperand + rightOperand};
+                    return evaluateAddition(leftOperand, rightOperand);
                 case BinaryOperator::Subtraction:
-                    return Value{leftOperand - rightOperand};
+                    return evaluateSubtraction(leftOperand, rightOperand);
                 case BinaryOperator::Multiplication:
-                    return Value{leftOperand * rightOperand};
+                    return evaluateMultiplication(leftOperand, rightOperand);
                 case BinaryOperator::Division:
-                    return Value{leftOperand / rightOperand};
+                    return evaluateDivision(leftOperand, rightOperand);
                 case BinaryOperator::Modulus:
-                    return Value{leftOperand % rightOperand};
+                    return evaluateModulus(leftOperand, rightOperand);
                 case BinaryOperator::LogicalAnd:
-                    return Value{leftOperand && rightOperand};
+                    return evaluateLogicalAnd(leftOperand, rightOperand);
                 case BinaryOperator::LogicalOr:
-                    return Value{leftOperand || rightOperand};
+                    return evaluateLogicalOr(leftOperand, rightOperand);
                 case BinaryOperator::BitwiseAnd:
-                    return Value{leftOperand & rightOperand};
+                    return evaluateBitwiseAnd(leftOperand, rightOperand);
                 case BinaryOperator::BitwiseXOr:
-                    return Value{leftOperand ^ rightOperand};
+                    return evaluateBitwiseXOr(leftOperand, rightOperand);
                 case BinaryOperator::BitwiseOr:
-                    return Value{leftOperand | rightOperand};
+                    return evaluateBitwiseOr(leftOperand, rightOperand);
                 case BinaryOperator::BitwiseShiftLeft:
-                    return Value{leftOperand << rightOperand};
+                    return evaluateBitwiseShiftLeft(leftOperand, rightOperand);
                 case BinaryOperator::BitwiseShiftRight:
-                    return Value{leftOperand >> rightOperand};
+                    return evaluateBitwiseShiftRight(leftOperand, rightOperand);
                 case BinaryOperator::Less:
-                    return Value{leftOperand < rightOperand};
+                    return Value{evaluateCompare(leftOperand, rightOperand) < 0};
                 case BinaryOperator::LessOrEqual:
-                    return Value{leftOperand <= rightOperand};
+                    return Value{evaluateCompare(leftOperand, rightOperand) <= 0};
                 case BinaryOperator::Greater:
-                    return Value{leftOperand > rightOperand};
+                    return Value{evaluateCompare(leftOperand, rightOperand) > 0};
                 case BinaryOperator::GreaterOrEqual:
-                    return Value{leftOperand >= rightOperand};
+                    return Value{evaluateCompare(leftOperand, rightOperand) >= 0};
                 case BinaryOperator::Equal:
-                    return Value{leftOperand == rightOperand};
+                    return Value{evaluateCompare(leftOperand, rightOperand) == 0};
                 case BinaryOperator::NotEqual:
-                    return Value{leftOperand != rightOperand};
+                    return Value{evaluateCompare(leftOperand, rightOperand) != 0};
                 case BinaryOperator::Range: {
                     const auto from = static_cast<long>(leftOperand.convertTo(ValueType::Number).numberValue());
                     const auto to = static_cast<long>(rightOperand.convertTo(ValueType::Number).numberValue());
@@ -339,7 +882,7 @@ namespace TrenchBroom {
                     return Value{std::move(range)};
                 }
                 case BinaryOperator::Case: {
-                    if (leftOperand.convertTo(ValueType::Boolean)) {
+                    if (leftOperand.convertTo(ValueType::Boolean).booleanValue()) {
                         return rightOperand;
                     } else {
                         return Value::Undefined;
@@ -353,7 +896,7 @@ namespace TrenchBroom {
             return evaluateBinaryExpression(m_operator, m_leftOperand.evaluate(context), m_rightOperand.evaluate(context));
         }
         
-        ExpressionVariant BinaryExpression::optimize() const {
+        std::unique_ptr<ExpressionImpl> BinaryExpression::optimize() const {
             auto optimizedLeftOperand = m_leftOperand.optimize();
             auto optimizedRightOperand = m_rightOperand.optimize();
 
@@ -362,10 +905,10 @@ namespace TrenchBroom {
             auto rightValue = optimizedRightOperand.evaluate(evaluationContext);
 
             if (auto value = evaluateBinaryExpression(m_operator, leftValue, rightValue); value != Value::Undefined) {
-                return LiteralExpression{std::move(value)};
+                return std::make_unique<LiteralExpression>(std::move(value));
             }
 
-            return BinaryExpression{m_operator, std::move(optimizedLeftOperand), std::move(optimizedRightOperand)};
+            return std::make_unique<BinaryExpression>(m_operator, std::move(optimizedLeftOperand), std::move(optimizedRightOperand));
         }
 
         size_t BinaryExpression::precedence() const {
@@ -406,79 +949,78 @@ namespace TrenchBroom {
             };
         }
 
-        bool operator==(const BinaryExpression& lhs, const BinaryExpression& rhs) {
-            return lhs.m_operator == rhs.m_operator && lhs.m_leftOperand == rhs.m_leftOperand && lhs.m_rightOperand == rhs.m_rightOperand;;
+        bool BinaryExpression::operator==(const ExpressionImpl& rhs) const {
+            return rhs == *this;
         }
 
-        bool operator!=(const BinaryExpression& lhs, const BinaryExpression& rhs) {
-            return !(lhs == rhs);
+        bool BinaryExpression::operator==(const BinaryExpression& rhs) const {
+            return m_operator == rhs.m_operator && m_leftOperand == rhs.m_leftOperand && m_rightOperand == rhs.m_rightOperand;
         }
 
-        std::ostream& operator<<(std::ostream& str, const BinaryExpression& exp) {
-            switch (exp.m_operator) {
+        void BinaryExpression::appendToStream(std::ostream& str) const {
+            switch (m_operator) {
                 case BinaryOperator::Addition:
-                    str << exp.m_leftOperand << " + " << exp.m_rightOperand;
+                    str << m_leftOperand << " + " << m_rightOperand;
                     break;
                 case BinaryOperator::Subtraction:
-                    str << exp.m_leftOperand << " - " << exp.m_rightOperand;
+                    str << m_leftOperand << " - " << m_rightOperand;
                     break;
                 case BinaryOperator::Multiplication:
-                    str << exp.m_leftOperand << " * " << exp.m_rightOperand;
+                    str << m_leftOperand << " * " << m_rightOperand;
                     break;
                 case BinaryOperator::Division:
-                    str << exp.m_leftOperand << " / " << exp.m_rightOperand;
+                    str << m_leftOperand << " / " << m_rightOperand;
                     break;
                 case BinaryOperator::Modulus:
-                    str << exp.m_leftOperand << " % " << exp.m_rightOperand;
+                    str << m_leftOperand << " % " << m_rightOperand;
                     break;
                 case BinaryOperator::LogicalAnd:
-                    str << exp.m_leftOperand << " && " << exp.m_rightOperand;
+                    str << m_leftOperand << " && " << m_rightOperand;
                     break;
                 case BinaryOperator::LogicalOr:
-                    str << exp.m_leftOperand << " || " << exp.m_rightOperand;
+                    str << m_leftOperand << " || " << m_rightOperand;
                     break;
                 case BinaryOperator::BitwiseAnd:
-                    str << exp.m_leftOperand << " & " << exp.m_rightOperand;
+                    str << m_leftOperand << " & " << m_rightOperand;
                     break;
                 case BinaryOperator::BitwiseXOr:
-                    str << exp.m_leftOperand << " ^ " << exp.m_rightOperand;
+                    str << m_leftOperand << " ^ " << m_rightOperand;
                     break;
                 case BinaryOperator::BitwiseOr:
-                    str << exp.m_leftOperand << " | " << exp.m_rightOperand;
+                    str << m_leftOperand << " | " << m_rightOperand;
                     break;
                 case BinaryOperator::BitwiseShiftLeft:
-                    str << exp.m_leftOperand << " << " << exp.m_rightOperand;
+                    str << m_leftOperand << " << " << m_rightOperand;
                     break;
                 case BinaryOperator::BitwiseShiftRight:
-                    str << exp.m_leftOperand << " >> " << exp.m_rightOperand;
+                    str << m_leftOperand << " >> " << m_rightOperand;
                     break;
                 case BinaryOperator::Less:
-                    str << exp.m_leftOperand << " < " << exp.m_rightOperand;
+                    str << m_leftOperand << " < " << m_rightOperand;
                     break;
                 case BinaryOperator::LessOrEqual:
-                    str << exp.m_leftOperand << " <= " << exp.m_rightOperand;
+                    str << m_leftOperand << " <= " << m_rightOperand;
                     break;
                 case BinaryOperator::Greater:
-                    str << exp.m_leftOperand << " > " << exp.m_rightOperand;
+                    str << m_leftOperand << " > " << m_rightOperand;
                     break;
                 case BinaryOperator::GreaterOrEqual:
-                    str << exp.m_leftOperand << " >= " << exp.m_rightOperand;
+                    str << m_leftOperand << " >= " << m_rightOperand;
                     break;
                 case BinaryOperator::Equal:
-                    str << exp.m_leftOperand << " == " << exp.m_rightOperand;
+                    str << m_leftOperand << " == " << m_rightOperand;
                     break;
                 case BinaryOperator::NotEqual:
-                    str << exp.m_leftOperand << " != " << exp.m_rightOperand;
+                    str << m_leftOperand << " != " << m_rightOperand;
                     break;
                 case BinaryOperator::Range:
-                    str << exp.m_leftOperand << ".." << exp.m_rightOperand;
+                    str << m_leftOperand << ".." << m_rightOperand;
                     break;
                 case BinaryOperator::Case:
-                    str << exp.m_leftOperand << " -> " << exp.m_rightOperand;
+                    str << m_leftOperand << " -> " << m_rightOperand;
                     break;
                 switchDefault();
             };
-            return str;
         }
 
         const std::string& SubscriptExpression::AutoRangeParameterName() {
@@ -500,7 +1042,7 @@ namespace TrenchBroom {
             return leftValue[rightValue];
         }
         
-        ExpressionVariant SubscriptExpression::optimize() const {
+        std::unique_ptr<ExpressionImpl> SubscriptExpression::optimize() const {
             auto optimizedLeftOperand = m_leftOperand.optimize();
             auto optimizedRightOperand = m_rightOperand.optimize();
 
@@ -511,25 +1053,24 @@ namespace TrenchBroom {
 
                 if (auto rightValue = optimizedRightOperand.evaluate(stack); rightValue != Value::Undefined) {
                     if (auto value = leftValue[rightValue]; value != Value::Undefined) {
-                        return LiteralExpression{std::move(value)};
+                        return std::make_unique<LiteralExpression>(std::move(value));
                     }
                 }
             }
 
-            return SubscriptExpression{std::move(optimizedLeftOperand), std::move(optimizedRightOperand)};
+            return std::make_unique<SubscriptExpression>(std::move(optimizedLeftOperand), std::move(optimizedRightOperand));
         }
 
-        bool operator==(const SubscriptExpression& lhs, const SubscriptExpression& rhs) {
-            return lhs.m_leftOperand == rhs.m_leftOperand && lhs.m_rightOperand == rhs.m_rightOperand;;
+        bool SubscriptExpression::operator==(const ExpressionImpl& rhs) const {
+            return rhs == *this;
         }
 
-        bool operator!=(const SubscriptExpression& lhs, const SubscriptExpression& rhs) {
-            return !(lhs == rhs);
+        bool SubscriptExpression::operator==(const SubscriptExpression& rhs) const {
+            return m_leftOperand == rhs.m_leftOperand && m_rightOperand == rhs.m_rightOperand;
         }
 
-        std::ostream& operator<<(std::ostream& str, const SubscriptExpression& exp) {
-            str << exp.m_leftOperand << "[" << exp.m_rightOperand << "]";
-            return str;
+        void SubscriptExpression::appendToStream(std::ostream& str) const {
+            str << m_leftOperand << "[" << m_rightOperand << "]";
         }
 
         SwitchExpression::SwitchExpression(std::vector<Expression> cases) :
@@ -544,39 +1085,38 @@ namespace TrenchBroom {
             return Value::Undefined;
         }
         
-        ExpressionVariant SwitchExpression::optimize() const {
+        std::unique_ptr<ExpressionImpl> SwitchExpression::optimize() const {
             if (m_cases.empty()) {
-                return *this;
+                return std::make_unique<SwitchExpression>(m_cases);
             }
 
             auto optimizedExpressions = kdl::vec_transform(m_cases, [](const auto& expression) { return expression.optimize(); });
             if (auto firstValue = optimizedExpressions.front().evaluate(EvaluationContext{}); firstValue != Value::Undefined) {
-                return LiteralExpression{std::move(firstValue)};
+                return std::make_unique<LiteralExpression>(std::move(firstValue));
             }
 
-            return SwitchExpression{std::move(optimizedExpressions)};
+            return std::make_unique<SwitchExpression>(std::move(optimizedExpressions));
         }
 
-        bool operator==(const SwitchExpression& lhs, const SwitchExpression& rhs) {
-            return lhs.m_cases == rhs.m_cases;
+        bool SwitchExpression::operator==(const ExpressionImpl& rhs) const {
+            return rhs == *this;
         }
 
-        bool operator!=(const SwitchExpression& lhs, const SwitchExpression& rhs) {
-            return !(lhs == rhs);
+        bool SwitchExpression::operator==(const SwitchExpression& rhs) const {
+            return m_cases == rhs.m_cases;
         }
 
-        std::ostream& operator<<(std::ostream& str, const SwitchExpression& exp) {
+        void SwitchExpression::appendToStream(std::ostream& str) const {
             str << "{{ ";
             size_t i = 0u;
-            for (const auto& case_ : exp.m_cases) {
+            for (const auto& case_ : m_cases) {
                 str << case_;
-                if (i < exp.m_cases.size() - 1u) {
+                if (i < m_cases.size() - 1u) {
                     str << ", ";
                 }
                 ++i;
             }
             str << " }}";
-            return str;
         }
     }
 }
