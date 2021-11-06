@@ -184,7 +184,8 @@ namespace TrenchBroom {
                 });
 
                 const auto* frame = m_entityModelManager.frame(spec);
-                const auto modelScale = vm::vec3f{definition->modelDefinition().scale(EL::NullVariableStore{}, m_defaultScaleModelExpression)};
+
+                auto modelScale = vm::vec3f{definition->modelDefinition().scale(EL::NullVariableStore{}, m_defaultScaleModelExpression)};
 
                 Renderer::TexturedRenderer* modelRenderer = nullptr;
                 vm::bbox3f rotatedBounds;
@@ -202,6 +203,11 @@ namespace TrenchBroom {
                     const auto center = rotatedBounds.center();
                     const auto transform =vm::translation_matrix(-center) * vm::rotation_matrix(m_rotation) *vm::translation_matrix(center);
                     rotatedBounds = rotatedBounds.transform(transform);
+                }
+
+                // RB: skip model scale expressions for sprite icons
+                if (modelOrientation == Assets::Orientation::ViewPlaneParallel) {
+                    modelScale = vm::vec3f(0.5f, 0.5f, 0.5f);
                 }
 
                 const auto boundsSize = rotatedBounds.size();
