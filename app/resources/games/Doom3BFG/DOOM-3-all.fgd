@@ -34,7 +34,7 @@
 	model(string) : "" : "admin_impdoors"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = admin_overhear_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = admin_overhear_cam : "No description"
 [
 	cinematic(string) : "" : "1"
 	spawnclass(string) : "" : "idCameraAnim"
@@ -93,7 +93,7 @@
 	snd_admin_sight2(string) : "" : "admin_monster_demon_pinky_sight2"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = admin_pinkyattack_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = admin_pinkyattack_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -196,7 +196,7 @@
 	damage_zone.legs(string) : "" : ""
 ]
 
-@PointClass color(127 76 0) size(-24 -24 0, 24 24 82) model({ "path": "sprites/ai.png" }) = ai_attackcone : "
+@PointClass color(127 76 0) size(-24 -24 0, 24 24 82) model({ "path": "sprites/ai.png", "scale": 0.03125 }) = ai_attackcone : "
 "
 [
 	spawnclass(string) : "" : "idCombatNode"
@@ -214,7 +214,7 @@
 	start_off(string) : "Disables entity until triggered."
 ]
 
-@PointClass color(127 76 0) size(-24 -24 0, 24 24 82) model({ "path": "sprites/ai.png" }) = ai_attackcone_once : "
+@PointClass color(127 76 0) size(-24 -24 0, 24 24 82) model({ "path": "sprites/ai.png", "scale": 0.03125 }) = ai_attackcone_once : "
 "
 [
 	spawnclass(string) : "" : "idCombatNode"
@@ -232,7 +232,7 @@
 	start_off(string) : "Disables entity until triggered."
 ]
 
-@PointClass color(127 76 0) size(-24 -24 0, 24 24 82) model({ "path": "sprites/ai.png" }) = ai_attackcone_turret : "Attack cone where monster stands in place and uses normal range attack (if it has one).
+@PointClass color(127 76 0) size(-24 -24 0, 24 24 82) model({ "path": "sprites/ai.png", "scale": 0.03125 }) = ai_attackcone_turret : "Attack cone where monster stands in place and uses normal range attack (if it has one).
 "
 [
 	spawnclass(string) : "" : "idCombatNode"
@@ -248,13 +248,13 @@
 	start_off(string) : "Disables entity until triggered."
 ]
 
-@PointClass color(127 76 0) size(-24 -24 0, 24 24 82) model({ "path": "sprites/ai.png" }) = ai_lostcombat : "Lost combat node.  Monster will retreat to this position when he can no longer reach the player.
+@PointClass color(127 76 0) size(-24 -24 0, 24 24 82) model({ "path": "sprites/ai.png", "scale": 0.03125 }) = ai_lostcombat : "Lost combat node.  Monster will retreat to this position when he can no longer reach the player.
 "
 [
 	spawnclass(string) : "" : "idSpawnableEntity"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = alphalabs1_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = alphalabs1_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.magintro_a(string) : "" : "models/md5/cinematics/alphalabs1/magintro_cam1.md5camera"
@@ -518,7 +518,7 @@
 	copy_joint_world.eyecontrol(string) : "" : ""
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = alphalabs3_vagaryintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = alphalabs3_vagaryintro_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -1533,7 +1533,7 @@
 	wait(string) : "" : "-1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_chain_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_chain_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.cameras(string) : "" : "models/md5/cinematics/commandos/cin_commandos_camanim.md5camera"
@@ -1566,7 +1566,7 @@
 	model(string) : "" : "cin_chain_zct"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_e3bathroom_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_e3bathroom_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.scene1cams(string) : "" : "models/md5/cinematics/alphalabs2/scene1cams.md5camera"
@@ -1575,7 +1575,7 @@
 	anim.scene9acam(string) : "" : "models/md5/cinematics/alphalabs2/cam9a.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_e3teaser_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_e3teaser_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.e3teasercam(string) : "" : "models/md5/cinematics/e3teasercam.md5camera"
@@ -1587,7 +1587,7 @@
 	model(string) : "" : "cin_e3teaser_hk"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_elevator_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_elevator_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.elevatorcam(string) : "" : "models/md5/cinematics/elevator/cin_elevator_cam.md5camera"
@@ -1631,7 +1631,7 @@
 	model(string) : "" : "cin_hk_walkbydoor"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_hkdeath_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_hkdeath_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.deathcam(string) : "" : "models/md5/cinematics/hellknightfeast/cin_hk_deathcam.md5camera"
@@ -1643,7 +1643,7 @@
 	model(string) : "" : "cin_hkdeath_uac"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_hkendroar_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_hkendroar_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.endroarcam(string) : "" : "models/md5/cinematics/hellknightfeast/cin_hk_endroarcam.md5camera"
@@ -1655,7 +1655,7 @@
 	model(string) : "" : "cin_hkendroar_hk"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_hkrip_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_hkrip_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.ripcam(string) : "" : "models/md5/cinematics/hellknightfeast/cin_hk_ripcam.md5camera"
@@ -1667,13 +1667,13 @@
 	model(string) : "" : "cin_hkrip_uac"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_logo_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_logo_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.logocam(string) : "" : "models/md5/cinematics/logo/logocam.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_mars_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_mars_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.marscam(string) : "" : "models/md5/cinematics/mars/marscam.md5camera"
@@ -1691,25 +1691,25 @@
 	model(string) : "" : "cin_pink_drag"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_posess2_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_posess2_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.pos2cam(string) : "" : "models/md5/cinematics/posession/cam2anim.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_posess3_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_posess3_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.pos3cam(string) : "" : "models/md5/cinematics/posession/cam3anim.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_posess5_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_posess5_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.pos5cam(string) : "" : "models/md5/cinematics/posession/cam5anim.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_posess_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_posess_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.poscam(string) : "" : "models/md5/cinematics/posession/secposcameras.md5camera"
@@ -1763,13 +1763,13 @@
 	model(string) : "" : "cin_shake"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_shake_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_shake_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.shakecam(string) : "" : "models/md5/cinematics/roomshake/cin_shakecam.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_tele_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_tele_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.e3telecam(string) : "" : "models/md5/cinematics/teleporter/telecam.md5camera"
@@ -1788,7 +1788,7 @@
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cin_toob_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cin_toob_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim(string) : "" : "toobcam"
@@ -1844,7 +1844,7 @@
 	model(string) : "" : "comm1_sentryloader"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = comm1_swann_video_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = comm1_swann_video_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.video_a(string) : "" : "models/md5/cinematics/comm1/swann_video_a_cam.md5camera"
@@ -1875,7 +1875,7 @@
 	model(string) : "" : "commoutside_campbell"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = commoutside_camzombie_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = commoutside_camzombie_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.camzombie(string) : "" : "models/md5/cinematics/commoutside/zombie_with_camera.md5camera"
@@ -1940,7 +1940,7 @@
 	model(string) : "" : "commoutside_player"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = commoutside_sawintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = commoutside_sawintro_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.sawshot1(string) : "" : "models/md5/cinematics/commoutside/sawintro_cam1.md5camera"
@@ -1962,7 +1962,7 @@
 	model(string) : "" : "commoutside_vehicle"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cpu1_camphunt_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cpu1_camphunt_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2084,7 +2084,7 @@
 	dropGibItem8Joint(string) : "" : "Hips"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = cpuboss_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = cpuboss_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2129,7 +2129,7 @@
 	head_joint(string) : "" : "Shoulders"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = delta1_sargevcd_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = delta1_sargevcd_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.sarge_vcd(string) : "" : "models/md5/cinematics/delta1/sarge_vcd.md5camera"
@@ -2193,7 +2193,7 @@
 	anim2(string) : "" : "scientist_b"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = delta2a_sci_tele_hell_visions_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = delta2a_sci_tele_hell_visions_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2238,7 +2238,7 @@
 	snd_secondary1(string) : "" : "delta2a_sci_secondary1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = delta2a_scientist_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = delta2a_scientist_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2287,7 +2287,7 @@
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = delta2a_teleporter_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = delta2a_teleporter_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2313,7 +2313,7 @@
 	snd_footstep(string) : "" : "monster_zombie_security_footstep"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = delta2b_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = delta2b_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2366,14 +2366,14 @@
 	head_joint(string) : "" : "Shoulders"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = delta2b_roq2_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = delta2b_roq2_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
 	anim.delta2b_roq2_cam(string) : "" : "models/md5/cinematics/delta2b/delta2b_roq2_camera.md5camera "
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = delta2b_roq3_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = delta2b_roq3_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2508,7 +2508,7 @@
 	snd_hit(string) : "" : ""
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = delta4_hkintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = delta4_hkintro_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2592,7 +2592,7 @@
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = ending_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = ending_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.ending(string) : "" : "models/md5/monsters/maledict/endingcam.md5camera"
@@ -2698,7 +2698,7 @@
 	snd_footstep(string) : "" : "monster_demon_wraith_footstep"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = enpro_escape_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = enpro_escape_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2708,7 +2708,7 @@
 	anim.escape4(string) : "" : "models/md5/cinematics/enpro/escapecam4.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = enpro_exit_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = enpro_exit_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2756,7 +2756,7 @@
 	anim3(string) : "" : "exitstart_c"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = enpro_glass_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = enpro_glass_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2793,7 +2793,7 @@
 	anim(string) : "" : "pop"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = enpro_lostintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = enpro_lostintro_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2802,7 +2802,7 @@
 	anim.lostintro3(string) : "" : "models/md5/cinematics/enpro/lostcam3.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = enpro_monitor_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = enpro_monitor_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -2958,14 +2958,14 @@
 	snd_convo2(string) : "" : "enpro_ok_lets_get_to"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = enpro_tuberide_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = enpro_tuberide_cam : "No description"
 [
 	cinematic(string) : "" : "1"
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.tuberide(string) : "" : "models/md5/cinematics/enpro/tuberidecam.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = enpro_wounded_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = enpro_wounded_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -4549,7 +4549,7 @@ Do not use in game. For testing only.
 	anim(string) : "" : "zjump_eats_zsci_loop"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus1_cinematic_camera : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus1_cinematic_camera : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.gravgun_camera_a(string) : "" : "models/md5/cinematics/gravgun_intro/gravgun_camera_a.camera"
@@ -4689,7 +4689,7 @@ Do not use in game. For testing only.
 	model_gib(string) : "" : "models/md5/chars/skeleton.md5mesh"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus1_intro_camera : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus1_intro_camera : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.e1_intro_cam_a(string) : "" : "models/md5/cinematics/intro_eric/intro_cam_a.camera"
@@ -4724,7 +4724,7 @@ Do not use in game. For testing only.
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus1_intro_camera_p3 : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus1_intro_camera_p3 : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.e1_intro_cam_p3_a(string) : "" : "models/md5/cinematics/intro_eric/intro_cam_p3_a.camera"
@@ -5222,7 +5222,7 @@ Do not use in game. For testing only.
 	snd_footstep(string) : "" : "player_sounds_footstep"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus2_hunterintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus2_hunterintro_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.erebus2_hunterintro(string) : "" : "models/md5/cinematics/erebus2/erebus2_hunterintro.md5camera"
@@ -5271,7 +5271,7 @@ Do not use in game. For testing only.
 	snd_talk_secondary2(string) : "" : "e2_spooked_secondary2"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus2_vulgarintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus2_vulgarintro_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.erebus2_vulgarintro(string) : "" : "models/md5/cinematics/erebus2/erebus2_vulgarintro.md5camera"
@@ -5423,7 +5423,7 @@ Do not use in game. For testing only.
 	snd_harvest_whisper(string) : "" : "harvest_whisper"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus5_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus5_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.erebus5_cinematic_cam_1(string) : "" : "models/md5/cinematics/erebus5/erebus5_cinematic_cam.md5camera"
@@ -5485,7 +5485,7 @@ Do not use in game. For testing only.
 	snd_mcneil_triggered_full(string) : "" : "e5_mcneil_triggered_full"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus5_cloud_cinematic_camera_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus5_cloud_cinematic_camera_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -5552,7 +5552,7 @@ Do not use in game. For testing only.
 	health(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus5_envirosuit_off_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus5_envirosuit_off_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.erebus5_envirosuit_off_cam_1(string) : "" : "models/md5/cinematics/erebus5/erebus5_envirosuit_off_cam.md5camera"
@@ -5561,7 +5561,7 @@ Do not use in game. For testing only.
 	anim.erebus5_envirosuit_off_cam_c(string) : "" : "models/md5/cinematics/erebus5/erebus5_envirosuit_off_cam_c.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus5_envirosuit_on_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus5_envirosuit_on_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.erebus5_envirosuit_on_cam_1(string) : "" : "models/md5/cinematics/erebus5/erebus5_envirosuit_on_cam.md5camera"
@@ -5579,7 +5579,7 @@ Do not use in game. For testing only.
 	snd_footstep(string) : "" : "player_sounds_footstep"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus5_mcneil_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus5_mcneil_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.erebus5_mcneil_cam_1(string) : "" : "models/md5/cinematics/erebus5/erebus5_McNeil.md5camera"
@@ -5674,13 +5674,13 @@ Do not use in game. For testing only.
 	dropGibItem8Joint(string) : "" : "Hips"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus6_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus6_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.erebus6_cinematic_cam_1(string) : "" : "models/md5/cinematics/erebus6/hunter2introcam.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = erebus6_cinematic_cam_death : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = erebus6_cinematic_cam_death : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.erebus6_cinematic_cam_outro(string) : "" : "models/md5/cinematics/erebus6/hunter2outrocam.md5camera"
@@ -5926,7 +5926,7 @@ Repeat floor1_ height and door info with floor2_ etc.. for as many floors as you
 	statusgui(string) : "entity name to update floor info, can use statusgui2..3..4..etc. for multiple updates.  if appended with _num it will target an optional specific gui number on the entity this is handy for models with multiple guis."
 ]
 
-@PointClass base(func_static) color(0 127 204) size(-12 -12 -12, 12 12 12) model({ "path": "sprites/func_emitter.png" }) = func_emitter : "Inherits from a func_static but is fixed size and shows a rotation arrow.
+@PointClass base(func_static) color(0 127 204) size(-12 -12 -12, 12 12 12) model({ "path": "sprites/bonfire.png", "scale": 0.03125 }) = func_emitter : "Inherits from a func_static but is fixed size and shows a rotation arrow.
 Use it to orient particle models
 Trigger it to fade it in and/or out
 "
@@ -5983,7 +5983,7 @@ Trigger it to fade it in and/or out
 	disableFracture(string) : ""
 ]
 
-@PointClass color(0 127 204) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/func_emitter.png" }) = func_fx : "Spawns a special effect when triggered.
+@PointClass color(0 127 204) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/fx.png", "scale": 0.03125 }) = func_fx : "Spawns a special effect when triggered.
 "
 [
 	spawnclass(string) : "" : "idEntityFx"
@@ -6341,14 +6341,14 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = hell1_guardiandeath_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = hell1_guardiandeath_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.guardiandeath_cam(string) : "" : "models/md5/cinematics/hell1/guardiandeath_camera.md5camera"
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = hell1_guardianintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = hell1_guardianintro_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.guardianintro_cam(string) : "" : "models/md5/cinematics/hell1/guardianintro_camera.md5camera"
@@ -6362,7 +6362,7 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = hell_intro_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = hell_intro_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -6408,7 +6408,7 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = hellhole_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = hellhole_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -6606,7 +6606,7 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	copy_joint_world.eyecontrol(string) : "" : ""
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = hellhole_rescue_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = hellhole_rescue_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -6698,7 +6698,7 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	head_joint(string) : "" : "Shoulders"
 ]
 
-@PointClass color(255 255 0) size(-4 -4 -4, 4 4 4) model({ "path": "sprites/info_location.png" }) = info_location : "Place one of these in each door-separated area for naming the gameplay sections
+@PointClass color(255 255 0) size(-4 -4 -4, 4 4 4) model({ "path": "sprites/information.png", "scale": 0.03125 }) = info_location : "Place one of these in each door-separated area for naming the gameplay sections
 "
 [
 	spawnclass(string) : "" : "idLocationEntity"
@@ -6706,7 +6706,7 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	location(string) : "use this when you have two locations with the same name."
 ]
 
-@PointClass color(255 255 0) size(-16 -16 -16, 16 16 16) model({ "path": "sprites/info_location.png" }) = info_locationseparator : "Touch a vis-portal with this to break location name flood filling without using a door
+@PointClass color(255 255 0) size(-16 -16 -16, 16 16 16) model({ "path": "sprites/information.png", "scale": 0.03125 }) = info_locationseparator : "Touch a vis-portal with this to break location name flood filling without using a door
 "
 [
 	spawnclass(string) : "" : "idLocationSeparatorEntity"
@@ -6745,13 +6745,13 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	triggered(string) : "This portal sky will be inactive at start, and must be triggered to become active.  All additional portalsky areas must have this flag set."
 ]
 
-@PointClass color(255 255 0) size(-4 -4 -4, 4 4 4) model({ "path": "sprites/air-conditioning.png" }) = info_vacuum : "Place one of these in an outside area in each map for vacuum flooding
+@PointClass color(255 255 0) size(-4 -4 -4, 4 4 4) model({ "path": "sprites/air-conditioning.png", "scale": 0.03125 }) = info_vacuum : "Place one of these in an outside area in each map for vacuum flooding
 "
 [
 	spawnclass(string) : "" : "idVacuumEntity"
 ]
 
-@PointClass color(255 255 0) size(-16 -16 -16, 16 16 16) model({ "path": "sprites/air-conditioning.png" }) = info_vacuumseparator : "Touch a vis-portal with this to break air/vacuum flood filling at windows.  Trigger it to allow vacuum to flood through.
+@PointClass color(255 255 0) size(-16 -16 -16, 16 16 16) model({ "path": "sprites/air-conditioning.png", "scale": 0.03125 }) = info_vacuumseparator : "Touch a vis-portal with this to break air/vacuum flood filling at windows.  Trigger it to allow vacuum to flood through.
 "
 [
 	spawnclass(string) : "" : "idVacuumSeparatorEntity"
@@ -7029,7 +7029,7 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	snd_acquire(string) : "" : "guisounds_health"
 ]
 
-@PointClass base(item_default) color(76 76 255) size(-4 -4 -4, 4 4 4) = item_objective : "Gives the player an objective, trigger it to give the objective.
+@PointClass base(item_default) color(76 76 255) size(-4 -4 -4, 4 4 4) model({ "path": "sprites/objective.png", "scale": 0.03125 }) = item_objective : "Gives the player an objective, trigger it to give the objective.
 "
 [
 	spawnclass(string) : "" : "idObjective"
@@ -7041,7 +7041,7 @@ When triggered, toggles between visible and hidden (see hide).  Entity is non-so
 	inv_name(string) : "name of inventory/objective item used for requirements"
 ]
 
-@PointClass base(item_default) color(76 76 255) size(-4 -4 -4, 4 4 4) = item_objectivecomplete : "Completes a named objective, trigger it to complete the objective.
+@PointClass base(item_default) color(76 76 255) size(-4 -4 -4, 4 4 4) model({ "path": "sprites/objective.png", "scale": 0.03125 }) = item_objectivecomplete : "Completes a named objective, trigger it to complete the objective.
 "
 [
 	spawnclass(string) : "" : "idObjectiveComplete"
@@ -7146,7 +7146,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	snd_acquire(string) : "" : "videocd_pickup"
 ]
 
-@PointClass color(0 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/light-bulb.png" }) = light : "Light source.  If health is set, light becomes breakable and turns off when shot.
+@PointClass color(0 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/light-bulb.png", "scale": 0.03125 }) = light : "Light source.  If health is set, light becomes breakable and turns off when shot.
 "
 [
 	light(integer) : "light radius" : 300
@@ -7172,7 +7172,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	broken(string) : "model to use when the light is broken (defaults to model name with '_broken' appended to name)"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = lm_ending_camera : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = lm_ending_camera : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.camera_a(string) : "" : "models/md5/cinematics/le_hell_post/ending_cam_a.camera"
@@ -7370,21 +7370,21 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	def_charge(string) : "" : "damage_guardianCharge"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = lm_guardian_ending_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = lm_guardian_ending_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.guardian_ending_cam(string) : "" : "models/md5/cinematics/le_hell_post/guardian_ending_cam.camera"
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = lm_meyers_camera : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = lm_meyers_camera : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.meyers_control_room_cam(string) : "" : "models/md5/cinematics/le_enpro1/le_enpro1_cam.camera"
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = lm_meyers_camera_new : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = lm_meyers_camera_new : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.meyers_control_room_cam(string) : "" : "models/md5/cinematics/le_enpro1/le_enpro1_cam.camera"
@@ -7481,7 +7481,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	head_joint(string) : "" : "Shoulders"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = lm_wraith_legs_pull_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = lm_wraith_legs_pull_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.wraith_legs_pull_cam(string) : "" : "models/md5/cinematics/le_enpro1/wraith_legs_pull_cam.camera"
@@ -7507,7 +7507,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	snd_death(string) : "" : "monster_demon_guardian_die"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = maledict_death_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = maledict_death_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -7632,21 +7632,21 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	model(string) : "" : "maledict_debris1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = maledict_heart_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = maledict_heart_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
 	anim.maledict_heart_camera_a(string) : "" : "models/md5/cinematics/maledict_death/m_heart_camera_a.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = maledict_heart_closeup_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = maledict_heart_closeup_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
 	anim.maledict_heart_closeup_camera_a(string) : "" : "models/md5/cinematics/maledict_death/m_heart_closeup_camera_a.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = maledict_heart_flyin_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = maledict_heart_flyin_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -7675,7 +7675,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	snd_footstep(string) : "" : "e1_maledict_fs1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = maledict_intro_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = maledict_intro_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -7687,7 +7687,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	anim.maledict_camera_f(string) : "" : "models/md5/cinematics/maledict_intro/m_intro_camera_f.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = maledict_rocket_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = maledict_rocket_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -7808,7 +7808,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	snd_secondary2(string) : "" : "marscity2_ceiling_secondary2"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = marscity2_sarge_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = marscity2_sarge_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.sarge_brief_cam(string) : "" : "models/md5/cinematics/marscity_2/sarge_brief_cam.md5camera"
@@ -7879,7 +7879,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = marscity_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = marscity_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.betrugercin1(string) : "" : "models/md5/cinematics/marscity/betrugercin1_cam.camera"
@@ -8564,7 +8564,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	sound_bone(string) : "" : "headcontrol"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = marscity_sci_team_request_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = marscity_sci_team_request_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.sci_team_request(string) : "" : "models/md5/cinematics/marscity/sci_team_request_cam"
@@ -8991,7 +8991,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	head_joint(string) : "" : "Shoulders"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = marscity_xbox_sp_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = marscity_xbox_sp_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.hangar_a(string) : "" : "models/md5/cinematics/marscity/hangar_cam_a.camera"
@@ -9093,7 +9093,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = monorail_crash_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = monorail_crash_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.crash(string) : "" : "models/md5/cinematics/monorail/crash_cam.md5camera"
@@ -9126,7 +9126,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = monorail_raisecommando_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = monorail_raisecommando_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.raise(string) : "" : "models/md5/cinematics/monorail/raisecommando_cam.md5camera"
@@ -14278,7 +14278,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	snd_harvest_whisper(string) : "" : "harvest_whisper"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = npcgroup_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = npcgroup_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.npcgroup_cinematic_cam_1(string) : "" : "models/md5/cinematics/david/npcgroup.md5camera"
@@ -14296,7 +14296,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	model(string) : "" : "npcgroup_cinematic_scientist2"
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_anim : "Character will play the specified animation.  Set angles to direction to face.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_anim : "Character will play the specified animation.  Set angles to direction to face.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14305,13 +14305,13 @@ Only add model, model_detonate or model_burn or health to override defaults
 	head_anim(string) : "if set, waits for animation in head to finish, instead of the body."
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_attack : "Character will attack the character specified by 'enemy' key.  Character will go to next path when enemy dies or when activated.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_attack : "Character will attack the character specified by 'enemy' key.  Character will go to next path when enemy dies or when activated.
 "
 [
 	enemy(string) : "Character to attack."
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_conversation : "Conversation node.  Character speaks a line of dialog and looks at a specific entity.  When talked to, conversation will end for all characters listening to conversation and they'll begin following path entities after all conversation nodes.  When finished, character will tell all listening characters to go to their next conversation node.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_conversation : "Conversation node.  Character speaks a line of dialog and looks at a specific entity.  When talked to, conversation will end for all characters listening to conversation and they'll begin following path entities after all conversation nodes.  When finished, character will tell all listening characters to go to their next conversation node.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14321,7 +14321,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	snd_dialog(string) : "Name of sound shader to play."
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_conversation_listen : "Conversation node.  Character listens to entity 'focus' and waits for him to finish.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_conversation_listen : "Conversation node.  Character listens to entity 'focus' and waits for him to finish.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14331,12 +14331,12 @@ Only add model, model_detonate or model_burn or health to override defaults
 	no_look(string) : "If set, character doesn't look at the speaker."
 ]
 
-@PointClass base(path_default) size(-24 -24 0, 24 24 82) model({ "path": "sprites/waypoint.png" }) = path_corner : "Character will walk to this entity
+@PointClass base(path_default) size(-24 -24 0, 24 24 82) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_corner : "Character will walk to this entity
 "
 [
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_cycleanim : "Character will loop the specified animation and wait until triggered, or until time specified by 'wait' has elapsed.  Set angles to direction to face.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_cycleanim : "Character will loop the specified animation and wait until triggered, or until time specified by 'wait' has elapsed.  Set angles to direction to face.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14345,7 +14345,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	wait(string) : "how long to play the animation.  if 0, or not set, then waits until character is triggered."
 ]
 
-@PointClass color(178 76 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_default : "No description"
+@PointClass color(178 76 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_default : "No description"
 [
 	spawnclass(string) : "" : "idPathCorner"
 	target(string) : "next path entity."
@@ -14355,7 +14355,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	skip(string) : "skip to next path when talked to or hearing gunshot."
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_headanim : "starts playing an animation on the head immediately goes to next path.  used for playing talk anims while walking.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_headanim : "starts playing an animation on the head immediately goes to next path.  used for playing talk anims while walking.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "2"
@@ -14363,19 +14363,19 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim(string) : "Name of animation to play."
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_hide : "Makes the character invisible and non-solid.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_hide : "Makes the character invisible and non-solid.
 "
 [
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_jump : "Character will jump to the next path entity (regardless of type).  Will cause error if character doesn't have jumping ability.  If jump is failing, you can manually specify velocity of the jump using 'up' and 'forward'.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_jump : "Character will jump to the next path entity (regardless of type).  Will cause error if character doesn't have jumping ability.  If jump is failing, you can manually specify velocity of the jump using 'up' and 'forward'.
 "
 [
 	up(string) : "How much upward velocity the monster will jump with."
 	forward(string) : "How much forward velocity the monster will jump with."
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_lookat : "Causes character to look at an entity for a certain length of time or until triggered.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_lookat : "Causes character to look at an entity for a certain length of time or until triggered.
 "
 [
 	blend_in(string) : "# frame to blend in to anim." : "4"
@@ -14385,7 +14385,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	wait(string) : "how long to look at the entity.  if 0, or not set, then only waits until character is triggered."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_ignore_player : "Tells sentry to stop leading the player to his destination.  Imediately goes to next path entity.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_sentry_ignore_player : "Tells sentry to stop leading the player to his destination.  Imediately goes to next path entity.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14393,7 +14393,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_lead_player : "Tells sentry to start leading the player to his destination.  Imediately goes to next path entity.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_sentry_lead_player : "Tells sentry to start leading the player to his destination.  Imediately goes to next path entity.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14401,7 +14401,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_light_off : "Tells sentry to turn on his flashlight.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_sentry_light_off : "Tells sentry to turn on his flashlight.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14409,7 +14409,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_light_on : "Tells sentry to turn on his flashlight.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_sentry_light_on : "Tells sentry to turn on his flashlight.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14417,7 +14417,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_shutdown : "Tells sentry to shutdown until triggered again.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_sentry_shutdown : "Tells sentry to shutdown until triggered again.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14425,7 +14425,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png" }) = path_sentry_unlock_door : "Sentry walks to this location and plays the unlock door animation.  Set 'trigger' to name of target_lock entity that unlocks the door.
+@PointClass color(127 76 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_sentry_unlock_door : "Sentry walks to this location and plays the unlock door animation.  Set 'trigger' to name of target_lock entity that unlocks the door.
 "
 [
 	spawnclass(string) : "" : "idPathCorner"
@@ -14433,49 +14433,49 @@ Only add model, model_detonate or model_burn or health to override defaults
 	trigger(string) : "entity to trigger when turn finishes."
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_show : "Makes the character visible and solid.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_show : "Makes the character visible and solid.
 "
 [
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_talk : "forces character to talk to the player
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_talk : "forces character to talk to the player
 "
 [
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_talk_primary : "forces character to say his primary talk anim to the player
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_talk_primary : "forces character to say his primary talk anim to the player
 "
 [
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_talk_secondary : "forces character to say his secondary talk anim to the player
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_talk_secondary : "forces character to say his secondary talk anim to the player
 "
 [
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_talk_triggered : "forces character to say his triggered talk anim to the player
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_talk_triggered : "forces character to say his triggered talk anim to the player
 "
 [
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_turn : "Character will turn to the direction specified in entity.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_turn : "Character will turn to the direction specified in entity.
 "
 [
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_wait : "Character will wait specified amount of time before continuing on path.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_wait : "Character will wait specified amount of time before continuing on path.
 "
 [
 	wait(string) : "how long to wait." : "2"
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_waitforheadanim : "waits for animation on the head from path_headanim finish.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_waitforheadanim : "waits for animation on the head from path_headanim finish.
 "
 [
 	focus(string) : "Name of entity to look at."
 ]
 
-@PointClass base(path_default) model({ "path": "sprites/waypoint.png" }) = path_waitfortrigger : "Character will wait until they're triggered again before continuing on path.
+@PointClass base(path_default) model({ "path": "sprites/waypoint.png", "scale": 0.03125 }) = path_waitfortrigger : "Character will wait until they're triggered again before continuing on path.
 "
 [
 ]
@@ -14688,7 +14688,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim(string) : "" : "tramthrow"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = phobos2_hunterintro : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = phobos2_hunterintro : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.phobos2_hunterintro(string) : "" : "models/md5/cinematics/phobos2/phobos2_hunterintro.md5camera"
@@ -14704,7 +14704,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim.phobos2_hunterintro10(string) : "" : "models/md5/cinematics/phobos2/phobos2_hunterintro_j.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = phobos2_hunteroutro : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = phobos2_hunteroutro : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.phobos2_hunteroutro(string) : "" : "models/md5/cinematics/phobos2/phobos2_hunteroutro.md5camera"
@@ -14717,13 +14717,13 @@ Only add model, model_detonate or model_burn or health to override defaults
 	model(string) : "" : "phobos2_marine"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = phobos2_mcneil_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = phobos2_mcneil_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.phobos2_McNeil(string) : "" : "models/md5/cinematics/phobos2/phobos2_McNeil.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = phobos2_mcneil_camera : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = phobos2_mcneil_camera : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.mcn_cam_a(string) : "" : "models/md5/cinematics/phobos2/cam_a.camera"
@@ -15032,7 +15032,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	remove(string) : "" : "1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = recycling1_revintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = recycling1_revintro_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim(string) : "" : "revintro"
@@ -15094,7 +15094,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim(string) : "" : "crawl"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = recycling2_mancintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = recycling2_mancintro_cam : "No description"
 [
 	cinematic(string) : "" : "1"
 	spawnclass(string) : "" : "idCameraAnim"
@@ -15138,14 +15138,14 @@ Only add model, model_detonate or model_burn or health to override defaults
 	copy_joint_world.eyecontrol(string) : "" : "eyecontrol"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = recycling2_video_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = recycling2_video_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.betruger_cam_a(string) : "" : "models/md5/cinematics/recycling/betruger_vid_camera.md5camera"
 	anim.betruger_cam_b(string) : "" : "models/md5/cinematics/recycling/betruger_vid_camera2.md5camera"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = ronn_cinematic_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = ronn_cinematic_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.ronn_cinematic_cam_1(string) : "" : "models/md5/cinematics/ronn/ronn.md5camera"
@@ -15179,7 +15179,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	model(string) : "" : "site3_hellknight"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = site3_roq_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = site3_roq_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
@@ -15354,7 +15354,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	snd_berserkSpawn(string) : "" : "sound_powerup_berserk"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = space_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = space_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.space1(string) : "" : "models/md5/cinematics/marscity/spacecam1.camera"
@@ -15406,7 +15406,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim3(string) : "" : "space_c"
 ]
 
-@PointClass color(0 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/speaker.png" }) = speaker : "
+@PointClass color(0 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/speaker.png", "scale": 0.03125 }) = speaker : "
 "
 [
 	spawnclass(string) : "" : "idSound"
@@ -15426,7 +15426,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	snd_demonic(string) : "demonic sound shader."
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = ss_cgw_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = ss_cgw_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.cgwcam(string) : "" : "models/md5/anims/ss/cgwcam.md5camera"
@@ -15456,7 +15456,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim(string) : "" : "cgw2zsci"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = ss_ew_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = ss_ew_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.ewcam(string) : "" : "models/md5/anims/cinematics/ewcam.md5camera"
@@ -15481,7 +15481,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim(string) : "" : "ewmaint"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = ss_gameprocamera : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = ss_gameprocamera : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.cam1(string) : "" : "models/md5/screenshots/gameprocamera1.md5camera"
@@ -15505,7 +15505,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim11(string) : "" : "hk_k"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = ss_hero_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = ss_hero_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.camera_a(string) : "" : "models/md5/screenshots/ss_player_cam1.md5camera"
@@ -15627,7 +15627,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim17(string) : "" : "shotty17"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = ss_hk_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = ss_hk_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.cam_a(string) : "" : "models/md5/screenshots/hk_cam1.md5camera"
@@ -15655,7 +15655,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	anim(string) : "" : "pose1"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = ss_pcg_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = ss_pcg_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.pcgcam(string) : "" : "models/md5/anims/cinematics/pcgcam.md5camera"
@@ -15718,7 +15718,7 @@ Only add model, model_detonate or model_burn or health to override defaults
 	model(string) : "" : "static_hunter3"
 ]
 
-@PointClass color(0 127 204) size(-12 -12 -12, 12 12 12) model({ "path": "sprites/gamepad.png" }) = target_achievement : "When triggered, this registers an achievement has been accomplished.
+@PointClass color(0 127 204) size(-12 -12 -12, 12 12 12) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_achievement : "When triggered, this registers an achievement has been accomplished.
 Enter the achievement number to register (found in DeclAchievements.h) .
 "
 [
@@ -15726,35 +15726,35 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	achievement(string) : "achievement number"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_ai_followalternatepath1 : "Target a monster or npc and trigger target to cause them to follow the path set in 'alt_path1' (set on the character).
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_ai_followalternatepath1 : "Target a monster or npc and trigger target to cause them to follow the path set in 'alt_path1' (set on the character).
 "
 [
 	spawnclass(string) : "" : "idTarget_CallObjectFunction"
 	call(string) : "" : "follow_alternate_path1"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_ai_followalternatepath2 : "Target a monster or npc and trigger target to cause them to follow the path set in 'alt_path2' (set on the character).
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_ai_followalternatepath2 : "Target a monster or npc and trigger target to cause them to follow the path set in 'alt_path2' (set on the character).
 "
 [
 	spawnclass(string) : "" : "idTarget_CallObjectFunction"
 	call(string) : "" : "follow_alternate_path2"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_ai_followalternatepath3 : "Target a monster or npc and trigger target to cause them to follow the path set in 'alt_path3' (set on the character).
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_ai_followalternatepath3 : "Target a monster or npc and trigger target to cause them to follow the path set in 'alt_path3' (set on the character).
 "
 [
 	spawnclass(string) : "" : "idTarget_CallObjectFunction"
 	call(string) : "" : "follow_alternate_path3"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_callobjectfunction : "Target an entity to set call a function from it's script object.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_callobjectfunction : "Target an entity to set call a function from it's script object.
 "
 [
 	spawnclass(string) : "" : "idTarget_CallObjectFunction"
 	call(string) : "Object function to call on entity"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_checkpoint : "Trigger this to trigger a trigger an upcoming map. It will be triggered when the player spawns
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/security-gate.png", "scale": 0.03125 }) = target_checkpoint : "Trigger this to trigger a trigger an upcoming map. It will be triggered when the player spawns
 "
 [
 	spawnclass(string) : "" : "idTarget_Checkpoint"
@@ -15762,14 +15762,14 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	triggerName(string) : "trigger name to fire"
 ]
 
-@PointClass color(255 0 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_enablestamina : "Trigger this to enable or disable stamina
+@PointClass color(255 0 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_enablestamina : "Trigger this to enable or disable stamina
 "
 [
 	spawnclass(string) : "" : "idTarget_EnableStamina"
 	enable(string) : "set to 1 to enable or 0 to disable"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_enableweapons : "Trigger this to turn off the no_weapons flag in a level. Used once the player gets their weapons.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_enableweapons : "Trigger this to turn off the no_weapons flag in a level. Used once the player gets their weapons.
 "
 [
 	spawnclass(string) : "" : "idTarget_EnableLevelWeapons"
@@ -15777,7 +15777,7 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	disable(string) : "Set to 1 to disable weapons, 0 to enable them"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_endlevel : "When triggered, displays end level gui and transfers the player to the next map.  Orient the entity to specify the view during the stats display.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_endlevel : "When triggered, displays end level gui and transfers the player to the next map.  Orient the entity to specify the view during the stats display.
 "
 [
 	spawnclass(string) : "" : "idTarget_EndLevel"
@@ -15786,7 +15786,7 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	guiName(string) : "end of level gui."
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_entity_fadein : "Target an entity to fade in.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_entity_fadein : "Target an entity to fade in.
 "
 [
 	spawnclass(string) : "" : "idTarget_FadeEntity"
@@ -15794,7 +15794,7 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	fadeTime(string) : "How long fade should take." : "1"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_entity_fadeout : "Target an entity to fade out.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_entity_fadeout : "Target an entity to fade out.
 "
 [
 	spawnclass(string) : "" : "idTarget_FadeEntity"
@@ -15802,7 +15802,7 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	fadeTime(string) : "How long fade should take." : "1"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_entity_setcolor : "Changes the color on the targeted entity.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_entity_setcolor : "Changes the color on the targeted entity.
 "
 [
 	spawnclass(string) : "" : "idTarget_FadeEntity"
@@ -15810,7 +15810,7 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	_color(string) : "Color to change to."
 ]
 
-@PointClass color(25 255 25) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_fadesoundclass : "Fades given sound class
+@PointClass color(25 255 25) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_fadesoundclass : "Fades given sound class
 "
 [
 	spawnclass(string) : "" : "idTarget_FadeSoundClass"
@@ -15821,7 +15821,7 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	fadeIn(string) : "You can optionally set fadeDuration to 0 and use another target_FadeSoundClass to fade the class back in"
 ]
 
-@PointClass color(51 178 127) size(-6 -6 -6, 6 6 6) model({ "path": "sprites/gamepad.png" }) = target_give : "Gives the player a list of items.
+@PointClass color(51 178 127) size(-6 -6 -6, 6 6 6) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_give : "Gives the player a list of items.
 "
 [
 	developer(string) : "" : "1"
@@ -15831,21 +15831,21 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	development(string) : "Use only with devmap defaults to 1"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_giveemail : "Trigger this to give an email to the player.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_giveemail : "Trigger this to give an email to the player.
 "
 [
 	spawnclass(string) : "" : "idTarget_GiveEmail"
 	email(string) : "name of email ( as defined in a pda file ) to give to the player"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_givesecurity : "Trigger this to give a new security clearance to the player.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_givesecurity : "Trigger this to give a new security clearance to the player.
 "
 [
 	text_security(string) : "The security clearance" : "General Access"
 	spawnclass(string) : "" : "idTarget_GiveSecurity"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_leveltrigger : "Trigger this to trigger a trigger an upcoming map. It will be triggered when the player spawns
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_leveltrigger : "Trigger this to trigger a trigger an upcoming map. It will be triggered when the player spawns
 "
 [
 	spawnclass(string) : "" : "idTarget_LevelTrigger"
@@ -15853,76 +15853,76 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	triggerName(string) : "trigger name to fire"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_light_fadein : "Target one or more lights to fade in.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_light_fadein : "Target one or more lights to fade in.
 "
 [
 	spawnclass(string) : "" : "idTarget_LightFadeIn"
 	fadeTime(string) : "How long fade should take." : "1"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_light_fadeout : "Target one or more lights to fade out.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_light_fadeout : "Target one or more lights to fade out.
 "
 [
 	spawnclass(string) : "" : "idTarget_LightFadeOut"
 	fadeTime(string) : "How long fade should take." : "1"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_lock : "Target an door to lock or unlock.  Toggles door's lock state each time it's triggered.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_lock : "Target an door to lock or unlock.  Toggles door's lock state each time it's triggered.
 "
 [
 	spawnclass(string) : "" : "idTarget_LockDoor"
 	locked(string) : "Value to set 'locked' to on doors."
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_npc_talk : "Target an npc to cause him to talk to the player.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_npc_talk : "Target an npc to cause him to talk to the player.
 "
 [
 	spawnclass(string) : "" : "idTarget_CallObjectFunction"
 	call(string) : "" : "target_talk"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_npc_talk_primary : "Target an npc to cause him to say his primary talk anim to the player.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_npc_talk_primary : "Target an npc to cause him to say his primary talk anim to the player.
 "
 [
 	spawnclass(string) : "" : "idTarget_CallObjectFunction"
 	call(string) : "" : "say_primary"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_npc_talk_secondary : "Target an npc to cause him to say his secondary talk anim to the player.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_npc_talk_secondary : "Target an npc to cause him to say his secondary talk anim to the player.
 "
 [
 	spawnclass(string) : "" : "idTarget_CallObjectFunction"
 	call(string) : "" : "say_secondary"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_npc_talk_triggered : "Target an npc to cause him to say his triggered talk anim to the player.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_npc_talk_triggered : "Target an npc to cause him to say his triggered talk anim to the player.
 "
 [
 	spawnclass(string) : "" : "idTarget_CallObjectFunction"
 	call(string) : "" : "say_triggered"
 ]
 
-@PointClass color(255 255 0) size(-6 -6 -6, 6 6 6) model({ "path": "sprites/info_notnull.png" }) = target_null : "Generic target to point camera views at
+@PointClass color(255 255 0) size(-6 -6 -6, 6 6 6) model({ "path": "sprites/info_notnull.png", "scale": 0.25 }) = target_null : "Generic target to point camera views at
 "
 [
 	spawnclass(string) : "" : "idTarget"
 ]
 
-@PointClass color(255 0 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_primaryobjective : "Trigger to change primary mission objective
+@PointClass color(255 0 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_primaryobjective : "Trigger to change primary mission objective
 "
 [
 	spawnclass(string) : "" : "idTarget_SetPrimaryObjective"
 	text(string) : "Text to set the objective to"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_removeweapons : "Trigger this to remove weapons
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_removeweapons : "Trigger this to remove weapons
 "
 [
 	spawnclass(string) : "" : "idTarget_RemoveWeapons"
 	weapon(string) : "Weapon to remove by slot.. i.e. weapon0, weapon1.. use multiples to remove more than one"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_rumble_joystick : "Trigger this to activate a rumbling on the controller.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_rumble_joystick : "Trigger this to activate a rumbling on the controller.
 "
 [
 	spawnclass(string) : "" : "idTarget_RumbleJoystick"
@@ -15932,14 +15932,14 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	high_duration(string) : "High rumble duration in MS"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_sessioncommand : "When triggered, sends the specified command (playdemo e3_1, etc) to the game.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_sessioncommand : "When triggered, sends the specified command (playdemo e3_1, etc) to the game.
 "
 [
 	spawnclass(string) : "" : "idTarget_SessionCommand"
 	command(string) : "the string to return to session."
 ]
 
-@PointClass color(255 0 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_setfov : "Trigger to change fov
+@PointClass color(255 0 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_setfov : "Trigger to change fov
 "
 [
 	spawnclass(string) : "" : "idTarget_SetFov"
@@ -15947,14 +15947,14 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	fov(string) : "Target fov"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_setglobalparmtime : "Trigger to set the passed global parm to current time offset
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_setglobalparmtime : "Trigger to set the passed global parm to current time offset
 "
 [
 	spawnclass(string) : "" : "idTarget_SetGlobalShaderTime"
 	globalParm(string) : "which global parm to set."
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_setinfluence : "Trigger to set off demonic influences.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_setinfluence : "Trigger to set off demonic influences.
 "
 [
 	effect_all(boolean) : "Effect everything (default)" : 1
@@ -15985,7 +15985,7 @@ Enter the achievement number to register (found in DeclAchievements.h) .
 	snd_influence(string) : "sound to play when influence is active, will turn off at end of influence"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_setkeyval : "Target an entity to set key val pairs on.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_setkeyval : "Target an entity to set key val pairs on.
 Use keyval, keyval1, keyval2, etc.. for multiples.
 "
 [
@@ -15993,14 +15993,14 @@ Use keyval, keyval1, keyval2, etc.. for multiples.
 	keyval(string) : "Separate key val with semicolon... key;val"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_setmodel : "Target an entity to set the model.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_setmodel : "Target an entity to set the model.
 "
 [
 	spawnclass(string) : "" : "idTarget_SetModel"
 	newmodel(string) : "Name of model to set on entity"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_setshaderparm : "Target an entity to set shader parms on.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_setshaderparm : "Target an entity to set shader parms on.
 "
 [
 	spawnclass(string) : "" : "idTarget_SetShaderParm"
@@ -16016,19 +16016,19 @@ Use keyval, keyval1, keyval2, etc.. for multiples.
 	_color(string) : "New color for the entity."
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_setshadertime : "Target an entity to set the shadertime (parm4) on.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_setshadertime : "Target an entity to set the shadertime (parm4) on.
 "
 [
 	spawnclass(string) : "" : "idTarget_SetShaderTime"
 ]
 
-@PointClass color(255 0 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_show : "Trigger to unhide the targeted entities.
+@PointClass color(255 0 255) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_show : "Trigger to unhide the targeted entities.
 "
 [
 	spawnclass(string) : "" : "idTarget_Show"
 ]
 
-@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png" }) = target_tip : "Trigger this to show a tip to the player.
+@PointClass color(255 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/gamepad.png", "scale": 0.03125 }) = target_tip : "Trigger this to show a tip to the player.
 "
 [
 	spawnclass(string) : "" : "idTarget_Tip"
@@ -16329,7 +16329,7 @@ Use keyval, keyval1, keyval2, etc.. for multiples.
 	removeItem(string) : "if above item is removed from inventory when used."
 ]
 
-@PointClass color(76 25 153) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/joystick.png" }) = trigger_relay : "Non-touchable repeatable trigger.  Used as a proxy for triggering multiple targets in script, or from other entities.  Must be targeted at one or more entities.  The basic time between firing is a random time between (wait - random) and (wait + random).
+@PointClass color(76 25 153) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/joystick.png", "scale": 0.03125 }) = trigger_relay : "Non-touchable repeatable trigger.  Used as a proxy for triggering multiple targets in script, or from other entities.  Must be targeted at one or more entities.  The basic time between firing is a random time between (wait - random) and (wait + random).
 "
 [
 	spawnclass(string) : "" : "idTrigger_Multi"
@@ -16500,7 +16500,7 @@ Use keyval, keyval1, keyval2, etc.. for multiples.
 	snd_tear4(string) : "" : "mcu_impdoor_tear4"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = underground_impintro_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = underground_impintro_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.impintro(string) : "" : "models/md5/cinematics/underground/impintro_cam.md5camera"
@@ -16530,7 +16530,7 @@ Use keyval, keyval1, keyval2, etc.. for multiples.
 	model(string) : "" : "underground_invasion_bigskull"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = underground_invasion_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = underground_invasion_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	anim.crazy1(string) : "" : "models/md5/cinematics/underground/crazy_cam1.md5camera"
@@ -17868,7 +17868,7 @@ Use keyval, keyval1, keyval2, etc.. for multiples.
 	def_player(string) : "player def to use when spawning this world"
 ]
 
-@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) = xbox_hellhole_cam : "No description"
+@PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = xbox_hellhole_cam : "No description"
 [
 	spawnclass(string) : "" : "idCameraAnim"
 	cinematic(string) : "" : "1"
