@@ -289,13 +289,25 @@ namespace TrenchBroom {
                     parseBrush(status, startLine, false);
                 }
             } else if (m_sourceMapFormat == Model::MapFormat::Quake3_Valve ||
-                       m_sourceMapFormat == Model::MapFormat::Quake3_Legacy || 
-                       m_sourceMapFormat == Model::MapFormat::Doom3_Valve) {
+                       m_sourceMapFormat == Model::MapFormat::Quake3_Legacy) {
                 // We expect either a patch or a regular brush.
                 expect(QuakeMapToken::String | QuakeMapToken::OParenthesis, token);
                 if (token.hasType(QuakeMapToken::String)) {
                     expect(PatchId2, token);
                     parseQuake3Patch(status, startLine);
+                } else {
+                    parseBrush(status, startLine, false);
+                }
+            } else if (m_sourceMapFormat == Model::MapFormat::Doom3_Valve) {
+                // We expect either a patch or a regular brush.
+                expect(QuakeMapToken::String | QuakeMapToken::OParenthesis, token);
+                if (token.hasType(QuakeMapToken::String)) {
+                    expect(std::vector<std::string>({ PatchId2, PatchId3 }), token);
+                    if (token.data() == PatchId3) {
+                        parseDoom3Patch3(status, startLine);
+                    } else {
+                        parseDoom3Patch2(status, startLine);
+                    }
                 } else {
                     parseBrush(status, startLine, false);
                 }
