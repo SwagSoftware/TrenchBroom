@@ -24,30 +24,31 @@
 #include <string>
 
 namespace TrenchBroom {
-    namespace IO {
-        class TestEnvironment {
-        private:
-            Path m_sandboxPath;
-            Path m_dir;
-        public:
-            explicit TestEnvironment(const std::string& dir);
-            virtual ~TestEnvironment();
+namespace IO {
+class TestEnvironment {
+private:
+  Path m_sandboxPath;
+  Path m_dir;
 
-            const Path& dir() const;
-        public:
-            void createTestEnvironment();
-            void createDirectory(const Path& path);
-            void createFile(const Path& path, const std::string& contents);
+public:
+  explicit TestEnvironment(const std::string& dir);
+  virtual ~TestEnvironment();
 
-            bool deleteDirectoryAbsolute(const Path& absolutePath);
-            bool deleteTestEnvironment();
+  const Path& dir() const;
 
-            bool directoryExists(const Path& path) const;
-            bool fileExists(const Path& path) const;
-        private:
-            virtual void doCreateTestEnvironment();
-        };
-    }
-}
+public:
+  void createTestEnvironment();
+  void createDirectory(const Path& path);
+  void createFile(const Path& path, const std::string& contents);
 
+  bool deleteDirectoryAbsolute(const Path& absolutePath);
+  bool deleteTestEnvironment();
 
+  bool directoryExists(const Path& path) const;
+  bool fileExists(const Path& path) const;
+
+private:
+  virtual void doCreateTestEnvironment();
+};
+} // namespace IO
+} // namespace TrenchBroom

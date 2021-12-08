@@ -20,8 +20,8 @@
 #include "MapDocumentTest.h"
 #include "TestUtils.h"
 
-#include "Exceptions.h"
 #include "Assets/EntityDefinition.h"
+#include "Exceptions.h"
 #include "IO/WorldReader.h"
 #include "Model/BrushBuilder.h"
 #include "Model/BrushNode.h"
@@ -36,85 +36,105 @@
 #include "Catch2.h"
 
 namespace TrenchBroom {
-    namespace View {
-        MapDocumentTest::MapDocumentTest() :
-        MapDocumentTest(Model::MapFormat::Standard) {}
+namespace View {
+MapDocumentTest::MapDocumentTest()
+  : MapDocumentTest(Model::MapFormat::Standard) {}
 
-        MapDocumentTest::MapDocumentTest(const Model::MapFormat mapFormat) :
-        m_mapFormat(mapFormat),
-        m_pointEntityDef(nullptr),
-        m_brushEntityDef(nullptr) {
-            SetUp();
-        }
-
-        void MapDocumentTest::SetUp() {
-            game = std::make_shared<Model::TestGame>();
-            document = MapDocumentCommandFacade::newMapDocument();
-            document->newDocument(m_mapFormat, vm::bbox3(8192.0), game);
-
-            // create two entity definitions
-            m_pointEntityDef = new Assets::PointEntityDefinition("point_entity", Color(), vm::bbox3(16.0), "this is a point entity", {}, {});
-            m_brushEntityDef = new Assets::BrushEntityDefinition("brush_entity", Color(), "this is a brush entity", {});
-
-            document->setEntityDefinitions(std::vector<Assets::EntityDefinition*>{ m_pointEntityDef, m_brushEntityDef });
-        }
-
-        MapDocumentTest::~MapDocumentTest() {
-            m_pointEntityDef = nullptr;
-            m_brushEntityDef = nullptr;
-        }
-
-        Model::BrushNode* MapDocumentTest::createBrushNode(const std::string& textureName, const std::function<void(Model::Brush&)>& brushFunc) const {
-            const Model::WorldNode* world = document->world();
-            Model::BrushBuilder builder(world->mapFormat(), document->worldBounds(), document->game()->defaultFaceAttribs());
-            Model::Brush brush = builder.createCube(32.0, textureName).value();
-            brushFunc(brush);
-            return new Model::BrushNode(std::move(brush));
-        }
-
-        Model::PatchNode* MapDocumentTest::createPatchNode(const std::string& textureName) const {
-            return new Model::PatchNode{Model::BezierPatch{3, 3, {
-                {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
-                {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
-                {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, textureName}};
-        }
-
-        ValveMapDocumentTest::ValveMapDocumentTest() :
-        MapDocumentTest(Model::MapFormat::Valve) {}
-
-        Quake3MapDocumentTest::Quake3MapDocumentTest() :
-        MapDocumentTest{Model::MapFormat::Quake3} {}
-
-        TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.throwExceptionDuringCommand") {
-            CHECK_THROWS_AS(document->throwExceptionDuringCommand(), CommandProcessorException);
-        }
-
-        TEST_CASE("MapDocumentTest.detectValveFormatMap", "[MapDocumentTest]") {
-            auto [document, game, gameConfig] = View::loadMapDocument(IO::Path("fixture/test/View/MapDocumentTest/valveFormatMapWithoutFormatTag.map"),
-                                                                      "Quake", Model::MapFormat::Unknown);
-            CHECK(document->world()->mapFormat() == Model::MapFormat::Valve);
-            CHECK(document->world()->defaultLayer()->childCount() == 1);
-        }
-
-        TEST_CASE("MapDocumentTest.detectStandardFormatMap", "[MapDocumentTest]") {
-            auto [document, game, gameConfig] = View::loadMapDocument(IO::Path("fixture/test/View/MapDocumentTest/standardFormatMapWithoutFormatTag.map"),
-                                                                      "Quake", Model::MapFormat::Unknown);
-            CHECK(document->world()->mapFormat() == Model::MapFormat::Standard);
-            CHECK(document->world()->defaultLayer()->childCount() == 1);
-        }
-
-        TEST_CASE("MapDocumentTest.detectEmptyMap", "[MapDocumentTest]") {
-            auto [document, game, gameConfig] = View::loadMapDocument(IO::Path("fixture/test/View/MapDocumentTest/emptyMapWithoutFormatTag.map"),
-                                                                      "Quake", Model::MapFormat::Unknown);
-            // an empty map detects as Valve because Valve is listed first in the Quake game config
-            CHECK(document->world()->mapFormat() == Model::MapFormat::Valve);
-            CHECK(document->world()->defaultLayer()->childCount() == 0);
-        }
-
-        TEST_CASE("MapDocumentTest.mixedFormats", "[MapDocumentTest]") {
-            // map has both Standard and Valve brushes
-            CHECK_THROWS_AS(View::loadMapDocument(IO::Path("fixture/test/View/MapDocumentTest/mixedFormats.map"),
-                                                  "Quake", Model::MapFormat::Unknown), IO::WorldReaderException);
-        }
-    }
+MapDocumentTest::MapDocumentTest(const Model::MapFormat mapFormat)
+  : m_mapFormat(mapFormat)
+  , m_pointEntityDef(nullptr)
+  , m_brushEntityDef(nullptr) {
+  SetUp();
 }
+
+void MapDocumentTest::SetUp() {
+  game = std::make_shared<Model::TestGame>();
+  document = MapDocumentCommandFacade::newMapDocument();
+  document->newDocument(m_mapFormat, vm::bbox3(8192.0), game);
+
+  // create two entity definitions
+  m_pointEntityDef = new Assets::PointEntityDefinition(
+    "point_entity", Color(), vm::bbox3(16.0), "this is a point entity", {}, {});
+  m_brushEntityDef =
+    new Assets::BrushEntityDefinition("brush_entity", Color(), "this is a brush entity", {});
+
+  document->setEntityDefinitions(
+    std::vector<Assets::EntityDefinition*>{m_pointEntityDef, m_brushEntityDef});
+}
+
+MapDocumentTest::~MapDocumentTest() {
+  m_pointEntityDef = nullptr;
+  m_brushEntityDef = nullptr;
+}
+
+Model::BrushNode* MapDocumentTest::createBrushNode(
+  const std::string& textureName, const std::function<void(Model::Brush&)>& brushFunc) const {
+  const Model::WorldNode* world = document->world();
+  Model::BrushBuilder builder(
+    world->mapFormat(), document->worldBounds(), document->game()->defaultFaceAttribs());
+  Model::Brush brush = builder.createCube(32.0, textureName).value();
+  brushFunc(brush);
+  return new Model::BrushNode(std::move(brush));
+}
+
+Model::PatchNode* MapDocumentTest::createPatchNode(const std::string& textureName) const {
+  return new Model::PatchNode{Model::BezierPatch{
+    3,
+    3,
+    {{0, 0, 0},
+     {1, 0, 1},
+     {2, 0, 0},
+     {0, 1, 1},
+     {1, 1, 2},
+     {2, 1, 1},
+     {0, 2, 0},
+     {1, 2, 1},
+     {2, 2, 0}},
+    textureName}};
+}
+
+ValveMapDocumentTest::ValveMapDocumentTest()
+  : MapDocumentTest(Model::MapFormat::Valve) {}
+
+Quake3MapDocumentTest::Quake3MapDocumentTest()
+  : MapDocumentTest{Model::MapFormat::Quake3} {}
+
+TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.throwExceptionDuringCommand") {
+  CHECK_THROWS_AS(document->throwExceptionDuringCommand(), CommandProcessorException);
+}
+
+TEST_CASE("MapDocumentTest.detectValveFormatMap", "[MapDocumentTest]") {
+  auto [document, game, gameConfig] = View::loadMapDocument(
+    IO::Path("fixture/test/View/MapDocumentTest/valveFormatMapWithoutFormatTag.map"), "Quake",
+    Model::MapFormat::Unknown);
+  CHECK(document->world()->mapFormat() == Model::MapFormat::Valve);
+  CHECK(document->world()->defaultLayer()->childCount() == 1);
+}
+
+TEST_CASE("MapDocumentTest.detectStandardFormatMap", "[MapDocumentTest]") {
+  auto [document, game, gameConfig] = View::loadMapDocument(
+    IO::Path("fixture/test/View/MapDocumentTest/standardFormatMapWithoutFormatTag.map"), "Quake",
+    Model::MapFormat::Unknown);
+  CHECK(document->world()->mapFormat() == Model::MapFormat::Standard);
+  CHECK(document->world()->defaultLayer()->childCount() == 1);
+}
+
+TEST_CASE("MapDocumentTest.detectEmptyMap", "[MapDocumentTest]") {
+  auto [document, game, gameConfig] = View::loadMapDocument(
+    IO::Path("fixture/test/View/MapDocumentTest/emptyMapWithoutFormatTag.map"), "Quake",
+    Model::MapFormat::Unknown);
+  // an empty map detects as Valve because Valve is listed first in the Quake game config
+  CHECK(document->world()->mapFormat() == Model::MapFormat::Valve);
+  CHECK(document->world()->defaultLayer()->childCount() == 0);
+}
+
+TEST_CASE("MapDocumentTest.mixedFormats", "[MapDocumentTest]") {
+  // map has both Standard and Valve brushes
+  CHECK_THROWS_AS(
+    View::loadMapDocument(
+      IO::Path("fixture/test/View/MapDocumentTest/mixedFormats.map"), "Quake",
+      Model::MapFormat::Unknown),
+    IO::WorldReaderException);
+}
+} // namespace View
+} // namespace TrenchBroom

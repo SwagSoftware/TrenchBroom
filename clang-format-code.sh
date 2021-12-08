@@ -26,7 +26,7 @@ print_usage () {
 #	CLANGFMT_BIN="./clang-format.$CLANGFMT_SUFFIX"
 #fi
 
-CLANGFMT_BIN=clang-format
+CLANGFMT_BIN=./clang-format.exe
 
 #CLANGFMT_VERSION=$($CLANGFMT_BIN --version | grep -o -e "[[:digit:]\.]*")
 CLANGFMT_VERSION=$($CLANGFMT_BIN --version | egrep -o "([0-9]{1,}\.)+[0-9]{1,}")

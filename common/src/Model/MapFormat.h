@@ -24,82 +24,85 @@
 #include <vector>
 
 namespace TrenchBroom {
-    namespace Model {
-        enum class MapFormat {
-            /**
-             * Unknown map format.
-             */
-            Unknown,
-            /**
-             * Standard Quake 1 map format.
-             */
-            Standard,
-            /**
-             * Quake 2 map format.
-             */
-            Quake2,
-            /**
-             * Quake 2 with Valve 220 format texturing, supported by https://github.com/qbism/q2tools-220
-             */
-            Quake2_Valve,
-            /**
-             * Valve 220 map format.
-             */
-            Valve,
-            /**
-             * Hexen 2 map format.
-             */
-            Hexen2,
-            /**
-             * Daikatana map format.
-             */
-            Daikatana,
-            /**
-             * Quake 3 legacy format (like Quake 2, no brush primitives)
-             */
-            Quake3_Legacy,
-            /**
-             * Quake 3 with Valve 220 format texturing, supported by https://github.com/Garux/netradiant-custom/tree/master/tools/quake3/q3map2
-             */
-            Quake3_Valve,
-            /**
-             * Quake 3 with brush primitives, also allows Quake 2 brushes
-             */
-            Quake3,
-            /**
-             * Doom 3 with brush primitives but using normalized planes instead of 3 points
-             */
-            Doom3,
-             /**
-             * Doom 3 with Valve 220 format texturing, supported by https://github.com/RobertBeckebans/RBDOOM-3-BFG/tree/506-TrenchBroom-interop/neo/tools/compilers/dmap
-             */
-            Doom3_Valve,
-        };
+namespace Model {
+enum class MapFormat
+{
+  /**
+   * Unknown map format.
+   */
+  Unknown,
+  /**
+   * Standard Quake 1 map format.
+   */
+  Standard,
+  /**
+   * Quake 2 map format.
+   */
+  Quake2,
+  /**
+   * Quake 2 with Valve 220 format texturing, supported by https://github.com/qbism/q2tools-220
+   */
+  Quake2_Valve,
+  /**
+   * Valve 220 map format.
+   */
+  Valve,
+  /**
+   * Hexen 2 map format.
+   */
+  Hexen2,
+  /**
+   * Daikatana map format.
+   */
+  Daikatana,
+  /**
+   * Quake 3 legacy format (like Quake 2, no brush primitives)
+   */
+  Quake3_Legacy,
+  /**
+   * Quake 3 with Valve 220 format texturing, supported by
+   * https://github.com/Garux/netradiant-custom/tree/master/tools/quake3/q3map2
+   */
+  Quake3_Valve,
+  /**
+   * Quake 3 with brush primitives, also allows Quake 2 brushes
+   */
+  Quake3,
+  /**
+   * Doom 3 with brush primitives but using normalized planes instead of 3 points
+   */
+  Doom3,
+  /**
+   * Doom 3 with Valve 220 format texturing, supported by
+   * https://github.com/RobertBeckebans/RBDOOM-3-BFG/tree/506-TrenchBroom-interop/neo/tools/compilers/dmap
+   */
+  Doom3_Valve,
+};
 
-        /**
-         * Returns the map format enum value with the given name. If the given name is not recognized, MapFormat::Unknown
-         * is returned.
-         *
-         * @param formatName the name
-         * @return the enum value
-         */
-        MapFormat formatFromName(const std::string& formatName);
+/**
+ * Returns the map format enum value with the given name. If the given name is not recognized,
+ * MapFormat::Unknown is returned.
+ *
+ * @param formatName the name
+ * @return the enum value
+ */
+MapFormat formatFromName(const std::string& formatName);
 
-        /**
-         * Returns the name of the given map format enum value.
-         *
-         * @param format the enum value
-         * @return the name
-         */
-        std::string formatName(MapFormat format);
-        /**
-         * Returns a vector starting with the given format, then the other formats which are compatible with it.
-         *
-         * @param format the preferred format
-         * @return the preferred format, then the other compatible formats
-         */
-        std::vector<MapFormat> compatibleFormats(MapFormat format);
-        bool isParallelTexCoordSystem(MapFormat format);
-    }
-}
-
+/**
+ * Returns the name of the given map format enum value.
+ *
+ * @param format the enum value
+ * @return the name
+ */
+std::string formatName(MapFormat format);
+/**
+ * Returns a vector starting with the given format, then the other formats which are compatible with
+ * it.
+ *
+ * @param format the preferred format
+ * @return the preferred format, then the other compatible formats
+ */
+std::vector<MapFormat> compatibleFormats(MapFormat format);
+bool isParallelTexCoordSystem(MapFormat format);
+} // namespace Model
+} // namespace TrenchBroom
