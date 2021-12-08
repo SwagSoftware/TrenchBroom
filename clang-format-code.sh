@@ -37,4 +37,4 @@ if [ "$CLANGFMT_VERSION" != "$OUR_CLANGFMT_VERSION" ]; then
 	exit 1
 fi
 
-find . -regex ".*\.\(c\|cpp\|cc\|cxx\|h\|hpp\)" ! -path "./libs/*" ! -exec $CLANGFMT_BIN -i {} \;
+find . -regex ".*\.\(c\|cpp\|cc\|cxx\|h\|hpp\)" ! -path "./lib/*" ! -exec $CLANGFMT_BIN -i {} \;
