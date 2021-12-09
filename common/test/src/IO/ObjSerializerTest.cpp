@@ -438,5 +438,6 @@ map_Kd {}
 )";
 
   CHECK(mtlStream.str() == expectedMtl);
+}
 } // namespace IO
 } // namespace TrenchBroom

@@ -73,13 +73,6 @@ TEST_CASE("Issue.addSelectableNodes") {
     {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
     {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
   // clang-format on
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
 
   outerGroupNode.addChildren(
     {innerGroupNode, pointEntityNode, brushNode, brushEntityNode, patchNode});

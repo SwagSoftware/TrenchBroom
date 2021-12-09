@@ -73,7 +73,6 @@ public: // selection modification
   void performDeselect(const std::vector<Model::BrushFaceHandle>& faces);
   void performDeselectAll();
 
-
 public: // adding and removing nodes
   void performAddNodes(const std::map<Model::Node*, std::vector<Model::Node*>>& nodes);
   void performRemoveNodes(const std::map<Model::Node*, std::vector<Model::Node*>>& nodes);

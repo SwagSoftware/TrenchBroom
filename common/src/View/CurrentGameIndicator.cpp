@@ -22,7 +22,6 @@
 #include "IO/Path.h"
 #include "IO/ResourceUtils.h"
 #include "Model/GameFactory.h"
-#include "View/ViewConstants.h"
 
 #include <QPixmap>
 #include <QString>
@@ -41,8 +40,6 @@ CurrentGameIndicator::CurrentGameIndicator(const std::string& gameName, QWidget*
 
   const auto gameIcon = IO::loadPixmapResource(iconPath);
   set(QString::fromStdString(gameName), gameIcon);
-    LayoutConstants::WideHMargin, LayoutConstants::MediumVMargin, LayoutConstants::WideHMargin,
-    LayoutConstants::MediumVMargin);
-} // namespace TrenchBroom
+}
 } // namespace View
 } // namespace TrenchBroom

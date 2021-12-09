@@ -68,12 +68,6 @@ TEST_CASE("EntityNodeTest.canAddChild") {
     {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
     {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
   // clang-format on
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
 
   CHECK_FALSE(entityNode.canAddChild(&worldNode));
   CHECK_FALSE(entityNode.canAddChild(&layerNode));
@@ -100,12 +94,6 @@ TEST_CASE("EntityNodeTest.canRemoveChild") {
     {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
     {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
   // clang-format on
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
 
   CHECK(entityNode.canRemoveChild(&worldNode));
   CHECK(worldNode.canRemoveChild(&layerNode));

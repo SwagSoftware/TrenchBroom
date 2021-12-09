@@ -590,12 +590,6 @@ TEST_CASE("NodeTest.accept", "[NodeTest]") {
     BezierPatch::Point{}, BezierPatch::Point{}, BezierPatch::Point{},
   }, "texture"));
   // clang-format on
-      BezierPatch::Point{},
-      BezierPatch::Point{},
-      BezierPatch::Point{},
-      BezierPatch::Point{},
-    },
-    "texture"));
 
   SECTION("Non const nodes accept non const visitor") {
     CHECK(world.accept(nodeTestVisitor) == Visited::World);

@@ -129,8 +129,6 @@ void TestGame::doWriteMap(WorldNode& world, const IO::Path& path) const {
 }
 
 void TestGame::doExportMap(WorldNode& /* world */, const IO::ExportOptions& /* options */) const {}
-  WorldNode& /* world */, const Model::ExportFormat /* format */,
-  const IO::Path& /* path */) const {}
 
 std::vector<Node*> TestGame::doParseNodes(
   const std::string& str, const MapFormat mapFormat, const vm::bbox3& worldBounds,

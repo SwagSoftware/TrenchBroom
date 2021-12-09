@@ -301,9 +301,6 @@ MapDocumentCommandFacade::performReplaceChildren(
                       }));
 
     auto oldChildren = parent->replaceChildren(std::move(newChildren));
-      kdl::vec_concat(std::move(allOldChildren), kdl::vec_transform(oldChildren, [](auto& child) {
-                        return child.get();
-                      }));
 
     result.emplace_back(parent, std::move(oldChildren));
   }

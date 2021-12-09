@@ -734,5 +734,6 @@ TEST_CASE_METHOD(
     CHECK(!linkedEntityNode1->entity().hasProperty("key"));
     CHECK(!linkedEntityNode2->entity().hasProperty("key"));
   }
+}
 } // namespace View
 } // namespace TrenchBroom

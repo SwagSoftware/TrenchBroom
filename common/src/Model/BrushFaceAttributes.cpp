@@ -22,6 +22,7 @@
 
 #include <vecmath/vec.h>
 #include <vecmath/vec_io.h>
+#include <vecmath/mat.h>
 
 #include <kdl/opt_utils.h>
 
@@ -312,5 +313,7 @@ bool BrushFaceAttributes::setBrushPrimitMatrix(const vm::mat4x4f& matrix) {
 
 const vm::mat4x4f& BrushFaceAttributes::bpMatrix() const {
   return m_bpMatrix;
+}
+
 } // namespace Model
 } // namespace TrenchBroom

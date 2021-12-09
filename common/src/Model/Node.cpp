@@ -691,6 +691,7 @@ bool Node::setLockState(const LockState lockState) {
 bool Node::lockedByOtherSelection() const {
   return m_lockedByOtherSelection;
 }
+
 void Node::setLockedByOtherSelection(const bool lockedByOtherSelection) {
   m_lockedByOtherSelection = lockedByOtherSelection;
 }

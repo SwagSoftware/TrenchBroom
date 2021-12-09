@@ -683,5 +683,6 @@ FaceSelectionResult faceSelectionWithLinkedGroupConstraints(
   }
 
   return {std::move(facesToSelect), std::move(constrainedNodes.groupsToLock)};
+}
 } // namespace Model
 } // namespace TrenchBroom

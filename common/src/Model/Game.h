@@ -178,7 +178,6 @@ private: // subclassing interface
     MapFormat format, const vm::bbox3& worldBounds, const IO::Path& path, Logger& logger) const = 0;
   virtual void doWriteMap(WorldNode& world, const IO::Path& path) const = 0;
   virtual void doExportMap(WorldNode& world, const IO::ExportOptions& options) const = 0;
-    WorldNode& world, Model::ExportFormat format, const IO::Path& path) const = 0;
 
   virtual std::vector<Node*> doParseNodes(
     const std::string& str, MapFormat mapFormat, const vm::bbox3& worldBounds,

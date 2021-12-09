@@ -120,12 +120,6 @@ TEST_CASE("GroupNodeTest.canAddChild") {
     {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
     {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
   // clang-format on
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
 
   CHECK_FALSE(groupNode.canAddChild(&worldNode));
   CHECK_FALSE(groupNode.canAddChild(&layerNode));
@@ -152,12 +146,6 @@ TEST_CASE("GroupNodeTest.canRemoveChild") {
     {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
     {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
   // clang-format on
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
 
   CHECK(groupNode.canRemoveChild(&worldNode));
   CHECK(groupNode.canRemoveChild(&layerNode));
@@ -506,26 +494,18 @@ TEST_CASE("GroupNodeTest.updateLinkedGroupsAndPreserveEntityProperties", "[Group
                                           expectedProperties ] = GENERATE(values<T>({
   // properties remain unchanged
   {{},                {},                 { { "some_key", "some_value" } },
-       {},
-       {{"some_key", "some_value"}},
                                           { { "some_key", "some_value" } },
                                           { { "some_key", "some_value" } } },
 
   {{},                { "some_key" },     { { "some_key", "some_value" } },
-       {"some_key"},
-       {{"some_key", "some_value"}},
                                           { { "some_key", "some_value" } },
                                           { { "some_key", "some_value" } } },
 
   {{ "some_key" },    {},                 { { "some_key", "some_value" } },
-       {},
-       {{"some_key", "some_value"}},
                                           { { "some_key", "some_value" } },
                                           { { "some_key", "some_value" } } },
 
   {{ "some_key" },    { "some_key" },     { { "some_key", "some_value" } },
-       {"some_key"},
-       {{"some_key", "some_value"}},
                                           { { "some_key", "some_value" } },
                                           { { "some_key", "some_value" } } },
 
@@ -548,26 +528,18 @@ TEST_CASE("GroupNodeTest.updateLinkedGroupsAndPreserveEntityProperties", "[Group
 
   // property was changed in source
   {{},                {},                 { { "some_key", "other_value" } },
-       {},
-       {{"some_key", "other_value"}},
                                           { { "some_key", "some_value" } },
                                           { { "some_key", "other_value" } } },
 
   {{ "some_key" },    {},                 { { "some_key", "other_value" } },
-       {},
-       {{"some_key", "other_value"}},
                                           { { "some_key", "some_value" } },
                                           { { "some_key", "some_value" } } },
 
   {{},                { "some_key" },     { { "some_key", "other_value" } },
-       {"some_key"},
-       {{"some_key", "other_value"}},
                                           { { "some_key", "some_value" } },
                                           { { "some_key", "some_value" } } },
 
   {{ "some_key" },    { "some_key" },     { { "some_key", "other_value" } },
-       {"some_key"},
-       {{"some_key", "other_value"}},
                                           { { "some_key", "some_value" } },
                                           { { "some_key", "some_value" } } },
 

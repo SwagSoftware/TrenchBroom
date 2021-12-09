@@ -166,20 +166,6 @@ TEST_CASE("BrushNodeTest.containsPatchNode", "[BrushNodeTest]") {
       {32, 0, -16}, {32, 32, -16}, {0, 32, -16}, {-32,32, -16}, {-32, 0, -16}, }
   }, "some_texture"}};
   // clang-format on
-      {-32, 32, 16},
-      {-32, 0, 16},
-      {32, 0, 0},
-      {32, 32, 0},
-      {0, 32, 0},
-      {-32, 32, 0},
-      {-32, 0, 0},
-      {32, 0, -16},
-      {32, 32, -16},
-      {0, 32, -16},
-      {-32, 32, -16},
-      {-32, 0, -16},
-    }},
-    "some_texture"}};
 
   CHECK_FALSE(brushNode.contains(&patchNode));
 
@@ -206,20 +192,6 @@ TEST_CASE("BrushNodeTest.intersectsPatchNode", "[BrushNodeTest]") {
       {32, 0, -16}, {32, 32, -16}, {0, 32, -16}, {-32,32, -16}, {-32, 0, -16}, }
   }, "some_texture"}};
   // clang-format on
-      {-32, 32, 16},
-      {-32, 0, 16},
-      {32, 0, 0},
-      {32, 32, 0},
-      {0, 32, 0},
-      {-32, 32, 0},
-      {-32, 0, 0},
-      {32, 0, -16},
-      {32, 32, -16},
-      {0, 32, -16},
-      {-32, 32, -16},
-      {-32, 0, -16},
-    }},
-    "some_texture"}};
 
   CHECK(brushNode.intersects(&patchNode));
 

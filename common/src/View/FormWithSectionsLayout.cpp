@@ -125,5 +125,6 @@ void FormWithSectionsLayout::insertRow(int row, QLayout* field) {
   layout->setContentsMargins(LayoutConstants::WideHMargin, 0, LayoutConstants::WideHMargin, 0);
   layout->addLayout(field);
   QFormLayout::insertRow(row, layout);
+}
 } // namespace View
 } // namespace TrenchBroom

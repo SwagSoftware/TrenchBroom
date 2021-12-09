@@ -276,8 +276,6 @@ void GameFactory::loadCompilationConfig(GameConfig& gameConfig) {
     }
   } catch (const Exception& e) {
     std::cerr << "Could not load compilation configuration '" << path << "': " << e.what() << "\n";
-                   "': " + std::string(e.what())
-              << "\n";
     gameConfig.compilationConfigParseFailed = true;
   }
 }
@@ -294,8 +292,6 @@ void GameFactory::loadGameEngineConfig(GameConfig& gameConfig) {
     }
   } catch (const Exception& e) {
     std::cerr << "Could not load game engine configuration '" << path << "': " << e.what() << "\n";
-                   "': " + std::string(e.what())
-              << "\n";
     gameConfig.gameEngineConfigParseFailed = true;
   }
 }
@@ -337,7 +333,6 @@ void GameFactory::writeCompilationConfig(
   m_configFS->createFileAtomic(profilesPath, stream.str());
   gameConfig.compilationConfig = std::move(compilationConfig);
   logger.debug() << "Wrote compilation config to " << m_configFS->makeAbsolute(profilesPath);
-                 << m_configFS->makeAbsolute(profilesPath).asString();
 }
 
 void GameFactory::writeGameEngineConfig(
@@ -359,7 +354,6 @@ void GameFactory::writeGameEngineConfig(
 
     std::cerr << "Backed up malformed game engine config " << m_configFS->makeAbsolute(profilesPath)
               << " to " << m_configFS->makeAbsolute(backupPath) << std::endl;
-              << m_configFS->makeAbsolute(backupPath).asString() << std::endl;
 
     gameConfig.gameEngineConfigParseFailed = false;
   }

@@ -126,9 +126,7 @@ private:
   void removeNodeRecursive(Model::Node* node);
   void updateAllNodes();
 
-   * invalidateObjectsInRenderers()
   void invalidateRenderers(Renderer renderers);
-    Renderer renderers, const std::vector<Model::BrushNode*>& brushes);
   void invalidateEntityLinkRenderer();
   void invalidateGroupLinkRenderer();
   void reloadEntityModels();

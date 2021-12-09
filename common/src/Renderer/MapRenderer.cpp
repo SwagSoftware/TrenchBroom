@@ -340,51 +340,38 @@ MapRenderer::Renderer MapRenderer::determineDesiredRenderers(Model::Node* node) 
   node->accept(kdl::overload(
     [](Model::WorldNode*) {}, [](Model::LayerNode*) {},
     [&](Model::GroupNode* group) {
-      layer->visitChildren(thisLambda);
-    },
       if (group->locked()) {
         result = Renderer_Locked;
-          lockedNodes.groups.push_back(group);
       } else if (selected(group) || group->opened()) {
         result = Renderer_Selection;
-          selectedNodes.groups.push_back(group);
       } else {
         result = Renderer_Default;
-          defaultNodes.groups.push_back(group);
       }
     },
     [&](Model::EntityNode* entity) {
       if (entity->locked()) {
         result = Renderer_Locked;
-          lockedNodes.entities.push_back(entity);
       } else if (selected(entity)) {
         result = Renderer_Selection;
-          selectedNodes.entities.push_back(entity);
       } else {
         result = Renderer_Default;
-          defaultNodes.entities.push_back(entity);
       }
     },
     [&](Model::BrushNode* brush) {
       if (brush->locked()) {
         result = Renderer_Locked;
-          lockedNodes.brushes.push_back(brush);
       } else if (selected(brush) || brush->hasSelectedFaces()) {
         result = Renderer_Selection;
-          selectedNodes.brushes.push_back(brush);
       }
       if (!brush->selected() && !brush->parentSelected() && !brush->locked()) {
         result |= Renderer_Default;
-          defaultNodes.brushes.push_back(brush);
       }
     },
     [&](Model::PatchNode* patchNode) {
       if (patchNode->locked()) {
         result = Renderer_Locked;
-          lockedNodes.patches.push_back(patchNode);
       } else if (selected(patchNode)) {
         result = Renderer_Selection;
-          selectedNodes.patches.push_back(patchNode);
       }
       if (!patchNode->selected() && !patchNode->parentSelected() && !patchNode->locked()) {
         result |= Renderer_Default;
@@ -529,7 +516,6 @@ void MapRenderer::invalidateRenderers(Renderer renderers) {
     m_lockedRenderer->invalidate();
 }
 
-  Renderer renderers, const std::vector<Model::BrushNode*>& brushes) {
 void MapRenderer::invalidateEntityLinkRenderer() {
   m_entityLinkRenderer->invalidate();
 }
@@ -669,8 +655,6 @@ void MapRenderer::selectionDidChange(const View::Selection& selection) {
   }
   for (auto* node : selection.selectedNodes()) {
     updateAndInvalidateNodeRecursive(node);
-      kdl::vec_transform(selection.selectedBrushFaces(), toBrush),
-      kdl::vec_transform(selection.deselectedBrushFaces(), toBrush));
   }
 
   invalidateEntityLinkRenderer();

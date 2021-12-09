@@ -51,7 +51,6 @@ static TestEnvironment makeTestEnvironment() {
       env.createDirectory(Path("anotherDir"));
       env.createDirectory(Path("anotherDir/subDirTest"));
 
-
       env.createFile(Path("test.txt"), "some content");
       env.createFile(Path("test2.map"), "//test file\n{}");
       env.createFile(Path("anotherDir/subDirTest/test2.map"), "//sub dir test file\n{}");

@@ -52,7 +52,6 @@ void AppInfoPanel::createGui() {
   ClickableLabel* version = new ClickableLabel{tr("Version ") % getBuildVersion()};
   ClickableLabel* build = new ClickableLabel{tr("Build ") % getBuildIdStr()};
   ClickableLabel* qtVersion = new ClickableLabel{tr("Qt ") % QString::fromLocal8Bit(qVersion())};
-    new ClickableLabel(QString(tr("Qt ")) % QString::fromLocal8Bit(qVersion()));
 
   makeInfo(version);
   makeInfo(build);
@@ -87,7 +86,6 @@ void AppInfoPanel::createGui() {
 void AppInfoPanel::versionInfoClicked() {
   QClipboard* clipboard = QApplication::clipboard();
   const QString str = tr("TrenchBroom ") % getBuildVersion() % tr(" Build ") % getBuildIdStr();
-    QString("TrenchBroom ") % getBuildVersion() % QString(" Build ") % getBuildIdStr();
   clipboard->setText(str);
 }
 } // namespace TrenchBroom::View

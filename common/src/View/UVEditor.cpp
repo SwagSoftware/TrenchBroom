@@ -98,12 +98,10 @@ void UVEditor::createGui(GLContextManager& contextManager) {
   auto* gridLabel = new QLabel("Grid ");
   makeEmphasized(gridLabel);
   m_xSubDivisionEditor = new QSpinBox();
-                                         //wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER | wxALIGN_RIGHT);
   m_xSubDivisionEditor->setRange(1, 16);
   m_xSubDivisionEditor->setValue(1);
 
   m_ySubDivisionEditor = new QSpinBox();
-                                         //wxSP_ARROW_KEYS | wxTE_PROCESS_ENTER | wxALIGN_RIGHT);
   m_ySubDivisionEditor->setRange(1, 16);
   m_ySubDivisionEditor->setValue(1);
 
