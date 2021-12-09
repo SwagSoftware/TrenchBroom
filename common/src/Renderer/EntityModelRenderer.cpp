@@ -70,6 +70,10 @@ void EntityModelRenderer::addEntity(const Model::EntityNode* entityNode) {
   }
 }
 
+void EntityModelRenderer::removeEntity(const Model::EntityNode* entityNode) {
+  m_entities.erase(entityNode);
+}
+
 void EntityModelRenderer::updateEntity(const Model::EntityNode* entityNode) {
   const auto modelSpec =
     Assets::safeGetModelSpecification(m_logger, entityNode->entity().classname(), [&]() {

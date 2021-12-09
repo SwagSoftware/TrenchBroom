@@ -145,7 +145,7 @@ std::vector<vm::vec3> computeGridNormals(
               const auto right = gridPoint(row, col + 1u);
               return vm::cross(right - point, above - point);
             }
-              switchDefault()
+              switchDefault();
           }
         }
         case RowOffset::Below: {
@@ -162,10 +162,10 @@ std::vector<vm::vec3> computeGridNormals(
               const auto right = gridPoint(row, col + 1u);
               return vm::cross(below - point, right - point);
             }
-              switchDefault()
+              switchDefault();
           }
         }
-          switchDefault()
+          switchDefault();
       };
     };
 
@@ -306,8 +306,8 @@ const BezierPatch& PatchNode::patch() const {
 }
 
 BezierPatch PatchNode::setPatch(BezierPatch patch) {
-  const NotifyNodeChange nodeChange(this);
-  const NotifyPhysicalBoundsChange boundsChange(this);
+  const auto nodeChange = NotifyNodeChange{*this};
+  const auto boundsChange = NotifyPhysicalBoundsChange{*this};
 
   auto previousPatch = std::exchange(m_patch, std::move(patch));
   m_grid = makePatchGrid(m_patch, DefaultSubdivisionsPerSurface);

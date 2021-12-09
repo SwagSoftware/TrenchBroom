@@ -50,7 +50,6 @@ public:
     bool validateDestFactor() const;
     void reset();
   };
-
   // Doom 3
   enum class StageLighting
   {

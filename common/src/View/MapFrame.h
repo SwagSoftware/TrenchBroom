@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "IO/ExportOptions.h"
 #include "Model/MapFormat.h"
 #include "NotifierConnection.h"
 #include "View/Selection.h"
@@ -54,7 +55,6 @@ class Path;
 }
 
 namespace Model {
-enum class ExportFormat;
 class Game;
 class GroupNode;
 class LayerNode;
@@ -71,6 +71,7 @@ class Inspector;
 enum class InspectorPage;
 class MapDocument;
 class MapViewBase;
+class ObjExportDialog;
 enum class PasteType;
 class SignalDelayer;
 class SwitchableMapViewContainer;
@@ -106,6 +107,7 @@ private:
   QLabel* m_statusBarLabel;
 
   QPointer<QDialog> m_compilationDialog;
+  QPointer<ObjExportDialog> m_objExportDialog;
 
   NotifierConnection m_notifierConnection;
 
@@ -183,6 +185,8 @@ private: // notification handlers
   void groupWasClosed(Model::GroupNode* group);
   void nodeVisibilityDidChange(const std::vector<Model::Node*>& nodes);
   void editorContextDidChange();
+  void pointFileDidChange();
+  void portalFileDidChange();
 
 private: // menu event handlers
   void bindEvents();
@@ -196,7 +200,7 @@ public:
   bool revertDocument();
   bool exportDocumentAsObj();
   bool exportDocumentAsMap();
-  bool exportDocument(Model::ExportFormat format, const IO::Path& path);
+  bool exportDocument(const IO::ExportOptions& options);
 
 private:
   bool confirmOrDiscardChanges();

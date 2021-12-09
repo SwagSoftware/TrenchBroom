@@ -39,6 +39,7 @@ class BrushNode;
 class EditorContext;
 class EntityNode;
 class GroupNode;
+class Node;
 class PatchNode;
 } // namespace Model
 
@@ -64,11 +65,10 @@ public:
     , m_patchRenderer{} {}
 
 public: // object management
-  void setObjects(
-    const std::vector<Model::GroupNode*>& groups, const std::vector<Model::EntityNode*>& entities,
-    const std::vector<Model::BrushNode*>& brushes, const std::vector<Model::PatchNode*>& patches);
+  void addNode(Model::Node* node);
+  void removeNode(Model::Node* node);
+  void invalidateNode(Model::Node* node);
   void invalidate();
-  void invalidateBrushes(const std::vector<Model::BrushNode*>& brushes);
   void clear();
   void reloadModels();
 

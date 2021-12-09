@@ -23,6 +23,7 @@
 #include "IO/BrushFaceReader.h"
 #include "IO/DiskFileSystem.h"
 #include "IO/DiskIO.h"
+#include "IO/ExportOptions.h"
 #include "IO/IOUtils.h"
 #include "IO/NodeReader.h"
 #include "IO/NodeWriter.h"
@@ -127,7 +128,7 @@ void TestGame::doWriteMap(WorldNode& world, const IO::Path& path) const {
   writer.writeMap();
 }
 
-void TestGame::doExportMap(
+void TestGame::doExportMap(WorldNode& /* world */, const IO::ExportOptions& /* options */) const {}
   WorldNode& /* world */, const Model::ExportFormat /* format */,
   const IO::Path& /* path */) const {}
 

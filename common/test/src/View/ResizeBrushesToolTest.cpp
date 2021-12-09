@@ -109,9 +109,13 @@ TEST_CASE("ResizeBrushesToolTest.findDragFaces", "[ResizeBrushesToolTest]") {
     std::vector<std::string> expectedDragFaceTextureNames;
   };
 
-  auto [mapName, expectedDragFaceTextureNames] = GENERATE(values<TestCase>(
-    {{IO::Path("findDragFaces_noCoplanarFaces.map"), {"larger_top_face"}},
-     {IO::Path("findDragFaces_twoCoplanarFaces.map"), {"larger_top_face", "smaller_top_face"}}}));
+  // clang-format off
+  const auto 
+  [mapName,                                        expectedDragFaceTextureNames] = GENERATE(values<TestCase>({
+  {IO::Path("findDragFaces_noCoplanarFaces.map"),  {"larger_top_face"}},
+  {IO::Path("findDragFaces_twoCoplanarFaces.map"), {"larger_top_face", "smaller_top_face"}}
+  }));
+  // clang-format on
 
   const auto mapPath = IO::Path("fixture/test/View/ResizeBrushesToolTest") + mapName;
   auto [document, game, gameConfig] =

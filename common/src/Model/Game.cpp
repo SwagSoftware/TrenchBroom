@@ -20,6 +20,7 @@
 #include "Game.h"
 
 #include "Assets/EntityDefinitionFileSpec.h"
+#include "IO/ExportOptions.h"
 #include "Model/BrushFace.h"
 #include "Model/GameFactory.h"
 #include "Model/WorldNode.h"
@@ -89,9 +90,8 @@ void Game::writeMap(WorldNode& world, const IO::Path& path) const {
   doWriteMap(world, path);
 }
 
-void Game::exportMap(
-  WorldNode& world, const Model::ExportFormat format, const IO::Path& path) const {
-  doExportMap(world, format, path);
+void Game::exportMap(WorldNode& world, const IO::ExportOptions& options) const {
+  doExportMap(world, options);
 }
 
 std::vector<Node*> Game::parseNodes(

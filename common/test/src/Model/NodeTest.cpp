@@ -530,7 +530,7 @@ enum class Visited
       return str << "Brush";
     case Visited::Patch:
       return str << "Patch";
-      switchDefault()
+      switchDefault();
   }
 }
 
@@ -582,14 +582,14 @@ TEST_CASE("NodeTest.accept", "[NodeTest]") {
   GroupNode group(Group("name"));
   EntityNode entity{{}};
   BrushNode brush(BrushBuilder(world.mapFormat(), worldBounds).createCube(32.0, "texture").value());
-  PatchNode patch(BezierPatch(
-    3, 3,
-    {
-      BezierPatch::Point{},
-      BezierPatch::Point{},
-      BezierPatch::Point{},
-      BezierPatch::Point{},
-      BezierPatch::Point{},
+
+  // clang-format off
+  PatchNode patch(BezierPatch(3, 3, { 
+    BezierPatch::Point{}, BezierPatch::Point{}, BezierPatch::Point{},
+    BezierPatch::Point{}, BezierPatch::Point{}, BezierPatch::Point{},
+    BezierPatch::Point{}, BezierPatch::Point{}, BezierPatch::Point{},
+  }, "texture"));
+  // clang-format on
       BezierPatch::Point{},
       BezierPatch::Point{},
       BezierPatch::Point{},

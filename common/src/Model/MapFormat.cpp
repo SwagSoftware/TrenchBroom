@@ -80,7 +80,7 @@ std::string formatName(const MapFormat format) {
       return "Doom3 (Valve)";
     case MapFormat::Unknown:
       return "Unknown";
-      switchDefault()
+      switchDefault();
   }
 }
 
@@ -110,7 +110,7 @@ std::vector<MapFormat> compatibleFormats(const MapFormat format) {
       return {MapFormat::Doom3_Valve, MapFormat::Doom3};
     case MapFormat::Unknown:
       return {MapFormat::Unknown};
-      switchDefault()
+      switchDefault();
   }
 }
 
@@ -130,7 +130,7 @@ bool isParallelTexCoordSystem(const MapFormat format) {
     case MapFormat::Quake3:
     case MapFormat::Unknown:
       return false;
-      switchDefault()
+      switchDefault();
   }
 }
 } // namespace Model

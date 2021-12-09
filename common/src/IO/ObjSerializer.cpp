@@ -21,6 +21,7 @@
 
 #include "Assets/Texture.h"
 #include "Ensure.h"
+#include "IO/ExportOptions.h"
 #include "Model/BrushFace.h"
 #include "Model/BrushGeometry.h"
 #include "Model/BrushNode.h"
@@ -32,6 +33,7 @@
 #include <fmt/format.h>
 
 #include <iostream>
+#include <utility>
 
 namespace TrenchBroom {
 namespace IO {
@@ -81,17 +83,21 @@ std::ostream& operator<<(std::ostream& str, const ObjSerializer::Object& object)
 }
 
 ObjSerializer::ObjSerializer(
-  std::ostream& objStream, std::ostream& mtlStream, std::string mtlFilename)
+  std::ostream& objStream, std::ostream& mtlStream, std::string mtlFilename,
+  IO::ObjExportOptions options)
   : m_objStream{objStream}
   , m_mtlStream{mtlStream}
-  , m_mtlFilename{std::move(mtlFilename)} {
+  , m_mtlFilename{std::move(mtlFilename)}
+  , m_options{std::move(options)} {
   ensure(m_objStream.good(), "obj stream is good");
   ensure(m_mtlStream.good(), "mtl stream is good");
 }
 
 void ObjSerializer::doBeginFile(const std::vector<const Model::Node*>& /* rootNodes */) {}
 
-static void writeMtlFile(std::ostream& str, const std::vector<ObjSerializer::Object>& objects) {
+static void writeMtlFile(
+  std::ostream& str, const std::vector<ObjSerializer::Object>& objects,
+  const IO::ObjExportOptions& options) {
   auto usedTextures = std::map<std::string, const Assets::Texture*>{};
 
   for (const auto& object : objects) {
@@ -108,11 +114,24 @@ static void writeMtlFile(std::ostream& str, const std::vector<ObjSerializer::Obj
       object);
   }
 
+  const auto basePath = options.exportPath.deleteLastComponent();
   for (const auto& [textureName, texture] : usedTextures) {
     str << "newmtl " << textureName << "\n";
-    if (texture != nullptr && !texture->relativePath().isEmpty()) {
-      str << "map_Kd " << texture->relativePath().asString() << "\n\n";
+    if (texture) {
+      switch (options.mtlPathMode) {
+        case ObjMtlPathMode::RelativeToGamePath:
+          str << "map_Kd " << texture->relativePath() << "\n";
+          break;
+        case ObjMtlPathMode::RelativeToExportPath:
+          // textures loaded from image files (pak files) don't have absolute paths
+          if (!texture->absolutePath().isEmpty()) {
+            const auto mtlPath = basePath.makeRelative(texture->absolutePath());
+            str << "map_Kd " << mtlPath << "\n";
+          }
+          break;
+      }
     }
+    str << "\n";
   }
 }
 
@@ -163,7 +182,7 @@ static void writeObjFile(
 }
 
 void ObjSerializer::doEndFile() {
-  writeMtlFile(m_mtlStream, m_objects);
+  writeMtlFile(m_mtlStream, m_objects, m_options);
   writeObjFile(
     m_objStream, m_mtlFilename, m_vertices.list(), m_texCoords.list(), m_normals.list(), m_objects);
 }

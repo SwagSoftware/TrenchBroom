@@ -25,6 +25,7 @@
 #include "Model/MapFacade.h"
 #include "Model/NodeCollection.h"
 #include "Model/NodeContents.h"
+#include "Model/PointTrace.h"
 #include "Notifier.h"
 #include "NotifierConnection.h"
 #include "View/CachingLogger.h"
@@ -59,12 +60,11 @@ class BrushFaceHandle;
 class BrushFaceAttributes;
 class EditorContext;
 class Entity;
-enum class ExportFormat;
 class Game;
 class Issue;
 enum class MapFormat;
 class PickResult;
-class PointFile;
+class PointTrace;
 class PortalFile;
 class SmartTag;
 class TagManager;
@@ -85,6 +85,11 @@ class UndoableCommand;
 class ViewEffectsService;
 enum class MapTextEncoding;
 
+struct PointFile {
+  Model::PointTrace trace;
+  IO::Path path;
+};
+
 class MapDocument : public Model::MapFacade, public CachingLogger {
 public:
   static const vm::bbox3 DefaultWorldBounds;
@@ -95,9 +100,8 @@ protected:
   std::shared_ptr<Model::Game> m_game;
   std::unique_ptr<Model::WorldNode> m_world;
 
-  std::unique_ptr<Model::PointFile> m_pointFile;
+  std::optional<PointFile> m_pointFile;
   std::unique_ptr<Model::PortalFile> m_portalFile;
-  IO::Path m_pointFilePath;
   IO::Path m_portalFilePath;
 
   std::unique_ptr<Assets::EntityDefinitionManager> m_entityDefinitionManager;
@@ -242,7 +246,7 @@ public:
 
   Grid& grid() const;
 
-  Model::PointFile* pointFile() const;
+  std::optional<PointFile>& pointFile();
   Model::PortalFile* portalFile() const;
 
   void setViewEffectsService(ViewEffectsService* viewEffectsService);
@@ -278,7 +282,7 @@ public: // new, load, save document
   void saveDocument();
   void saveDocumentAs(const IO::Path& path);
   void saveDocumentTo(const IO::Path& path);
-  void exportDocumentAs(Model::ExportFormat format, const IO::Path& path);
+  void exportDocumentAs(const IO::ExportOptions& options);
 
 private:
   void doSaveDocument(const IO::Path& path);
@@ -317,8 +321,44 @@ public: // selection
   bool hasSelectedBrushFaces() const override;
   bool hasAnySelectedBrushFaces() const override;
 
+  /**
+   * For commands that modify entities, this returns all entities that should be acted on, based on
+   * the current selection.
+   *
+   * - selected brushes/patches act on their parent entities
+   * - selected groups implicitly act on any contained entities
+   *
+   * If multiple linked groups are selected, returns entities from all of them, so attempting to
+   * perform commands on all of them will be blocked as a conflict.
+   */
   std::vector<Model::EntityNodeBase*> allSelectedEntityNodes() const override;
+
+  /**
+   * For commands that modify brushes, this returns all brushes that should be acted on, based on
+   * the current selection.
+   *
+   * - selected groups implicitly act on any contained brushes
+   *
+   * If multiple linked groups are selected, returns brushes from all of them, so attempting to
+   * perform commands on all of them will be blocked as a conflict.
+   */
+  std::vector<Model::BrushNode*> allSelectedBrushNodes() const;
+  bool hasAnySelectedBrushNodes() const;
   const Model::NodeCollection& selectedNodes() const override;
+
+  /**
+   * For commands that modify brush faces, this returns all that should be acted on, based on the
+   * current selection.
+   *
+   * - if brush faces are explicitly selected (hasSelectedBrushFaces()), use those
+   * - selected groups implicitly act on any contained brushes
+   * - selected brushes implicitly act on their faces
+   *
+   * Unlike allSelectedBrushNodes()/allSelectedEntityNodes(), if multiple groups in a link set are
+   * selected, only return one representative face per brush, so that user actions can be performed
+   * without generating conflicts. (e.g. this allows selecting 2 closed linked groups in a link set
+   * and applying textures.)
+   */
   std::vector<Model::BrushFaceHandle> allSelectedBrushFaces() const override;
   std::vector<Model::BrushFaceHandle> selectedBrushFaces() const override;
 

@@ -22,6 +22,7 @@
 #include "FloatType.h"
 #include "IO/EntityDefinitionLoader.h"
 #include "IO/EntityModelLoader.h"
+#include "IO/ExportOptions.h"
 #include "Model/GameConfig.h"
 #include "Model/MapFormat.h"
 
@@ -49,7 +50,6 @@ class BrushFace;
 class BrushFaceAttributes;
 class CompilationConfig;
 class Entity;
-enum class ExportFormat;
 struct FlagsConfig;
 class Node;
 class SmartTag;
@@ -108,7 +108,7 @@ public: // loading and writing map files
   std::unique_ptr<WorldNode> loadMap(
     MapFormat format, const vm::bbox3& worldBounds, const IO::Path& path, Logger& logger) const;
   void writeMap(WorldNode& world, const IO::Path& path) const;
-  void exportMap(WorldNode& world, Model::ExportFormat format, const IO::Path& path) const;
+  void exportMap(WorldNode& world, const IO::ExportOptions& options) const;
 
 public: // parsing and serializing objects
   std::vector<Node*> parseNodes(
@@ -177,7 +177,7 @@ private: // subclassing interface
   virtual std::unique_ptr<WorldNode> doLoadMap(
     MapFormat format, const vm::bbox3& worldBounds, const IO::Path& path, Logger& logger) const = 0;
   virtual void doWriteMap(WorldNode& world, const IO::Path& path) const = 0;
-  virtual void doExportMap(
+  virtual void doExportMap(WorldNode& world, const IO::ExportOptions& options) const = 0;
     WorldNode& world, Model::ExportFormat format, const IO::Path& path) const = 0;
 
   virtual std::vector<Node*> doParseNodes(

@@ -25,6 +25,10 @@
 #include "IO/WorldReader.h"
 #include "Model/BrushBuilder.h"
 #include "Model/BrushNode.h"
+#include "Model/Entity.h"
+#include "Model/EntityNode.h"
+#include "Model/Group.h"
+#include "Model/GroupNode.h"
 #include "Model/LayerNode.h"
 #include "Model/PatchNode.h"
 #include "Model/TestGame.h"
@@ -32,6 +36,7 @@
 #include "View/MapDocumentCommandFacade.h"
 
 #include <kdl/result.h>
+#include <kdl/vector_utils.h>
 
 #include "Catch2.h"
 
@@ -78,19 +83,12 @@ Model::BrushNode* MapDocumentTest::createBrushNode(
 }
 
 Model::PatchNode* MapDocumentTest::createPatchNode(const std::string& textureName) const {
-  return new Model::PatchNode{Model::BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    textureName}};
+  // clang-format off
+  return new Model::PatchNode{Model::BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, textureName}};
+  // clang-format on
 }
 
 ValveMapDocumentTest::ValveMapDocumentTest()
@@ -135,6 +133,93 @@ TEST_CASE("MapDocumentTest.mixedFormats", "[MapDocumentTest]") {
       IO::Path("fixture/test/View/MapDocumentTest/mixedFormats.map"), "Quake",
       Model::MapFormat::Unknown),
     IO::WorldReaderException);
+}
+
+TEST_CASE_METHOD(MapDocumentTest, "Brush Node Selection") {
+  auto* brushNodeInDefaultLayer = createBrushNode("brushNodeInDefaultLayer");
+  auto* brushNodeInCustomLayer = createBrushNode("brushNodeInCustomLayer");
+  auto* brushNodeInEntity = createBrushNode("brushNodeInEntity");
+  auto* brushNodeInGroup = createBrushNode("brushNodeInGroup");
+  auto* brushNodeInNestedGroup = createBrushNode("brushNodeInNestedGroup");
+
+  auto* customLayerNode = new Model::LayerNode{Model::Layer{"customLayerNode"}};
+  auto* brushEntityNode = new Model::EntityNode{Model::Entity{}};
+  auto* pointEntityNode = new Model::EntityNode{Model::Entity{}};
+  auto* outerGroupNode = new Model::GroupNode{Model::Group{"outerGroupNode"}};
+  auto* innerGroupNode = new Model::GroupNode{Model::Group{"outerGroupNode"}};
+
+  document->addNodes(
+    {{document->world()->defaultLayer(),
+      {brushNodeInDefaultLayer, brushEntityNode, pointEntityNode, outerGroupNode}},
+     {document->world(), {customLayerNode}}});
+
+  document->addNodes({
+    {customLayerNode, {brushNodeInCustomLayer}},
+    {outerGroupNode, {innerGroupNode, brushNodeInGroup}},
+    {brushEntityNode, {brushNodeInEntity}},
+  });
+
+  document->addNodes({{innerGroupNode, {brushNodeInNestedGroup}}});
+
+  const auto getPath = [&](const Model::Node* node) {
+    return node->pathFrom(*document->world());
+  };
+  const auto resolvePaths = [&](const std::vector<Model::NodePath>& paths) {
+    auto result = std::vector<Model::Node*>{};
+    for (const auto& path : paths) {
+      result.push_back(document->world()->resolvePath(path));
+    }
+    return result;
+  };
+
+  SECTION("allSelectedBrushNodes") {
+    using T = std::vector<Model::NodePath>;
+
+    // clang-format off
+    const auto 
+    paths = GENERATE_COPY(values<T>({
+    {},
+    {getPath(brushNodeInDefaultLayer)},
+    {getPath(brushNodeInDefaultLayer), getPath(brushNodeInCustomLayer)},
+    {getPath(brushNodeInDefaultLayer), getPath(brushNodeInCustomLayer), getPath(brushNodeInEntity)},
+    {getPath(brushNodeInGroup)},
+    {getPath(brushNodeInGroup), getPath(brushNodeInNestedGroup)},
+    }));
+    // clang-format on
+
+    const auto nodes = resolvePaths(paths);
+    const auto brushNodes = kdl::vec_element_cast<Model::BrushNode*>(nodes);
+
+    document->select(nodes);
+
+    CHECK_THAT(document->allSelectedBrushNodes(), Catch::Matchers::UnorderedEquals(brushNodes));
+  }
+
+  SECTION("hasAnySelectedBrushNodes") {
+    using T = std::tuple<std::vector<Model::NodePath>, bool>;
+
+    // clang-format off
+    const auto 
+    [pathsToSelect,                      expectedResult] = GENERATE_COPY(values<T>({
+    {std::vector<Model::NodePath>{},     false},
+    {{getPath(pointEntityNode)},         false},
+    {{getPath(brushEntityNode)},         true},
+    {{getPath(outerGroupNode)},          true},
+    {{getPath(brushNodeInDefaultLayer)}, true},
+    {{getPath(brushNodeInCustomLayer)},  true},
+    {{getPath(brushNodeInEntity)},       true},
+    {{getPath(brushNodeInGroup)},        true},
+    {{getPath(brushNodeInNestedGroup)},  true},
+    }));
+    // clang-format on
+
+    CAPTURE(pathsToSelect);
+
+    const auto nodes = resolvePaths(pathsToSelect);
+    document->select(nodes);
+
+    CHECK(document->hasAnySelectedBrushNodes() == expectedResult);
+  }
 }
 } // namespace View
 } // namespace TrenchBroom

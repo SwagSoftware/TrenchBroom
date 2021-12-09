@@ -73,19 +73,13 @@ TEST_CASE("NodeCollection.counts") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   nodeCollection.addNodes({&layerNode, &groupNode, &entityNode, &brushNode, &patchNode});
   CHECK(nodeCollection.nodeCount() == 5u);
@@ -105,19 +99,13 @@ TEST_CASE("NodeCollection.has") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   auto nodeCollection = NodeCollection{};
 
@@ -129,7 +117,6 @@ TEST_CASE("NodeCollection.has") {
   REQUIRE_FALSE(nodeCollection.hasOnlyEntities());
   REQUIRE_FALSE(nodeCollection.hasBrushes());
   REQUIRE_FALSE(nodeCollection.hasOnlyBrushes());
-  REQUIRE_FALSE(nodeCollection.hasBrushesRecursively());
   REQUIRE_FALSE(nodeCollection.hasPatches());
   REQUIRE_FALSE(nodeCollection.hasOnlyPatches());
 
@@ -168,12 +155,10 @@ TEST_CASE("NodeCollection.has") {
       nodeCollection.addNode(&brushNode);
       CHECK(nodeCollection.hasBrushes());
       CHECK(nodeCollection.hasOnlyBrushes());
-      CHECK(nodeCollection.hasBrushesRecursively());
 
       nodeCollection.addNode(&layerNode);
       CHECK(nodeCollection.hasBrushes());
       CHECK_FALSE(nodeCollection.hasOnlyBrushes());
-      CHECK(nodeCollection.hasBrushesRecursively());
     }
 
     SECTION("nested brushes") {
@@ -187,19 +172,16 @@ TEST_CASE("NodeCollection.has") {
         nodeCollection.addNode(node);
         CHECK_FALSE(nodeCollection.hasBrushes());
         CHECK_FALSE(nodeCollection.hasOnlyBrushes());
-        CHECK(nodeCollection.hasBrushesRecursively());
       }
 
       SECTION("adding brushes to containers") {
         nodeCollection.addNode(node);
         REQUIRE_FALSE(nodeCollection.hasBrushes());
         REQUIRE_FALSE(nodeCollection.hasOnlyBrushes());
-        REQUIRE_FALSE(nodeCollection.hasBrushesRecursively());
 
         node->addChild(brushNode.clone(worldBounds));
         CHECK_FALSE(nodeCollection.hasBrushes());
         CHECK_FALSE(nodeCollection.hasOnlyBrushes());
-        CHECK(nodeCollection.hasBrushesRecursively());
       }
     }
   }
@@ -224,19 +206,13 @@ TEST_CASE("NodeCollection.iterators") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   auto nodeCollection = NodeCollection{};
 
@@ -261,19 +237,13 @@ TEST_CASE("NodeCollection.collections") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   auto nodeCollection = NodeCollection{};
 
@@ -316,11 +286,6 @@ TEST_CASE("NodeCollection.collections") {
     layerNode.addChild(brushInLayer);
     groupNode.addChild(brushInGroup);
     entityNode.addChild(brushInEntity);
-
-    CHECK_THAT(
-      nodeCollection.brushesRecursively(),
-      Catch::Matchers::UnorderedEquals(
-        std::vector<BrushNode*>{&brushNode, brushInLayer, brushInGroup, brushInEntity}));
   }
 }
 
@@ -333,19 +298,13 @@ TEST_CASE("NodeCollection.addNode") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   auto nodeCollection = NodeCollection{};
 
@@ -393,19 +352,13 @@ TEST_CASE("NodeCollection.addNodes") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   auto nodeCollection = NodeCollection{};
 
@@ -434,19 +387,13 @@ TEST_CASE("NodeCollection.removeNode") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   auto nodeCollection = NodeCollection{};
   nodeCollection.addNodes({&layerNode, &groupNode, &entityNode, &brushNode, &patchNode});
@@ -503,19 +450,13 @@ TEST_CASE("NodeCollection.clear") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   auto nodeCollection = NodeCollection{};
   nodeCollection.addNodes({&layerNode, &groupNode, &entityNode, &brushNode, &patchNode});

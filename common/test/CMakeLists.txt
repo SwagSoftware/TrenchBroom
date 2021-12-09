@@ -69,6 +69,7 @@ set(COMMON_TEST_SOURCE
         "${COMMON_TEST_SOURCE_DIR}/Model/EntityNodeTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/EntityRotationPolicyTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/EntityTest.cpp"
+        "${COMMON_TEST_SOURCE_DIR}/Model/GameFactoryTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/GameTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/GroupTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/GroupNodeTest.cpp"
@@ -78,6 +79,7 @@ set(COMMON_TEST_SOURCE
         "${COMMON_TEST_SOURCE_DIR}/Model/NodeCollectionTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/NodeTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/PatchNodeTest.cpp"
+        "${COMMON_TEST_SOURCE_DIR}/Model/PointTraceTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/PolyhedronTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/PortalFileTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/TaggingTest.cpp"
@@ -137,6 +139,7 @@ set(COMMON_REGRESSION_TEST_SOURCE
         "${COMMON_TEST_SOURCE_DIR}/IO/Quake3ShaderParserRegressionTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/BrushNodeRegressionTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/BrushRegressionTest.cpp"
+        "${COMMON_TEST_SOURCE_DIR}/Model/EntityRegressionTest.cpp"
         "${COMMON_TEST_SOURCE_DIR}/Model/PolyhedronRegressionTest.cpp"
 )
 

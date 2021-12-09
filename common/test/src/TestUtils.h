@@ -57,6 +57,7 @@ class BrushFace;
 class BrushNode;
 class Game;
 struct GameConfig;
+class GroupNode;
 class Node;
 
 BrushFace createParaxial(
@@ -103,6 +104,8 @@ const Model::BrushFace* findFaceByPoints(
   const vm::vec3& point2);
 void checkFaceTexCoordSystem(const Model::BrushFace& face, const bool expectParallel);
 void checkBrushTexCoordSystem(const Model::BrushNode* brushNode, const bool expectParallel);
+
+void setLinkedGroupId(GroupNode& groupNode, std::string linkedGroupId);
 } // namespace Model
 
 namespace View {

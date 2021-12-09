@@ -22,13 +22,13 @@
 #include "Console.h"
 #include "Exceptions.h"
 #include "FileLogger.h"
+#include "IO/ExportOptions.h"
 #include "IO/PathQt.h"
 #include "Model/BrushNode.h"
 #include "Model/EditorContext.h"
 #include "Model/Entity.h"
 #include "Model/EntityNode.h"
 #include "Model/EntityNodeBase.h"
-#include "Model/ExportFormat.h"
 #include "Model/Game.h"
 #include "Model/GameFactory.h"
 #include "Model/GroupNode.h"
@@ -62,6 +62,7 @@
 #include "View/MapDocument.h"
 #include "View/MapViewBase.h"
 #include "View/MapViewToolBox.h"
+#include "View/ObjExportDialog.h"
 #include "View/PasteType.h"
 #include "View/QtUtils.h"
 #include "View/RenderView.h"
@@ -83,6 +84,7 @@
 #include <chrono>
 #include <iterator>
 #include <string>
+#include <variant>
 #include <vector>
 
 #include <QApplication>
@@ -694,6 +696,14 @@ void MapFrame::connectObservers() {
     m_document->nodeVisibilityDidChangeNotifier.connect(this, &MapFrame::nodeVisibilityDidChange);
   m_notifierConnection +=
     m_document->editorContextDidChangeNotifier.connect(this, &MapFrame::editorContextDidChange);
+  m_notifierConnection +=
+    m_document->pointFileWasLoadedNotifier.connect(this, &MapFrame::pointFileDidChange);
+  m_notifierConnection +=
+    m_document->pointFileWasUnloadedNotifier.connect(this, &MapFrame::pointFileDidChange);
+  m_notifierConnection +=
+    m_document->portalFileWasLoadedNotifier.connect(this, &MapFrame::portalFileDidChange);
+  m_notifierConnection +=
+    m_document->portalFileWasUnloadedNotifier.connect(this, &MapFrame::portalFileDidChange);
 
   Grid& grid = m_document->grid();
   m_notifierConnection += grid.gridDidChangeNotifier.connect(this, &MapFrame::gridDidChange);
@@ -791,6 +801,14 @@ void MapFrame::nodeVisibilityDidChange(const std::vector<Model::Node*>&) {
 void MapFrame::editorContextDidChange() {
   // e.g. changing the view filters may cause the number of hidden brushes/entities to change
   updateStatusBarDelayed();
+}
+
+void MapFrame::pointFileDidChange() {
+  updateActionStateDelayed();
+}
+
+void MapFrame::portalFileDidChange() {
+  updateActionStateDelayed();
 }
 
 void MapFrame::bindEvents() {
@@ -916,16 +934,12 @@ bool MapFrame::revertDocument() {
 }
 
 bool MapFrame::exportDocumentAsObj() {
-  const IO::Path& originalPath = m_document->path();
-  const IO::Path objPath = originalPath.replaceExtension("obj");
-
-  const QString newFileName = QFileDialog::getSaveFileName(
-    this, tr("Export Wavefront OBJ file"), IO::pathAsQString(objPath),
-    "Wavefront OBJ files (*.obj)");
-  if (newFileName.isEmpty())
-    return false;
-
-  return exportDocument(Model::ExportFormat::WavefrontObj, IO::pathFromQString(newFileName));
+  if (m_objExportDialog == nullptr) {
+    m_objExportDialog = new ObjExportDialog{this};
+  }
+  m_objExportDialog->updateExportPath();
+  showModelessDialog(m_objExportDialog);
+  return true;
 }
 
 bool MapFrame::exportDocumentAsMap() {
@@ -937,27 +951,35 @@ bool MapFrame::exportDocumentAsMap() {
     return false;
   }
 
-  return exportDocument(Model::ExportFormat::Map, IO::pathFromQString(newFileName));
+  const auto options = IO::MapExportOptions{IO::pathFromQString(newFileName)};
+  return exportDocument(options);
 }
 
-bool MapFrame::exportDocument(const Model::ExportFormat format, const IO::Path& path) {
-  if (path == m_document->path()) {
+bool MapFrame::exportDocument(const IO::ExportOptions& options) {
+  const auto exportPath = std::visit(
+    [](const auto& o) {
+      return o.exportPath;
+    },
+    options);
+
+  if (exportPath == m_document->path()) {
     QMessageBox::critical(
       this, "",
       tr("You can't overwrite the current document.\nPlease choose a different file name to export "
          "to."));
     return false;
   }
+
   try {
-    m_document->exportDocumentAs(format, path);
-    logger().info() << "Exported " << path;
+    m_document->exportDocumentAs(options);
+    logger().info() << "Exported " << exportPath;
     return true;
   } catch (const FileSystemException& e) {
     QMessageBox::critical(this, "", e.what());
     return false;
   } catch (...) {
     QMessageBox::critical(
-      this, "", QString::fromStdString("Unknown error while exporting " + path.asString()),
+      this, "", QString::fromStdString("Unknown error while exporting " + exportPath.asString()),
       QMessageBox::Ok);
     return false;
   }
@@ -1590,7 +1612,7 @@ void MapFrame::snapVerticesToGrid() {
 }
 
 bool MapFrame::canSnapVertices() const {
-  return m_document->selectedNodes().hasBrushesRecursively();
+  return m_document->hasAnySelectedBrushNodes();
 }
 
 void MapFrame::toggleTextureLock() {

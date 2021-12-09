@@ -102,7 +102,7 @@ TEST_CASE_METHOD(MapDocumentTest, "CompilationCopyFilesTaskRunner.createTargetDi
 
   auto context = CompilationContext{document, variables, outputAdapter, false};
 
-  auto testEnvironment = IO::TestEnvironment{"copyFilesTask"};
+  auto testEnvironment = IO::TestEnvironment{};
 
   const auto sourcePath = IO::Path("my_map.map");
   testEnvironment.createFile(sourcePath, "{}");

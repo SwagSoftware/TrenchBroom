@@ -66,6 +66,7 @@ private:
 
   VisibilityState m_visibilityState;
   LockState m_lockState;
+  bool m_lockedByOtherSelection;
 
   mutable size_t m_lineNumber;
   mutable size_t m_lineCount;
@@ -250,10 +251,10 @@ private:
 protected: // notification for parents
   class NotifyNodeChange {
   private:
-    Node* m_node;
+    Node& m_node;
 
   public:
-    explicit NotifyNodeChange(Node* node);
+    explicit NotifyNodeChange(Node& node);
     ~NotifyNodeChange();
   };
 
@@ -264,10 +265,10 @@ protected: // notification for parents
   friend class NotifyPhysicalBoundsChange;
   class NotifyPhysicalBoundsChange {
   private:
-    Node* m_node;
+    Node& m_node;
 
   public:
-    explicit NotifyPhysicalBoundsChange(Node* node);
+    explicit NotifyPhysicalBoundsChange(Node& node);
     ~NotifyPhysicalBoundsChange();
   };
   void nodePhysicalBoundsDidChange();
@@ -336,6 +337,8 @@ public: // visibility, locking
   bool locked() const;
   LockState lockState() const;
   bool setLockState(LockState lockState);
+  bool lockedByOtherSelection() const;
+  void setLockedByOtherSelection(bool lockedByOtherSelection);
 
 public: // picking
   void pick(const EditorContext& editorContext, const vm::ray3& ray, PickResult& result);

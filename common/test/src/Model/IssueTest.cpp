@@ -67,12 +67,12 @@ TEST_CASE("Issue.addSelectableNodes") {
     new BrushNode{BrushBuilder{MapFormat::Quake3, worldBounds}.createCube(64.0, "texture").value()};
   brushEntityNode->addChild(entityBrushNode);
 
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
      {0, 1, 1},
      {1, 1, 2},
      {2, 1, 1},

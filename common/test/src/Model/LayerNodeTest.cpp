@@ -48,13 +48,13 @@ TEST_CASE("LayerNodeTest.canAddChild") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
      {1, 1, 2},
      {2, 1, 1},
      {0, 2, 0},
@@ -80,13 +80,13 @@ TEST_CASE("LayerNodeTest.canRemoveChild") {
   auto entityNode = EntityNode{Entity{}};
   auto brushNode =
     BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto patchNode = PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
+
+  // clang-format off
+  auto patchNode = PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
      {1, 1, 2},
      {2, 1, 1},
      {0, 2, 0},

@@ -70,7 +70,7 @@ private:
     MapFormat format, const vm::bbox3& worldBounds, const IO::Path& path,
     Logger& logger) const override;
   void doWriteMap(WorldNode& world, const IO::Path& path) const override;
-  void doExportMap(
+  void doExportMap(WorldNode& world, const IO::ExportOptions& options) const override;
     WorldNode& world, Model::ExportFormat format, const IO::Path& path) const override;
 
   std::vector<Node*> doParseNodes(

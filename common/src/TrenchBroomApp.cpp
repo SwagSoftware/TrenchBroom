@@ -398,8 +398,12 @@ void TrenchBroomApp::openAbout() {
 
 bool TrenchBroomApp::initializeGameFactory() {
   try {
+    const auto gamePathConfig = Model::GamePathConfig{
+      IO::SystemPaths::findResourceDirectories(IO::Path{"games"}),
+      IO::SystemPaths::userDataDirectory() + IO::Path{"games"},
+    };
     auto& gameFactory = Model::GameFactory::instance();
-    gameFactory.initialize();
+    gameFactory.initialize(gamePathConfig);
   } catch (const std::exception& e) {
     qCritical() << e.what();
     return false;

@@ -76,8 +76,7 @@ private:
     Logger& logger) const override;
   void doWriteMap(WorldNode& world, const IO::Path& path, bool exporting) const;
   void doWriteMap(WorldNode& world, const IO::Path& path) const override;
-  void doExportMap(
-    WorldNode& world, Model::ExportFormat format, const IO::Path& path) const override;
+  void doExportMap(WorldNode& world, const IO::ExportOptions& options) const override;
 
   std::vector<Node*> doParseNodes(
     const std::string& str, MapFormat mapFormat, const vm::bbox3& worldBounds,

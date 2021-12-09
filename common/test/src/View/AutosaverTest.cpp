@@ -49,7 +49,7 @@ TEST_CASE("AutosaverTest.backupFileMatcher", "[AutosaverTest]") {
 TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.autosaverNoSaveUntilSaveInterval") {
   using namespace std::literals::chrono_literals;
 
-  IO::TestEnvironment env("autosaver_test");
+  IO::TestEnvironment env;
   NullLogger logger;
 
   document->saveDocumentAs(env.dir() + IO::Path("test.map"));
@@ -69,7 +69,7 @@ TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.autosaverNoSaveUntilSaveInter
 TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.autosaverNoSaveOfUnchangedMap") {
   using namespace std::literals::chrono_literals;
 
-  IO::TestEnvironment env("autosaver_test");
+  IO::TestEnvironment env;
   NullLogger logger;
 
   document->saveDocumentAs(env.dir() + IO::Path("test.map"));
@@ -85,7 +85,7 @@ TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.autosaverNoSaveOfUnchangedMap
 TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.autosaverSavesAfterSaveInterval") {
   using namespace std::literals::chrono_literals;
 
-  IO::TestEnvironment env("autosaver_test");
+  IO::TestEnvironment env;
   NullLogger logger;
 
   document->saveDocumentAs(env.dir() + IO::Path("test.map"));
@@ -109,7 +109,7 @@ TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.autosaverSavesAfterSaveInterv
 TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.autosaverSavesAgainAfterSaveInterval") {
   using namespace std::literals::chrono_literals;
 
-  IO::TestEnvironment env("autosaver_test");
+  IO::TestEnvironment env;
   NullLogger logger;
 
   document->saveDocumentAs(env.dir() + IO::Path("test.map"));
@@ -148,7 +148,7 @@ TEST_CASE_METHOD(MapDocumentTest, "MapDocumentTest.autosaverSavesWhenCrashFilesP
 
   using namespace std::literals::chrono_literals;
 
-  IO::TestEnvironment env("autosaver_test");
+  IO::TestEnvironment env;
   env.createDirectory(IO::Path("autosave"));
   env.createFile(IO::Path("autosave/test.1.map"), "some content");
   env.createFile(IO::Path("autosave/test.1-crash.map"), "some content again");

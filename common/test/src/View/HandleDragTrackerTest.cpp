@@ -405,14 +405,14 @@ TEST_CASE("RestrictedDragTracker.modifierKeyChange") {
 TEST_CASE("makeLineHandlePicker") {
   using T = std::tuple<vm::line3, vm::vec3, vm::ray3, vm::vec3>;
 
-  const auto [line, handleOffset, pickRay, expectedHandlePosition] = GENERATE(values<T>({
-    {vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0},
-     vm::ray3{vm::vec3{0, -1, 0}, vm::vec3{0, 1, 0}}, vm::vec3{0, 0, 0}},
-    {vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{-1, -1, -1},
-     vm::ray3{vm::vec3{1, -1, 1}, vm::vec3{0, 1, 0}}, vm::vec3{0, 0, 0}}, // hitPoint is at {1 1 1}
-    {vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{-1, -1, -1},
-     vm::ray3{vm::vec3{1, -1, 2}, vm::vec3{0, 1, 0}}, vm::vec3{0, 0, 1}}, // hitPoint is at {1 1 1}
+  // clang-format off
+  const auto 
+  [line,                                            handleOffset,         pickRay,                                         expectedHandlePosition] = GENERATE(values<T>({
+  {vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{ 0,  0,  0}, vm::ray3{vm::vec3{0, -1, 0}, vm::vec3{0, 1, 0}}, vm::vec3{0, 0, 0}},
+  {vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{-1, -1, -1}, vm::ray3{vm::vec3{1, -1, 1}, vm::vec3{0, 1, 0}}, vm::vec3{0, 0, 0}}, // hitPoint is at {1 1 1}
+  {vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{-1, -1, -1}, vm::ray3{vm::vec3{1, -1, 2}, vm::vec3{0, 1, 0}}, vm::vec3{0, 0, 1}}, // hitPoint is at {1 1 1}
   }));
+  // clang-format on
 
   CAPTURE(line, handleOffset, pickRay);
 
@@ -426,14 +426,14 @@ TEST_CASE("makeLineHandlePicker") {
 TEST_CASE("makePlaneHandlePicker") {
   using T = std::tuple<vm::plane3, vm::vec3, vm::ray3, vm::vec3>;
 
-  const auto [plane, handleOffset, pickRay, expectedHandlePosition] = GENERATE(values<T>({
-    {vm::plane3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0},
-     vm::ray3{vm::vec3{0, 0, 1}, vm::vec3{0, 0, -1}}, vm::vec3{0, 0, 0}},
-    {vm::plane3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{-1, -1, -1},
-     vm::ray3{vm::vec3{1, 1, 1}, vm::vec3{0, 0, -1}}, vm::vec3{0, 0, 0}}, // hitPoint is at {1 1 1}
-    {vm::plane3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{-1, -1, -1},
-     vm::ray3{vm::vec3{1, 2, 1}, vm::vec3{0, 0, -1}}, vm::vec3{0, 1, 0}}, // hitPoint is at {1 1 1}
+  // clang-format off
+  const auto
+  [plane,                                            handleOffset,         pickRay,                                         expectedHandlePosition] = GENERATE(values<T>({
+  {vm::plane3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{ 0,  0,  0}, vm::ray3{vm::vec3{0, 0, 1}, vm::vec3{0, 0, -1}}, vm::vec3{0, 0, 0}},
+  {vm::plane3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{-1, -1, -1}, vm::ray3{vm::vec3{1, 1, 1}, vm::vec3{0, 0, -1}}, vm::vec3{0, 0, 0}}, // hitPoint is at {1 1 1}
+  {vm::plane3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{-1, -1, -1}, vm::ray3{vm::vec3{1, 2, 1}, vm::vec3{0, 0, -1}}, vm::vec3{0, 1, 0}}, // hitPoint is at {1 1 1}
   }));
+  // clang-format on
 
   CAPTURE(plane, handleOffset, pickRay);
 
@@ -447,17 +447,15 @@ TEST_CASE("makePlaneHandlePicker") {
 TEST_CASE("makeCircleHandlePicker") {
   using T = std::tuple<vm::vec3, vm::vec3, FloatType, vm::vec3, vm::ray3, vm::vec3>;
 
-  const auto [center, normal, radius, handleOffset, pickRay, expectedHandlePosition] =
-    GENERATE(values<T>({
-      {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}, 10.0, vm::vec3{0, 0, 0},
-       vm::ray3{vm::vec3{5, 0, 1}, vm::vec3{0, 0, -1}}, 10.0 * vm::normalize(vm::vec3{1, 0, 0})},
-      {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}, 10.0, vm::vec3{0, 0, 1},
-       vm::ray3{vm::vec3{5, 0, 1}, vm::vec3{0, 0, -1}}, 10.0 * vm::normalize(vm::vec3{1, 0, 0})},
-      {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}, 10.0, vm::vec3{0, 0, 0},
-       vm::ray3{vm::vec3{5, 5, 1}, vm::vec3{0, 0, -1}}, 10.0 * vm::normalize(vm::vec3{1, 1, 0})},
-      {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}, 10.0, vm::vec3{1, 1, 1},
-       vm::ray3{vm::vec3{5, 5, 1}, vm::vec3{0, 0, -1}}, 10.0 * vm::normalize(vm::vec3{1, 1, 0})},
-    }));
+  // clang-format off
+  const auto
+  [center,            normal,            radius, handleOffset,         pickRay,                                         expectedHandlePosition] = GENERATE(values<T>({
+  {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}, 10.0,   vm::vec3{ 0,  0,  0}, vm::ray3{vm::vec3{5, 0, 1}, vm::vec3{0, 0, -1}}, 10.0 * vm::normalize(vm::vec3{1, 0, 0})},
+  {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}, 10.0,   vm::vec3{ 0,  0,  1}, vm::ray3{vm::vec3{5, 0, 1}, vm::vec3{0, 0, -1}}, 10.0 * vm::normalize(vm::vec3{1, 0, 0})},
+  {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}, 10.0,   vm::vec3{ 0,  0,  0}, vm::ray3{vm::vec3{5, 5, 1}, vm::vec3{0, 0, -1}}, 10.0 * vm::normalize(vm::vec3{1, 1, 0})},
+  {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}, 10.0,   vm::vec3{ 1,  1,  1}, vm::ray3{vm::vec3{5, 5, 1}, vm::vec3{0, 0, -1}}, 10.0 * vm::normalize(vm::vec3{1, 1, 0})},
+  }));
+  // clang-format on
 
   CAPTURE(center, normal, radius, handleOffset, pickRay);
 
@@ -482,16 +480,15 @@ TEST_CASE("makeSurfaceHandlePicker") {
 
   using T = std::tuple<Model::HitFilter, vm::vec3, vm::ray3, vm::vec3>;
 
-  const auto [hitFilter, handleOffset, pickRay, expectedHandlePosition] = GENERATE_REF(values<T>({
-    {type(HitType), vm::vec3{0, 0, 0}, vm::ray3{vm::vec3{0, 0, 20}, vm::vec3{0, 0, -1}},
-     vm::vec3{hit.hitPoint()}},
-    {type(OtherHitType), vm::vec3{0, 0, 0}, vm::ray3{vm::vec3{0, 0, 20}, vm::vec3{0, 0, -1}},
-     vm::vec3{otherHit.hitPoint()}},
-    {type(BothTypes), vm::vec3{0, 0, 0}, vm::ray3{vm::vec3{0, 0, 20}, vm::vec3{0, 0, -1}},
-     vm::vec3{hit.hitPoint()}},
-    {type(HitType), vm::vec3{1, 1, 1}, vm::ray3{vm::vec3{0, 0, 20}, vm::vec3{0, 0, -1}},
-     vm::vec3{hit.hitPoint() + vm::vec3{1, 1, 1}}},
+  // clang-format off
+  const auto
+  [hitFilter,          handleOffset,      pickRay,                                          expectedHandlePosition] = GENERATE_REF(values<T>({
+  {type(HitType),      vm::vec3{0, 0, 0}, vm::ray3{vm::vec3{0, 0, 20}, vm::vec3{0, 0, -1}}, vm::vec3{hit.hitPoint()}},
+  {type(OtherHitType), vm::vec3{0, 0, 0}, vm::ray3{vm::vec3{0, 0, 20}, vm::vec3{0, 0, -1}}, vm::vec3{otherHit.hitPoint()}},
+  {type(BothTypes),    vm::vec3{0, 0, 0}, vm::ray3{vm::vec3{0, 0, 20}, vm::vec3{0, 0, -1}}, vm::vec3{hit.hitPoint()}},
+  {type(HitType),      vm::vec3{1, 1, 1}, vm::ray3{vm::vec3{0, 0, 20}, vm::vec3{0, 0, -1}}, vm::vec3{hit.hitPoint() + vm::vec3{1, 1, 1}}},
   }));
+  // clang-format on
 
   CAPTURE(handleOffset, pickRay);
 
@@ -510,10 +507,13 @@ TEST_CASE("makeSurfaceHandlePicker") {
 TEST_CASE("makeIdentityHandleSnapper") {
   using T = std::tuple<vm::vec3, vm::vec3>;
 
-  const auto [proposedHandlePosition, expectedHandlePosition] = GENERATE(values<T>({
-    {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 0}},
-    {vm::vec3{1, 2, 3}, vm::vec3{1, 2, 3}},
+  // clang-format off
+  const auto 
+  [proposedHandlePosition, expectedHandlePosition] = GENERATE(values<T>({
+  {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 0}},
+  {vm::vec3{1, 2, 3}, vm::vec3{1, 2, 3}},
   }));
+  // clang-format on
 
   CAPTURE(proposedHandlePosition);
 
@@ -525,15 +525,17 @@ TEST_CASE("makeIdentityHandleSnapper") {
 TEST_CASE("makeRelativeHandleSnapper") {
   using T = std::tuple<vm::vec3, vm::vec3, int, vm::vec3>;
 
-  const auto [initialHandlePosition, proposedHandlePosition, gridSize, expectedHandlePosition] =
-    GENERATE(values<T>({
-      {vm::vec3{3, 1, 2}, vm::vec3{3, 1, 2}, 4, vm::vec3{3, 1, 2}},
-      {vm::vec3{3, 1, 2}, vm::vec3{7, 1, 2}, 4, vm::vec3{3, 1, 2}},
-      {vm::vec3{3, 1, 2}, vm::vec3{8, 1, 2}, 3, vm::vec3{11, 1, 2}},
-      {vm::vec3{3, 1, 2}, vm::vec3{10, 1, 2}, 4, vm::vec3{3, 1, 2}},
-      {vm::vec3{3, 1, 2}, vm::vec3{11, 1, 2}, 4, vm::vec3{19, 1, 2}},
-      {vm::vec3{3, 1, 2}, vm::vec3{33, 1, 2}, 4, vm::vec3{35, 1, 2}},
-    }));
+  // clang-format off
+  const auto
+  [initialHandlePosition, proposedHandlePosition, gridSize, expectedHandlePosition] = GENERATE(values<T>({
+  {vm::vec3{3, 1, 2},     vm::vec3{3, 1, 2},      4,        vm::vec3{3, 1, 2}},
+  {vm::vec3{3, 1, 2},     vm::vec3{7, 1, 2},      4,        vm::vec3{3, 1, 2}},
+  {vm::vec3{3, 1, 2},     vm::vec3{8, 1, 2},      3,        vm::vec3{11, 1, 2}},
+  {vm::vec3{3, 1, 2},     vm::vec3{10, 1, 2},     4,        vm::vec3{3, 1, 2}},
+  {vm::vec3{3, 1, 2},     vm::vec3{11, 1, 2},     4,        vm::vec3{19, 1, 2}},
+  {vm::vec3{3, 1, 2},     vm::vec3{33, 1, 2},     4,        vm::vec3{35, 1, 2}},
+  }));
+  // clang-format on
 
   CAPTURE(initialHandlePosition, proposedHandlePosition, gridSize);
 
@@ -547,13 +549,16 @@ TEST_CASE("makeRelativeHandleSnapper") {
 TEST_CASE("makeAbsoluteHandleSnapper") {
   using T = std::tuple<vm::vec3, int, vm::vec3>;
 
-  const auto [proposedHandlePosition, gridSize, expectedHandlePosition] = GENERATE(values<T>({
-    {vm::vec3{0, 0, 0}, 4, vm::vec3{0, 0, 0}},
-    {vm::vec3{4, 3, 2}, 4, vm::vec3{0, 0, 0}},
-    {vm::vec3{4, 3, 22}, 3, vm::vec3{8, 0, 24}},
-    {vm::vec3{7, 0, 0}, 4, vm::vec3{0, 0, 0}},
-    {vm::vec3{8, 17, 31}, 4, vm::vec3{16, 16, 32}},
+  // clang-format off
+  const auto
+  [proposedHandlePosition, gridSize, expectedHandlePosition] = GENERATE(values<T>({
+  {vm::vec3{0, 0, 0},      4,        vm::vec3{0, 0, 0}},
+  {vm::vec3{4, 3, 2},      4,        vm::vec3{0, 0, 0}},
+  {vm::vec3{4, 3, 22},     3,        vm::vec3{8, 0, 24}},
+  {vm::vec3{7, 0, 0},      4,        vm::vec3{0, 0, 0}},
+  {vm::vec3{8, 17, 31},    4,        vm::vec3{16, 16, 32}},
   }));
+  // clang-format on
 
   CAPTURE(proposedHandlePosition, gridSize);
 
@@ -567,24 +572,18 @@ TEST_CASE("makeAbsoluteHandleSnapper") {
 TEST_CASE("makeRelativeLineHandleSnapper") {
   using T = std::tuple<vm::vec3, vm::vec3, int, vm::line3, vm::vec3>;
 
+  // clang-format off
   const auto
-    [initialHandlePosition, proposedHandlePosition, gridSize, line, expectedHandlePosition] =
-      GENERATE(values<T>({
-        {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 0}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}},
-         vm::vec3{0, 0, 0}},
-        {vm::vec3{0, 0, 0}, vm::vec3{0, 0, 7}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}},
-         vm::vec3{0, 0, 0}},
-        {vm::vec3{0, 0, 0}, vm::vec3{2, 9, 7}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}},
-         vm::vec3{0, 0, 0}},
-        {vm::vec3{0, 0, 0}, vm::vec3{2, 9, 8}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}},
-         vm::vec3{0, 0, 16}},
-        {vm::vec3{0, 0, 1}, vm::vec3{2, 9, 8}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}},
-         vm::vec3{0, 0, 1}},
-        {vm::vec3{0, 0, 1}, vm::vec3{2, 9, 9}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}},
-         vm::vec3{0, 0, 17}},
-        {vm::vec3{22, 9, 1}, vm::vec3{2, 9, 9}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}},
-         vm::vec3{0, 0, 17}},
-      }));
+  [initialHandlePosition, proposedHandlePosition, gridSize, line,                                            expectedHandlePosition] = GENERATE(values<T>({
+  {vm::vec3{0, 0, 0},     vm::vec3{0, 0, 0},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0}},
+  {vm::vec3{0, 0, 0},     vm::vec3{0, 0, 7},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0}},
+  {vm::vec3{0, 0, 0},     vm::vec3{2, 9, 7},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0}},
+  {vm::vec3{0, 0, 0},     vm::vec3{2, 9, 8},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 16}},
+  {vm::vec3{0, 0, 1},     vm::vec3{2, 9, 8},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 1}},
+  {vm::vec3{0, 0, 1},     vm::vec3{2, 9, 9},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 17}},
+  {vm::vec3{22, 9, 1},    vm::vec3{2, 9, 9},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 17}},
+  }));
+  // clang-format on
 
   CAPTURE(initialHandlePosition, proposedHandlePosition, gridSize, line);
 
@@ -598,14 +597,17 @@ TEST_CASE("makeRelativeLineHandleSnapper") {
 TEST_CASE("makeAbsoluteLineHandleSnapper") {
   using T = std::tuple<vm::vec3, int, vm::line3, vm::vec3>;
 
-  const auto [proposedHandlePosition, gridSize, line, expectedHandlePosition] = GENERATE(values<T>({
-    {vm::vec3{0, 0, 0}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0}},
-    {vm::vec3{0, 0, 7}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0}},
-    {vm::vec3{0, 0, 7}, 3, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 8}},
-    {vm::vec3{2, 9, 7}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0}},
-    {vm::vec3{2, 9, 9}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 16}},
-    {vm::vec3{2, 9, 31}, 4, vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 32}},
+  // clang-format off
+  const auto
+  [proposedHandlePosition, gridSize, line,                                            expectedHandlePosition] = GENERATE(values<T>({
+  {vm::vec3{0, 0, 0},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0}},
+  {vm::vec3{0, 0, 7},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0}},
+  {vm::vec3{0, 0, 7},      3,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 8}},
+  {vm::vec3{2, 9, 7},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 0}},
+  {vm::vec3{2, 9, 9},      4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 16}},
+  {vm::vec3{2, 9, 31},     4,        vm::line3{vm::vec3{0, 0, 0}, vm::vec3{0, 0, 1}}, vm::vec3{0, 0, 32}},
   }));
+  // clang-format on
 
   CAPTURE(proposedHandlePosition, gridSize, line);
 
@@ -619,13 +621,15 @@ TEST_CASE("makeAbsoluteLineHandleSnapper") {
 TEST_CASE("makeCircleHandleSnapper") {
   using T = std::tuple<vm::vec3, vm::vec3, FloatType, vm::vec3>;
 
-  const auto [initialHandlePosition, proposedHandlePosition, snapAngle, expectedHandlePosition] =
-    GENERATE(values<T>({
-      {vm::vec3{1, 0, 0}, vm::vec3{1, 0, 0}, 15.0, vm::normalize(vm::vec3{1, 0, 0})},
-      {vm::vec3{1, 0, 0}, vm::vec3{1, 1, 0}, 15.0, vm::normalize(vm::vec3{1, 1, 0})},
-      {vm::vec3{1, 0, 0}, vm::vec3{1, 2, 0}, 15.0, vm::normalize(vm::vec3{0.5, 0.866025, 0})},
-      {vm::vec3{1, 0, 0}, vm::vec3{1, 1, 0}, 45.0, vm::normalize(vm::vec3{1, 1, 0})},
-    }));
+  // clang-format off
+  const auto
+  [initialHandlePosition, proposedHandlePosition, snapAngle, expectedHandlePosition] = GENERATE(values<T>({
+  {vm::vec3{1, 0, 0},     vm::vec3{1, 0, 0},      15.0,      vm::normalize(vm::vec3{1, 0, 0})},
+  {vm::vec3{1, 0, 0},     vm::vec3{1, 1, 0},      15.0,      vm::normalize(vm::vec3{1, 1, 0})},
+  {vm::vec3{1, 0, 0},     vm::vec3{1, 2, 0},      15.0,      vm::normalize(vm::vec3{0.5, 0.866025, 0})},
+  {vm::vec3{1, 0, 0},     vm::vec3{1, 1, 0},      45.0,      vm::normalize(vm::vec3{1, 1, 0})},
+  }));
+  // clang-format on
 
   CAPTURE(initialHandlePosition, proposedHandlePosition, snapAngle);
 

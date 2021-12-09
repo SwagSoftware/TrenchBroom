@@ -312,6 +312,5 @@ bool BrushFaceAttributes::setBrushPrimitMatrix(const vm::mat4x4f& matrix) {
 
 const vm::mat4x4f& BrushFaceAttributes::bpMatrix() const {
   return m_bpMatrix;
-}
 } // namespace Model
 } // namespace TrenchBroom

@@ -31,7 +31,9 @@
 #include "Exceptions.h"
 #include "IO/DiskFileSystem.h"
 #include "IO/DiskIO.h"
+#include "IO/ExportOptions.h"
 #include "IO/GameConfigParser.h"
+#include "IO/IOUtils.h"
 #include "IO/SimpleParserStatus.h"
 #include "IO/SystemPaths.h"
 #include "Model/BezierPatch.h"
@@ -70,7 +72,6 @@
 #include "Model/NonIntegerVerticesIssueGenerator.h"
 #include "Model/PatchNode.h"
 #include "Model/PointEntityWithBrushesIssueGenerator.h"
-#include "Model/PointFile.h"
 #include "Model/Polyhedron.h"
 #include "Model/Polyhedron3.h"
 #include "Model/PortalFile.h"
@@ -338,7 +339,6 @@ const std::string MapDocument::DefaultDocumentName("unnamed.map");
 MapDocument::MapDocument()
   : m_worldBounds(DefaultWorldBounds)
   , m_world(nullptr)
-  , m_pointFile(nullptr)
   , m_portalFile(nullptr)
   , m_entityDefinitionManager(std::make_unique<Assets::EntityDefinitionManager>())
   , m_entityModelManager(std::make_unique<Assets::EntityModelManager>(
@@ -481,8 +481,8 @@ Grid& MapDocument::grid() const {
   return *m_grid;
 }
 
-Model::PointFile* MapDocument::pointFile() const {
-  return m_pointFile.get();
+std::optional<PointFile>& MapDocument::pointFile() {
+  return m_pointFile;
 }
 
 Model::PortalFile* MapDocument::portalFile() const {
@@ -560,8 +560,8 @@ void MapDocument::saveDocumentTo(const IO::Path& path) {
   m_game->writeMap(*m_world, path);
 }
 
-void MapDocument::exportDocumentAs(const Model::ExportFormat format, const IO::Path& path) {
-  m_game->exportMap(*m_world, format, path);
+void MapDocument::exportDocumentAs(const IO::ExportOptions& options) {
+  m_game->exportMap(*m_world, options);
 }
 
 void MapDocument::doSaveDocument(const IO::Path& path) {
@@ -745,40 +745,38 @@ void MapDocument::loadPointFile(const IO::Path path) {
     !std::is_reference<decltype(path)>::value,
     "path must be passed by value because reloadPointFile() passes m_pointFilePath");
 
-  if (!Model::PointFile::canLoad(path)) {
-    return;
-  }
-
   if (isPointFileLoaded()) {
     unloadPointFile();
   }
 
-  m_pointFilePath = path;
-  m_pointFile = std::make_unique<Model::PointFile>(m_pointFilePath);
-
-  info("Loaded point file " + m_pointFilePath.asString());
-  pointFileWasLoadedNotifier();
+  auto file = IO::openPathAsInputStream(path);
+  if (auto trace = Model::loadPointFile(file)) {
+    m_pointFile = PointFile{*trace, path};
+    info() << "Loaded point file " << path;
+    pointFileWasLoadedNotifier();
+  } else {
+    warn() << "Failed to load point file " << path;
+  }
 }
 
 bool MapDocument::isPointFileLoaded() const {
-  return m_pointFile != nullptr;
+  return m_pointFile != std::nullopt;
 }
 
 bool MapDocument::canReloadPointFile() const {
-  return m_pointFile != nullptr && Model::PointFile::canLoad(m_pointFilePath);
+  return isPointFileLoaded();
 }
 
 void MapDocument::reloadPointFile() {
   assert(isPointFileLoaded());
-  loadPointFile(m_pointFilePath);
+  loadPointFile(m_pointFile->path);
 }
 
 void MapDocument::unloadPointFile() {
   assert(isPointFileLoaded());
-  m_pointFile = nullptr;
-  m_pointFilePath = IO::Path();
+  m_pointFile = std::nullopt;
 
-  info("Unloaded point file");
+  info() << "Unloaded point file";
   pointFileWasUnloadedNotifier();
 }
 
@@ -884,6 +882,70 @@ std::vector<Model::EntityNodeBase*> MapDocument::allSelectedEntityNodes() const 
   return kdl::vec_sort_and_remove_duplicates(std::move(nodes));
 }
 
+std::vector<Model::BrushNode*> MapDocument::allSelectedBrushNodes() const {
+  auto brushes = std::vector<Model::BrushNode*>{};
+  for (auto* node : m_selectedNodes.nodes()) {
+    node->accept(kdl::overload(
+      [](auto&& thisLambda, Model::WorldNode* world) {
+        world->visitChildren(thisLambda);
+      },
+      [](auto&& thisLambda, Model::LayerNode* layer) {
+        layer->visitChildren(thisLambda);
+      },
+      [](auto&& thisLambda, Model::GroupNode* group) {
+        group->visitChildren(thisLambda);
+      },
+      [](auto&& thisLambda, Model::EntityNode* entity) {
+        entity->visitChildren(thisLambda);
+      },
+      [&](Model::BrushNode* brush) {
+        brushes.push_back(brush);
+      },
+      [&](Model::PatchNode*) {}));
+  }
+  return brushes;
+}
+
+bool MapDocument::hasAnySelectedBrushNodes() const {
+  // This is just an optimization of `!allSelectedBrushNodes().empty()`
+  // that stops after finding the first brush
+  const auto visitChildrenAndExitEarly = [](auto&& thisLambda, const auto* node) {
+    for (const auto* child : node->children()) {
+      if (child->accept(thisLambda)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  for (const auto* node : m_selectedNodes.nodes()) {
+    const auto hasBrush = node->accept(kdl::overload(
+      [&](auto&& thisLambda, const Model::WorldNode* world) -> bool {
+        return visitChildrenAndExitEarly(thisLambda, world);
+      },
+      [&](auto&& thisLambda, const Model::LayerNode* layer) -> bool {
+        return visitChildrenAndExitEarly(thisLambda, layer);
+      },
+      [&](auto&& thisLambda, const Model::GroupNode* group) -> bool {
+        return visitChildrenAndExitEarly(thisLambda, group);
+      },
+      [&](auto&& thisLambda, const Model::EntityNode* entity) -> bool {
+        return visitChildrenAndExitEarly(thisLambda, entity);
+      },
+      [](const Model::BrushNode*) -> bool {
+        return true;
+      },
+      [](const Model::PatchNode*) -> bool {
+        return false;
+      }));
+    if (hasBrush) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 const Model::NodeCollection& MapDocument::selectedNodes() const {
   return m_selectedNodes;
 }
@@ -891,7 +953,9 @@ const Model::NodeCollection& MapDocument::selectedNodes() const {
 std::vector<Model::BrushFaceHandle> MapDocument::allSelectedBrushFaces() const {
   if (hasSelectedBrushFaces())
     return selectedBrushFaces();
-  return Model::collectBrushFaces(m_selectedNodes.nodes());
+
+  const auto faces = Model::collectBrushFaces(m_selectedNodes.nodes());
+  return Model::faceSelectionWithLinkedGroupConstraints(*m_world.get(), faces).facesToSelect;
 }
 
 std::vector<Model::BrushFaceHandle> MapDocument::selectedBrushFaces() const {
@@ -3012,8 +3076,8 @@ bool MapDocument::snapVertices(const FloatType snapTo) {
   size_t succeededBrushCount = 0;
   size_t failedBrushCount = 0;
 
-  const auto allSelectedBrushes = m_selectedNodes.brushesRecursively();
-  applyAndSwap(
+  const auto allSelectedBrushes = allSelectedBrushNodes();
+  const bool applyAndSwapSuccess = applyAndSwap(
     *this, "Snap Brush Vertices", allSelectedBrushes,
     findContainingLinkedGroupsToUpdate(*m_world, allSelectedBrushes),
     kdl::overload(
@@ -3045,6 +3109,9 @@ bool MapDocument::snapVertices(const FloatType snapTo) {
         return true;
       }));
 
+  if (!applyAndSwapSuccess) {
+    return false;
+  }
   if (succeededBrushCount > 0) {
     info(kdl::str_to_string(
       "Snapped vertices of ", succeededBrushCount, " ",

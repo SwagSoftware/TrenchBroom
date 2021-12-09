@@ -189,13 +189,8 @@ public:
   BrushRenderer();
 
   /**
-   * New brushes are invalidated, brushes already in the BrushRenderer are not invalidated.
+   * Remove all brushes.
    */
-  void addBrushes(const std::vector<Model::BrushNode*>& brushes);
-  /**
-   * New brushes are invalidated, brushes already in the BrushRenderer are not invalidated.
-   */
-  void setBrushes(const std::vector<Model::BrushNode*>& brushes);
   void clear();
 
   /**
@@ -213,7 +208,7 @@ public:
    * pointers.
    */
   void invalidate();
-  void invalidateBrushes(const std::vector<Model::BrushNode*>& brushes);
+  void invalidateBrush(const Model::BrushNode* brush);
   bool valid() const;
 
   /**
@@ -301,9 +296,19 @@ private:
   bool shouldDrawFaceInTransparentPass(
     const Model::BrushNode* brush, const Model::BrushFace& face) const;
   void validateBrush(const Model::BrushNode* brush);
+
+public:
+  /**
+   * Adds a brush. Calling with an already-added brush is allowed, but ignored (not guaranteed to
+   * invalidate it).
+   */
   void addBrush(const Model::BrushNode* brush);
+  /**
+   * Removes a brush. Calling with an unknown brush is allowed, but ignored.
+   */
   void removeBrush(const Model::BrushNode* brush);
 
+private:
   /**
    * If the given brush is not currently in the VBO, it's silently ignored.
    * Otherwise, it's removed from the VBO (having its indices zeroed out, causing it to no longer

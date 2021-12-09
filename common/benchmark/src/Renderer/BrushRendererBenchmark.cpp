@@ -75,7 +75,9 @@ static std::pair<std::vector<Model::BrushNode*>, std::vector<Assets::Texture*>> 
   // want it mixed into the timing
 
   BrushRenderer tempRenderer;
-  tempRenderer.addBrushes(result);
+  for (auto* brushNode : result) {
+    tempRenderer.addBrush(brushNode);
+  }
   tempRenderer.validate();
   tempRenderer.clear();
 
@@ -91,7 +93,9 @@ TEST_CASE("BrushRendererBenchmark.benchBrushRenderer", "[BrushRendererBenchmark]
 
   timeLambda(
     [&]() {
-      r.addBrushes(brushes);
+      for (auto* brush : brushes) {
+        r.addBrush(brush);
+      }
     },
     "add " + std::to_string(brushes.size()) + " brushes to BrushRenderer");
   timeLambda(
@@ -103,15 +107,11 @@ TEST_CASE("BrushRendererBenchmark.benchBrushRenderer", "[BrushRendererBenchmark]
     "validate after adding " + std::to_string(brushes.size()) + " brushes to BrushRenderer");
 
   // Tiny change: remove the last brush
-  std::vector<Model::BrushNode*> brushesMinusOne = brushes;
-  assert(!brushesMinusOne.empty());
-  brushesMinusOne.pop_back();
-
   timeLambda(
     [&]() {
-      r.setBrushes(brushesMinusOne);
+      r.removeBrush(brushes.back());
     },
-    "setBrushes to " + std::to_string(brushesMinusOne.size()) + " (removing one)");
+    "call removeBrush once");
   timeLambda(
     [&]() {
       if (!r.valid()) {
@@ -121,19 +121,15 @@ TEST_CASE("BrushRendererBenchmark.benchBrushRenderer", "[BrushRendererBenchmark]
     "validate after removing one brush");
 
   // Large change: keep every second brush
-  std::vector<Model::BrushNode*> brushesToKeep;
-  for (size_t i = 0; i < brushes.size(); ++i) {
-    if ((i % 2) == 0) {
-      brushesToKeep.push_back(brushes.at(i));
-    }
-  }
-
   timeLambda(
     [&]() {
-      r.setBrushes(brushesToKeep);
+      for (size_t i = 0; i < brushes.size(); ++i) {
+        if ((i % 2) == 0) {
+          r.removeBrush(brushes[i]);
+        }
+      }
     },
-    "set brushes from " + std::to_string(brushes.size()) + " to " +
-      std::to_string(brushesToKeep.size()));
+    "remove every second brush");
 
   timeLambda(
     [&]() {
@@ -141,7 +137,7 @@ TEST_CASE("BrushRendererBenchmark.benchBrushRenderer", "[BrushRendererBenchmark]
         r.validate();
       }
     },
-    "validate with " + std::to_string(brushesToKeep.size()) + " brushes");
+    "validate remaining brushes");
 
   kdl::vec_clear_and_delete(brushes);
   kdl::vec_clear_and_delete(textures);

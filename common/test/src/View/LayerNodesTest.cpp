@@ -429,8 +429,13 @@ TEST_CASE_METHOD(MapDocumentTest, "LayerNodeTest.moveSelectionToLayer", "[LayerN
     REQUIRE(Model::findContainingLayer(entityNode) == defaultLayer);
 
     WHEN("Any child node is selected and moved to another layer") {
+      // clang-format off
       const auto [selectChild1, selectChild2] = GENERATE(
-        std::make_tuple(true, true), std::make_tuple(true, false), std::make_tuple(false, true));
+        std::make_tuple(true, true),
+        std::make_tuple(true, false),
+        std::make_tuple(false, true)
+      );
+      // clang-format on
 
       if (selectChild1) {
         document->select(childNode1);

@@ -20,6 +20,7 @@
 #pragma once
 
 #include "FloatType.h"
+#include "IO/ExportOptions.h"
 #include "IO/NodeSerializer.h"
 
 #include <vecmath/forward.h>
@@ -114,6 +115,7 @@ private:
   std::ostream& m_objStream;
   std::ostream& m_mtlStream;
   std::string m_mtlFilename;
+  ObjExportOptions m_options;
 
   IndexMap<vm::vec3> m_vertices;
   IndexMap<vm::vec2f> m_texCoords;
@@ -123,7 +125,9 @@ private:
   std::vector<Object> m_objects;
 
 public:
-  explicit ObjSerializer(std::ostream& objStream, std::ostream& mtlStream, std::string mtlFilename);
+  ObjSerializer(
+    std::ostream& objStream, std::ostream& mtlStream, std::string mtlFilename,
+    ObjExportOptions options);
 
 private:
   void doBeginFile(const std::vector<const Model::Node*>& rootNodes) override;

@@ -61,19 +61,13 @@ TEST_CASE("ModelUtils.findContainingLayer") {
   auto* entityNode = new EntityNode{Entity{}};
   auto* brushNode =
     new BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   groupNode->addChildren({entityNode, brushNode});
   layerNode->addChildren({groupNode, patchNode});
@@ -99,19 +93,13 @@ TEST_CASE("ModelUtils.findContainingGroup") {
   auto* entityNode = new EntityNode{Entity{}};
   auto* brushNode =
     new BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   innerGroupNode->addChildren({entityNode, brushNode});
   outerGroupNode->addChildren({innerGroupNode, patchNode});
@@ -138,19 +126,13 @@ TEST_CASE("ModelUtils.findOutermostClosedGroup") {
   auto* entityNode = new EntityNode{Entity{}};
   auto* brushNode =
     new BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   innerGroupNode->addChildren({entityNode, brushNode});
   outerGroupNode->addChildren({innerGroupNode, patchNode});
@@ -192,6 +174,91 @@ TEST_CASE("ModelUtils.findOutermostClosedGroup") {
   }
 }
 
+TEST_CASE("ModelUtils.findLinkedGroups") {
+  constexpr auto worldBounds = vm::bbox3d{8192.0};
+  constexpr auto mapFormat = MapFormat::Quake3;
+
+  auto worldNode = WorldNode{{}, {}, mapFormat};
+
+  auto* groupNode1 = new GroupNode{Group{"Group 1"}};
+  auto* groupNode2 = new GroupNode{Group{"Group 2"}};
+  auto* groupNode3 = new GroupNode{Group{"Group 3"}};
+
+  setLinkedGroupId(*groupNode1, "group1");
+  setLinkedGroupId(*groupNode2, "group2");
+
+  auto* linkedGroupNode1_1 =
+    static_cast<Model::GroupNode*>(groupNode1->cloneRecursively(worldBounds));
+
+  auto* linkedGroupNode2_1 =
+    static_cast<Model::GroupNode*>(groupNode2->cloneRecursively(worldBounds));
+  auto* linkedGroupNode2_2 =
+    static_cast<Model::GroupNode*>(groupNode2->cloneRecursively(worldBounds));
+
+  worldNode.defaultLayer()->addChild(groupNode1);
+  worldNode.defaultLayer()->addChild(groupNode2);
+  worldNode.defaultLayer()->addChild(groupNode3);
+  worldNode.defaultLayer()->addChild(linkedGroupNode1_1);
+  worldNode.defaultLayer()->addChild(linkedGroupNode2_1);
+  worldNode.defaultLayer()->addChild(linkedGroupNode2_2);
+
+  auto* entityNode = new EntityNode{Entity{}};
+  worldNode.defaultLayer()->addChild(entityNode);
+
+  CHECK_THAT(
+    findLinkedGroups(worldNode, "asdf"),
+    Catch::Matchers::UnorderedEquals(std::vector<Model::GroupNode*>{}));
+  CHECK_THAT(
+    findLinkedGroups(worldNode, "group1"),
+    Catch::Matchers::UnorderedEquals(
+      std::vector<Model::GroupNode*>{groupNode1, linkedGroupNode1_1}));
+  CHECK_THAT(
+    findLinkedGroups(worldNode, "group2"),
+    Catch::Matchers::UnorderedEquals(
+      std::vector<Model::GroupNode*>{groupNode2, linkedGroupNode2_1, linkedGroupNode2_2}));
+}
+
+TEST_CASE("ModelUtils.findAllLinkedGroups") {
+  constexpr auto worldBounds = vm::bbox3d{8192.0};
+  constexpr auto mapFormat = MapFormat::Quake3;
+
+  auto worldNode = WorldNode{{}, {}, mapFormat};
+
+  CHECK_THAT(
+    findAllLinkedGroups(worldNode),
+    Catch::Matchers::UnorderedEquals(std::vector<Model::GroupNode*>{}));
+
+  auto* groupNode1 = new GroupNode{Group{"Group 1"}};
+  auto* groupNode2 = new GroupNode{Group{"Group 2"}};
+  auto* groupNode3 = new GroupNode{Group{"Group 3"}};
+
+  setLinkedGroupId(*groupNode1, "group1");
+  setLinkedGroupId(*groupNode2, "group2");
+
+  auto* linkedGroupNode1_1 =
+    static_cast<Model::GroupNode*>(groupNode1->cloneRecursively(worldBounds));
+
+  auto* linkedGroupNode2_1 =
+    static_cast<Model::GroupNode*>(groupNode2->cloneRecursively(worldBounds));
+  auto* linkedGroupNode2_2 =
+    static_cast<Model::GroupNode*>(groupNode2->cloneRecursively(worldBounds));
+
+  worldNode.defaultLayer()->addChild(groupNode1);
+  worldNode.defaultLayer()->addChild(groupNode2);
+  worldNode.defaultLayer()->addChild(groupNode3);
+  worldNode.defaultLayer()->addChild(linkedGroupNode1_1);
+  worldNode.defaultLayer()->addChild(linkedGroupNode2_1);
+  worldNode.defaultLayer()->addChild(linkedGroupNode2_2);
+
+  auto* entityNode = new EntityNode{Entity{}};
+  worldNode.defaultLayer()->addChild(entityNode);
+
+  CHECK_THAT(
+    findAllLinkedGroups(worldNode),
+    Catch::Matchers::UnorderedEquals(std::vector<Model::GroupNode*>{
+      groupNode1, linkedGroupNode1_1, groupNode2, linkedGroupNode2_1, linkedGroupNode2_2}));
+}
+
 TEST_CASE("ModelUtils.collectWithParents") {
   constexpr auto worldBounds = vm::bbox3d{8192.0};
   constexpr auto mapFormat = MapFormat::Quake3;
@@ -204,19 +271,13 @@ TEST_CASE("ModelUtils.collectWithParents") {
   auto* entityNode = new EntityNode{Entity{}};
   auto* brushNode =
     new BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   innerGroupNode->addChildren({entityNode, brushNode});
   outerGroupNode->addChildren({innerGroupNode, patchNode});
@@ -258,19 +319,13 @@ TEST_CASE("ModelUtils.collectNodes") {
   auto* entityNode = new EntityNode{Entity{}};
   auto* brushNode =
     new BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   innerGroupNode->addChildren({entityNode, brushNode});
   outerGroupNode->addChildren({innerGroupNode, patchNode});
@@ -473,19 +528,13 @@ TEST_CASE("ModelUtils.collectSelectedNodes") {
   auto* entityNode = new EntityNode{Entity{}};
   auto* brushNode =
     new BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   innerGroupNode->addChildren({entityNode, brushNode});
   outerGroupNode->addChildren({innerGroupNode, patchNode});
@@ -545,19 +594,13 @@ TEST_CASE("ModelUtils.collectSelectableNodes") {
   auto* entityNode = new EntityNode{Entity{}};
   auto* brushNode =
     new BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   innerGroupNode->addChildren({entityNode, brushNode});
   outerGroupNode->addChildren({innerGroupNode, patchNode});
@@ -600,19 +643,13 @@ TEST_CASE("ModelUtils.computeLogicalBounds") {
   auto* entityNode = new EntityNode{Entity{}};
   auto* brushNode =
     new BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   innerGroupNode->addChildren({entityNode, brushNode});
   outerGroupNode->addChildren({innerGroupNode, patchNode});
@@ -646,19 +683,13 @@ TEST_CASE("ModelUtils.computePhysicalBounds") {
   auto* entityNode = new EntityNode{Entity{}};
   auto* brushNode =
     new BrushNode{BrushBuilder{mapFormat, worldBounds}.createCube(64.0, "texture").value()};
-  auto* patchNode = new PatchNode{BezierPatch{
-    3,
-    3,
-    {{0, 0, 0},
-     {1, 0, 1},
-     {2, 0, 0},
-     {0, 1, 1},
-     {1, 1, 2},
-     {2, 1, 1},
-     {0, 2, 0},
-     {1, 2, 1},
-     {2, 2, 0}},
-    "texture"}};
+
+  // clang-format off
+  auto* patchNode = new PatchNode{BezierPatch{3, 3, {
+    {0, 0, 0}, {1, 0, 1}, {2, 0, 0},
+    {0, 1, 1}, {1, 1, 2}, {2, 1, 1},
+    {0, 2, 0}, {1, 2, 1}, {2, 2, 0} }, "texture"}};
+  // clang-format on
 
   innerGroupNode->addChildren({entityNode, brushNode});
   outerGroupNode->addChildren({innerGroupNode, patchNode});
