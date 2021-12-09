@@ -20,9 +20,9 @@
 #include "BrushFaceAttributes.h"
 #include "Assets/Texture.h"
 
+#include <vecmath/mat.h>
 #include <vecmath/vec.h>
 #include <vecmath/vec_io.h>
-#include <vecmath/mat.h>
 
 #include <kdl/opt_utils.h>
 

@@ -43,7 +43,8 @@ const std::string Angle = "angle";
 const std::string Angles = "angles";
 const std::string Mangle = "mangle";
 const std::string Target = "target";
-const std::string Targetname = "name"; // RB: FIXME required for Doom 3 - change back to targetname so it doesn't break stuff
+// RB: FIXME required for Doom 3 - change back to targetname so it doesn't break stuff
+const std::string Targetname = "name";
 const std::string Killtarget = "killtarget";
 const std::string ProtectedEntityProperties = "_tb_protected_properties";
 const std::string GroupType = "_tb_type";
