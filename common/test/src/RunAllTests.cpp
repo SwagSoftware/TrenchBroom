@@ -19,33 +19,26 @@
 
 #define CATCH_CONFIG_RUNNER
 
-#include "TrenchBroomApp.h"
 #include "Ensure.h"
+#include "TestPreferenceManager.h"
+#include "TrenchBroomApp.h"
 
 #include <clocale>
 
 #include "Catch2.h"
 
-int main(int argc, char **argv) {
-    TrenchBroom::View::TrenchBroomApp app(argc, argv);
+int main(int argc, char** argv) {
+  TrenchBroom::PreferenceManager::createInstance<TrenchBroom::TestPreferenceManager>();
+  TrenchBroom::View::TrenchBroomApp app(argc, argv);
 
-/*
-    // use an empty file config so that we always use the default preferences
-    // this must happen exactly between creating the app instance and initializing it
-    // so that the app itself will not try to access the config file before we reset it here
-    const auto configFileName = "TrenchBroom-Test.ini";
-    const auto configFilePath = wxFileConfig::GetLocalFile(configFileName);
-    wxRemove(configFilePath.GetPath());
-    wxConfig::Set(new wxFileConfig(wxEmptyString, wxEmptyString, configFileName));
-*/
-    TrenchBroom::View::setCrashReportGUIEnbled(false);
+  TrenchBroom::View::setCrashReportGUIEnbled(false);
 
-    ensure(qApp == &app, "invalid app instance");
+  ensure(qApp == &app, "invalid app instance");
 
-    // set the locale to US so that we can parse floats attribute
-    std::setlocale(LC_NUMERIC, "C");
+  // set the locale to US so that we can parse floats attribute
+  std::setlocale(LC_NUMERIC, "C");
 
-    const int result = Catch::Session().run(argc, argv);
+  const int result = Catch::Session().run(argc, argv);
 
-    return result;
+  return result;
 }

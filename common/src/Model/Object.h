@@ -22,39 +22,34 @@
 #include "FloatType.h"
 
 namespace TrenchBroom {
-    namespace Model {
-        class GroupNode;
-        class LayerNode;
-        class Node;
+namespace Model {
+class GroupNode;
+class LayerNode;
+class Node;
 
-        class Object {
-        protected:
-            Object();
-        public:
-            virtual ~Object();
+class Object {
+protected:
+  Object();
 
-            Node* container();
-            const Node* container() const;
+public:
+  virtual ~Object();
 
-            LayerNode* containingLayer();
-            const LayerNode* containingLayer() const;
+  Node* container();
+  const Node* container() const;
 
-            GroupNode* containingGroup();
-            const GroupNode* containingGroup() const;
+  LayerNode* containingLayer();
+  const LayerNode* containingLayer() const;
 
-            bool containedInGroup() const;
-            bool containingGroupOpened() const;
+  GroupNode* containingGroup();
+  const GroupNode* containingGroup() const;
 
-            bool contains(const Node* object) const;
-            bool intersects(const Node* object) const;
-        private: // subclassing interface
-            virtual Node* doGetContainer() = 0;
-            virtual LayerNode* doGetContainingLayer() = 0;
-            virtual GroupNode* doGetContainingGroup() = 0;
+  bool containedInGroup() const;
+  bool containingGroupOpened() const;
 
-            virtual bool doContains(const Node* node) const = 0;
-            virtual bool doIntersects(const Node* node) const = 0;
-        };
-    }
-}
-
+private: // subclassing interface
+  virtual Node* doGetContainer() = 0;
+  virtual LayerNode* doGetContainingLayer() = 0;
+  virtual GroupNode* doGetContainingGroup() = 0;
+};
+} // namespace Model
+} // namespace TrenchBroom

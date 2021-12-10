@@ -20,6 +20,7 @@
 #pragma once
 
 #include "FloatType.h"
+#include "NotifierConnection.h"
 
 #include <vecmath/forward.h>
 #include <vecmath/util.h>
@@ -32,46 +33,48 @@ class QAbstractButton;
 class QComboBox;
 
 namespace TrenchBroom {
-    namespace View {
-        class MapDocument;
-        class RotateObjectsTool;
-        class Selection;
-        class SpinControl;
+namespace View {
+class MapDocument;
+class RotateObjectsTool;
+class Selection;
+class SpinControl;
 
-        class RotateObjectsToolPage : public QWidget {
-            Q_OBJECT
-        private:
-            std::weak_ptr<MapDocument> m_document;
-            RotateObjectsTool* m_tool;
+class RotateObjectsToolPage : public QWidget {
+  Q_OBJECT
+private:
+  std::weak_ptr<MapDocument> m_document;
+  RotateObjectsTool& m_tool;
 
-            QComboBox* m_recentlyUsedCentersList;
-            QAbstractButton* m_resetCenterButton;
+  QComboBox* m_recentlyUsedCentersList;
+  QAbstractButton* m_resetCenterButton;
 
-            SpinControl* m_angle;
-            QComboBox* m_axis;
-            QAbstractButton* m_rotateButton;
-        public:
-            RotateObjectsToolPage(std::weak_ptr<MapDocument> document, RotateObjectsTool* tool, QWidget* parent = nullptr);
-            ~RotateObjectsToolPage() override;
+  SpinControl* m_angle;
+  QComboBox* m_axis;
+  QAbstractButton* m_rotateButton;
 
-            void setAxis(vm::axis::type axis);
-            void setRecentlyUsedCenters(const std::vector<vm::vec3>& centers);
-            void setCurrentCenter(const vm::vec3& center);
-        private:
-            void bindObservers();
-            void unbindObservers();
+  NotifierConnection m_notifierConnection;
 
-            void createGui();
-            void updateGui();
+public:
+  RotateObjectsToolPage(
+    std::weak_ptr<MapDocument> document, RotateObjectsTool& tool, QWidget* parent = nullptr);
 
-            void selectionDidChange(const Selection& selection);
+  void setAxis(vm::axis::type axis);
+  void setRecentlyUsedCenters(const std::vector<vm::vec3>& centers);
+  void setCurrentCenter(const vm::vec3& center);
 
-            void centerChanged();
-            void resetCenterClicked();
-            void angleChanged(double value);
-            void rotateClicked();
-            vm::vec3 getAxis() const;
-        };
-    }
-}
+private:
+  void connectObservers();
 
+  void createGui();
+  void updateGui();
+
+  void selectionDidChange(const Selection& selection);
+
+  void centerChanged();
+  void resetCenterClicked();
+  void angleChanged(double value);
+  void rotateClicked();
+  vm::vec3 getAxis() const;
+};
+} // namespace View
+} // namespace TrenchBroom

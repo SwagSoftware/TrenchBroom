@@ -18,15 +18,17 @@
  */
 
 #include "Assets/EntityDefinition.h"
+#include "Model/BezierPatch.h"
 #include "Model/BrushNode.h"
 #include "Model/Entity.h"
 #include "Model/EntityNode.h"
 #include "Model/GroupNode.h"
 #include "Model/Layer.h"
 #include "Model/LayerNode.h"
+#include "Model/PatchNode.h"
 #include "Model/WorldNode.h"
-#include "View/MapDocumentTest.h"
 #include "View/MapDocument.h"
+#include "View/MapDocumentTest.h"
 
 #include <vecmath/bbox.h>
 
@@ -35,42 +37,82 @@
 #include "Catch2.h"
 
 namespace TrenchBroom {
-    namespace View {
-        class SetLockStateTest : public MapDocumentTest {
-        public:
-            SetLockStateTest() :
-            MapDocumentTest(Model::MapFormat::Valve) {}
-        };
+namespace View {
+TEST_CASE_METHOD(ValveMapDocumentTest, "SetLockStateTest.lockStateChanges") {
+  auto* brushNode = createBrushNode();
+  auto* entityNode = new Model::EntityNode{Model::Entity{}};
+  auto* patchNode = createPatchNode();
 
-        TEST_CASE_METHOD(SetLockStateTest, "SetLockStateTest.modificationCount") {
-            auto* brushNode = createBrushNode();
-            auto* entityNode = new Model::EntityNode{};
+  auto* entityNodeInGroup = new Model::EntityNode{Model::Entity{}};
 
-            auto* entityNodeInGroup = new Model::EntityNode{};
+  document->addNodes(
+    {{document->parentForNodes(), {brushNode, entityNode, patchNode, entityNodeInGroup}}});
+  document->deselectAll();
+  document->select(entityNodeInGroup);
 
-            document->addNodes({{document->parentForNodes(), {brushNode, entityNode, entityNodeInGroup}}});
-            document->deselectAll();
-            document->select(entityNodeInGroup);
-            
-            auto* groupNode = document->groupSelection("group");
-            document->deselectAll();
+  auto* groupNode = document->groupSelection("group");
+  document->deselectAll();
 
-            auto* layerNode = new Model::LayerNode{Model::Layer{"layer"}};
-            document->addNodes({{document->world(), {layerNode}}});
+  auto* layerNode = new Model::LayerNode{Model::Layer{"layer"}};
+  document->addNodes({{document->world(), {layerNode}}});
 
-            const auto originalModificationCount = document->modificationCount();
+  REQUIRE_FALSE(brushNode->locked());
+  REQUIRE_FALSE(entityNode->locked());
+  REQUIRE_FALSE(groupNode->locked());
+  REQUIRE_FALSE(patchNode->locked());
 
-            document->lock({brushNode, entityNode, groupNode});
-            CHECK(document->modificationCount() == originalModificationCount);
+  document->lock({brushNode, entityNode, groupNode, patchNode});
+  CHECK(brushNode->locked());
+  CHECK(entityNode->locked());
+  CHECK(groupNode->locked());
+  CHECK(patchNode->locked());
 
-            document->undoCommand();
-            CHECK(document->modificationCount() == originalModificationCount);
+  document->undoCommand();
+  CHECK_FALSE(brushNode->locked());
+  CHECK_FALSE(entityNode->locked());
+  CHECK_FALSE(groupNode->locked());
+  CHECK_FALSE(patchNode->locked());
 
-            document->lock({layerNode});
-            CHECK(document->modificationCount() == originalModificationCount + 1u);
+  REQUIRE_FALSE(layerNode->locked());
 
-            document->undoCommand();
-            CHECK(document->modificationCount() == originalModificationCount);
-        }
-    }
+  document->lock({layerNode});
+  CHECK(layerNode->locked());
+
+  document->undoCommand();
+  CHECK_FALSE(layerNode->locked());
 }
+
+TEST_CASE_METHOD(ValveMapDocumentTest, "SetLockStateTest.modificationCount") {
+  auto* brushNode = createBrushNode();
+  auto* entityNode = new Model::EntityNode{Model::Entity{}};
+  auto* patchNode = createPatchNode();
+
+  auto* entityNodeInGroup = new Model::EntityNode{Model::Entity{}};
+
+  document->addNodes(
+    {{document->parentForNodes(), {brushNode, entityNode, patchNode, entityNodeInGroup}}});
+  document->deselectAll();
+  document->select(entityNodeInGroup);
+
+  auto* groupNode = document->groupSelection("group");
+  document->deselectAll();
+
+  auto* layerNode = new Model::LayerNode{Model::Layer{"layer"}};
+  document->addNodes({{document->world(), {layerNode}}});
+
+  const auto originalModificationCount = document->modificationCount();
+
+  document->lock({brushNode, entityNode, groupNode, patchNode});
+  CHECK(document->modificationCount() == originalModificationCount);
+
+  document->undoCommand();
+  CHECK(document->modificationCount() == originalModificationCount);
+
+  document->lock({layerNode});
+  CHECK(document->modificationCount() == originalModificationCount + 1u);
+
+  document->undoCommand();
+  CHECK(document->modificationCount() == originalModificationCount);
+}
+} // namespace View
+} // namespace TrenchBroom

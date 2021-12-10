@@ -24,117 +24,55 @@
 
 #include <vecmath/forward.h>
 
+#include <memory>
 #include <vector>
 
 namespace TrenchBroom {
-    namespace Model {
-        class BrushFace;
-        class BrushNode;
-        class PickResult;
-    }
+namespace Model {
+class BrushFace;
+class BrushNode;
+class PickResult;
+} // namespace Model
 
-    namespace Renderer {
-        class RenderBatch;
-        class RenderContext;
-    }
+namespace Renderer {
+class RenderBatch;
+class RenderContext;
+} // namespace Renderer
 
-    namespace View {
-        class ClipTool;
+namespace View {
+class ClipTool;
 
-        class ClipToolController : public ToolControllerGroup {
-        protected:
-            class Callback {
-            protected:
-                ClipTool* m_tool;
-            public:
-                explicit Callback(ClipTool* tool);
-                virtual ~Callback();
-                ClipTool* tool() const;
+class ClipToolControllerBase : public ToolControllerGroup {
+protected:
+  ClipTool& m_tool;
 
-                bool addClipPoint(const InputState& inputState, vm::vec3& position);
-                bool setClipFace(const InputState& inputState);
+protected:
+  explicit ClipToolControllerBase(ClipTool& tool);
+  virtual ~ClipToolControllerBase() override;
 
-                virtual DragRestricter* createDragRestricter(const InputState& inputState, const vm::vec3& initialPoint) const = 0;
-                virtual DragSnapper* createDragSnapper(const InputState& inputState) const = 0;
-                virtual std::vector<vm::vec3> getHelpVectors(const InputState& inputState, const vm::vec3& clipPoint) const = 0;
+private:
+  Tool& tool() override;
+  const Tool& tool() const override;
 
-                void renderFeedback(const InputState& inputState, Renderer::RenderContext& renderContext, Renderer::RenderBatch& renderBatch);
-            private:
-                virtual bool doGetNewClipPointPosition(const InputState& inputState, vm::vec3& position) const = 0;
-            };
+  void pick(const InputState& inputState, Model::PickResult& pickResult) override;
 
-            class PartBase {
-            protected:
-                Callback* m_callback;
-                explicit PartBase(Callback* callback);
-            public:
-                virtual ~PartBase();
-            };
+  void setRenderOptions(
+    const InputState& inputState, Renderer::RenderContext& renderContext) const override;
+  void render(
+    const InputState& inputState, Renderer::RenderContext& renderContext,
+    Renderer::RenderBatch& renderBatch) override;
 
-            class AddClipPointPart : public ToolControllerBase<NoPickingPolicy, NoKeyPolicy, MousePolicy, RestrictedDragPolicy, RenderPolicy, NoDropPolicy>, protected PartBase {
-            private:
-                bool m_secondPointSet;
-            public:
-                explicit AddClipPointPart(Callback* callback);
-            private:
-                Tool* doGetTool() override;
-                const Tool* doGetTool() const override;
+  bool cancel() override;
+};
 
-                bool doMouseClick(const InputState& inputState) override;
-                bool doMouseDoubleClick(const InputState& inputState) override;
-                DragInfo doStartDrag(const InputState& inputState) override;
-                DragResult doDrag(const InputState& inputState, const vm::vec3& lastHandlePosition, const vm::vec3& nextHandlePosition) override;
-                void doEndDrag(const InputState& inputState) override;
-                void doCancelDrag() override;
-                void doRender(const InputState& inputState, Renderer::RenderContext& renderContext, Renderer::RenderBatch& renderBatch) override;
-                bool doCancel() override;
-            };
+class ClipToolController2D : public ClipToolControllerBase {
+public:
+  explicit ClipToolController2D(ClipTool& tool);
+};
 
-            class MoveClipPointPart : public ToolControllerBase<NoPickingPolicy, NoKeyPolicy, NoMousePolicy, RestrictedDragPolicy, NoRenderPolicy, NoDropPolicy>, protected PartBase {
-            public:
-                explicit MoveClipPointPart(Callback* callback);
-            private:
-                Tool* doGetTool() override;
-                const Tool* doGetTool() const override;
-                DragInfo doStartDrag(const InputState& inputState) override;
-                DragResult doDrag(const InputState& inputState, const vm::vec3& lastHandlePosition, const vm::vec3& nextHandlePosition) override;
-                void doEndDrag(const InputState& inputState) override;
-                void doCancelDrag() override;
-                bool doCancel() override;
-            };
-        protected:
-            ClipTool* m_tool;
-        protected:
-            explicit ClipToolController(ClipTool* tool);
-            virtual ~ClipToolController() override;
-        private:
-            Tool* doGetTool() override;
-            const Tool* doGetTool() const override;
-
-            void doPick(const InputState& inputState, Model::PickResult& pickResult) override;
-
-            void doSetRenderOptions(const InputState& inputState, Renderer::RenderContext& renderContext) const override;
-            void doRender(const InputState& inputState, Renderer::RenderContext& renderContext, Renderer::RenderBatch& renderBatch) override;
-
-            bool doCancel() override;
-        };
-
-        class ClipToolController2D : public ClipToolController {
-        private:
-            class Callback2D;
-        public:
-            explicit ClipToolController2D(ClipTool* tool);
-        };
-
-        class ClipToolController3D : public ClipToolController {
-        private:
-            static std::vector<vm::vec3> selectHelpVectors(const Model::BrushNode* brushNode, const Model::BrushFace& face, const vm::vec3& hitPoint);
-            static std::vector<const Model::BrushFace*> selectIncidentFaces(const Model::BrushNode* brushNode, const Model::BrushFace& face, const vm::vec3& hitPoint);
-        private:
-            class Callback3D;
-        public:
-            explicit ClipToolController3D(ClipTool* tool);
-        };
-    }
-}
-
+class ClipToolController3D : public ClipToolControllerBase {
+public:
+  explicit ClipToolController3D(ClipTool& tool);
+};
+} // namespace View
+} // namespace TrenchBroom

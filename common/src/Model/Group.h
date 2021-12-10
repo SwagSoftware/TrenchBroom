@@ -19,18 +19,38 @@
 
 #pragma once
 
+#include "FloatType.h"
+
+#include <vecmath/mat.h>
+
+#include <optional>
 #include <string>
 
 namespace TrenchBroom {
-    namespace Model {
-        class Group {
-        private:
-            std::string m_name;
-        public:
-            explicit Group(std::string name);
+namespace Model {
+class Group {
+private:
+  std::string m_name;
+  std::optional<std::string> m_linkedGroupId;
 
-            const std::string& name() const;
-            void setName(std::string name);
-        };
-    }
-}
+  vm::mat4x4 m_transformation;
+
+public:
+  explicit Group(std::string name);
+
+  const std::string& name() const;
+  void setName(std::string name);
+
+  std::optional<std::string> linkedGroupId() const;
+  void setLinkedGroupId(std::string linkedGroupId);
+  void resetLinkedGroupId();
+
+  const vm::mat4x4& transformation() const;
+  void setTransformation(const vm::mat4x4& transformation);
+  void transform(const vm::mat4x4& transformation);
+
+  friend bool operator==(const Group& lhs, const Group& rhs);
+  friend bool operator!=(const Group& lhs, const Group& rhs);
+};
+} // namespace Model
+} // namespace TrenchBroom

@@ -27,36 +27,29 @@
 #include <memory>
 
 namespace TrenchBroom {
-    namespace View {
-        class CreateSimpleBrushTool;
-        class MapDocument;
+namespace View {
+class CreateSimpleBrushTool;
+class DragTracker;
+class MapDocument;
 
-        class CreateSimpleBrushToolController3D : public ToolControllerBase<NoPickingPolicy, KeyPolicy, NoMousePolicy, RestrictedDragPolicy, RenderPolicy, NoDropPolicy> {
-        private:
-            CreateSimpleBrushTool* m_tool;
-            std::weak_ptr<MapDocument> m_document;
+class CreateSimpleBrushToolController3D : public ToolController {
+private:
+  CreateSimpleBrushTool& m_tool;
+  std::weak_ptr<MapDocument> m_document;
 
-            vm::vec3 m_initialPoint;
-        public:
-            CreateSimpleBrushToolController3D(CreateSimpleBrushTool* tool, std::weak_ptr<MapDocument> document);
-        private:
-            Tool* doGetTool() override;
-            const Tool* doGetTool() const override;
+  vm::vec3 m_initialPoint;
 
-            void doModifierKeyChange(const InputState& inputState) override;
+public:
+  CreateSimpleBrushToolController3D(
+    CreateSimpleBrushTool& tool, std::weak_ptr<MapDocument> document);
 
-            DragInfo doStartDrag(const InputState& inputState) override;
-            DragResult doDrag(const InputState& inputState, const vm::vec3& lastHandlePosition, const vm::vec3& nextHandlePosition) override;
-            void doEndDrag(const InputState& inputState) override;
-            void doCancelDrag() override;
+private:
+  Tool& tool() override;
+  const Tool& tool() const override;
 
-            void doSetRenderOptions(const InputState& inputState, Renderer::RenderContext& renderContext) const override;
-            void doRender(const InputState& inputState, Renderer::RenderContext& renderContext, Renderer::RenderBatch& renderBatch) override;
+  std::unique_ptr<DragTracker> acceptMouseDrag(const InputState& inputState) override;
 
-            bool doCancel() override;
-        private:
-            void updateBounds(const vm::vec3& point, const vm::vec3& cameraPosition);
-        };
-    }
-}
-
+  bool cancel() override;
+};
+} // namespace View
+} // namespace TrenchBroom

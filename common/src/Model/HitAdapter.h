@@ -22,17 +22,14 @@
 #include <optional>
 
 namespace TrenchBroom {
-    namespace Model {
-        class BrushFaceHandle;
-        class EntityNode;
-        class Hit;
-        class Node;
-        class Object;
+namespace Model {
+class BrushFaceHandle;
+class EntityNode;
+class Hit;
+class Node;
+class Object;
 
-        Node* hitToNode(const Hit& hit);
-        Object* hitToObject(const Hit& hit);
-        EntityNode* hitToEntity(const Hit& hit);
-        std::optional<BrushFaceHandle> hitToFaceHandle(const Hit& hit);
-    }
-}
-
+Node* hitToNode(const Hit& hit);
+std::optional<BrushFaceHandle> hitToFaceHandle(const Hit& hit);
+} // namespace Model
+} // namespace TrenchBroom

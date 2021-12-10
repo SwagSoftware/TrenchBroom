@@ -22,29 +22,32 @@
 #include "View/Tool.h"
 #include "View/ToolController.h"
 
+#include <memory>
+
 namespace TrenchBroom {
-    namespace Renderer {
-        class OrthographicCamera;
-    }
-
-    namespace View {
-        class UVCameraTool : public ToolControllerBase<NoPickingPolicy, NoKeyPolicy, MousePolicy, MouseDragPolicy, NoRenderPolicy, NoDropPolicy>, public Tool {
-        private:
-            Renderer::OrthographicCamera& m_camera;
-        public:
-            explicit UVCameraTool(Renderer::OrthographicCamera& camera);
-        private:
-            Tool* doGetTool() override;
-            const Tool* doGetTool() const override;
-
-            void doMouseScroll(const InputState& inputState) override;
-            bool doStartMouseDrag(const InputState& inputState) override;
-            bool doMouseDrag(const InputState& inputState) override;
-            void doEndMouseDrag(const InputState& inputState) override;
-            void doCancelMouseDrag() override;
-
-            bool doCancel() override;
-        };
-    }
+namespace Renderer {
+class OrthographicCamera;
 }
 
+namespace View {
+class DragTracker;
+
+class UVCameraTool : public ToolController, public Tool {
+private:
+  Renderer::OrthographicCamera& m_camera;
+
+public:
+  explicit UVCameraTool(Renderer::OrthographicCamera& camera);
+
+private:
+  Tool& tool() override;
+  const Tool& tool() const override;
+
+  void mouseScroll(const InputState& inputState) override;
+
+  std::unique_ptr<DragTracker> acceptMouseDrag(const InputState& inputState) override;
+
+  bool cancel() override;
+};
+} // namespace View
+} // namespace TrenchBroom

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "Model/BezierPatch.h"
 #include "Model/Brush.h"
 #include "Model/Entity.h"
 #include "Model/Group.h"
@@ -27,19 +28,20 @@
 #include <variant>
 
 namespace TrenchBroom {
-    namespace Model {
-        class NodeContents {
-        private:
-            std::variant<Layer, Group, Entity, Brush> m_contents;
-        public:
-            /** Unsets cached and derived information of the given objects, i.e.
-             *  - for entities, unsets the entity definition and the model
-             *  - for brushes, unsets the textures
-             */
-            explicit NodeContents(std::variant<Layer, Group, Entity, Brush> contents);
+namespace Model {
+class NodeContents {
+private:
+  std::variant<Layer, Group, Entity, Brush, BezierPatch> m_contents;
 
-            const std::variant<Layer, Group, Entity, Brush>& get() const;
-            std::variant<Layer, Group, Entity, Brush>& get();
-        };
-    }
-}
+public:
+  /** Unsets cached and derived information of the given objects, i.e.
+   *  - for entities, unsets the entity definition and the model
+   *  - for brushes, unsets the textures
+   */
+  explicit NodeContents(std::variant<Layer, Group, Entity, Brush, BezierPatch> contents);
+
+  const std::variant<Layer, Group, Entity, Brush, BezierPatch>& get() const;
+  std::variant<Layer, Group, Entity, Brush, BezierPatch>& get();
+};
+} // namespace Model
+} // namespace TrenchBroom

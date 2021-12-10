@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "NotifierConnection.h"
+
 #include <memory>
 
 #include <QWidget>
@@ -28,50 +30,54 @@ class QWidget;
 class QAbstractButton;
 
 namespace TrenchBroom {
-    namespace View {
-        class Selection;
-        class GLContextManager;
-        class MapDocument;
-        class UVView;
+namespace View {
+class Selection;
+class GLContextManager;
+class MapDocument;
+class UVView;
 
-        class UVEditor : public QWidget {
-            Q_OBJECT
-        private:
-            std::weak_ptr<MapDocument> m_document;
+class UVEditor : public QWidget {
+  Q_OBJECT
+private:
+  std::weak_ptr<MapDocument> m_document;
 
-            UVView* m_uvView;
-            QSpinBox* m_xSubDivisionEditor;
-            QSpinBox* m_ySubDivisionEditor;
+  UVView* m_uvView;
+  QSpinBox* m_xSubDivisionEditor;
+  QSpinBox* m_ySubDivisionEditor;
 
-            QAbstractButton* m_resetTextureButton;
-            QAbstractButton* m_resetTextureToWorldButton;
-            QAbstractButton* m_flipTextureHButton;
-            QAbstractButton* m_flipTextureVButton;
-            QAbstractButton* m_rotateTextureCCWButton;
-            QAbstractButton* m_rotateTextureCWButton;
-        public:
-            explicit UVEditor(std::weak_ptr<MapDocument> document, GLContextManager& contextManager, QWidget* parent = nullptr);
-            ~UVEditor() override;
+  QAbstractButton* m_resetTextureButton;
+  QAbstractButton* m_resetTextureToWorldButton;
+  QAbstractButton* m_flipTextureHButton;
+  QAbstractButton* m_flipTextureVButton;
+  QAbstractButton* m_rotateTextureCCWButton;
+  QAbstractButton* m_rotateTextureCWButton;
 
-            bool cancelMouseDrag();
-        private:
-            void updateButtons();
-        private:
-            void createGui(GLContextManager& contextManager);
+  NotifierConnection m_notifierConnection;
 
-            void selectionDidChange(const Selection& selection);
+public:
+  explicit UVEditor(
+    std::weak_ptr<MapDocument> document, GLContextManager& contextManager,
+    QWidget* parent = nullptr);
 
-            void bindObservers();
-            void unbindObservers();
+  bool cancelMouseDrag();
 
-            void resetTextureClicked();
-            void resetTextureToWorldClicked();
-            void flipTextureHClicked();
-            void flipTextureVClicked();
-            void rotateTextureCCWClicked();
-            void rotateTextureCWClicked();
-            void subDivisionChanged();
-        };
-    }
-}
+private:
+  void updateButtons();
 
+private:
+  void createGui(GLContextManager& contextManager);
+
+  void selectionDidChange(const Selection& selection);
+
+  void connectObservers();
+
+  void resetTextureClicked();
+  void resetTextureToWorldClicked();
+  void flipTextureHClicked();
+  void flipTextureVClicked();
+  void rotateTextureCCWClicked();
+  void rotateTextureCWClicked();
+  void subDivisionChanged();
+};
+} // namespace View
+} // namespace TrenchBroom

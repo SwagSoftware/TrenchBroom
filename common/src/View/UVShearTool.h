@@ -26,40 +26,32 @@
 #include <memory>
 
 namespace TrenchBroom {
-    namespace View {
-        class MapDocument;
-        class UVViewHelper;
+namespace View {
+class DragTracker;
+class MapDocument;
+class UVViewHelper;
 
-        class UVShearTool : public ToolControllerBase<PickingPolicy, NoKeyPolicy, NoMousePolicy, MouseDragPolicy, NoRenderPolicy, NoDropPolicy>, public Tool {
-        private:
-            static const Model::HitType::Type XHandleHitType;
-            static const Model::HitType::Type YHandleHitType;
-        private:
-            std::weak_ptr<MapDocument> m_document;
-            UVViewHelper& m_helper;
+class UVShearTool : public ToolController, public Tool {
+private:
+  static const Model::HitType::Type XHandleHitType;
+  static const Model::HitType::Type YHandleHitType;
 
-            vm::vec2b m_selector;
-            vm::vec3 m_xAxis;
-            vm::vec3 m_yAxis;
-            vm::vec2f m_initialHit;
-            vm::vec2f m_lastHit;
-        public:
-            UVShearTool(std::weak_ptr<MapDocument> document, UVViewHelper& helper);
-        private:
-            Tool* doGetTool() override;
-            const Tool* doGetTool() const override;
+private:
+  std::weak_ptr<MapDocument> m_document;
+  UVViewHelper& m_helper;
 
-            void doPick(const InputState& inputState, Model::PickResult& pickResult) override;
+public:
+  UVShearTool(std::weak_ptr<MapDocument> document, UVViewHelper& helper);
 
-            bool doStartMouseDrag(const InputState& inputState) override;
-            bool doMouseDrag(const InputState& inputState) override;
-            void doEndMouseDrag(const InputState& inputState) override;
-            void doCancelMouseDrag() override;
+private:
+  Tool& tool() override;
+  const Tool& tool() const override;
 
-            vm::vec2f getHit(const vm::ray3& pickRay) const;
+  void pick(const InputState& inputState, Model::PickResult& pickResult) override;
 
-            bool doCancel() override;
-        };
-    }
-}
+  std::unique_ptr<DragTracker> acceptMouseDrag(const InputState& inputState) override;
 
+  bool cancel() override;
+};
+} // namespace View
+} // namespace TrenchBroom

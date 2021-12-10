@@ -19,13 +19,17 @@
 
 #pragma once
 
-namespace TrenchBroom {
-    namespace Model {
-        enum class VisibilityState {
-            Visibility_Inherited = 1,
-            Visibility_Hidden    = 2,
-            Visibility_Shown     = 4
-        };
-    }
-}
+#include <iosfwd>
 
+namespace TrenchBroom {
+namespace Model {
+enum class VisibilityState
+{
+  Inherited = 1,
+  Hidden = 2,
+  Shown = 4
+};
+
+std::ostream& operator<<(std::ostream& str, VisibilityState state);
+} // namespace Model
+} // namespace TrenchBroom

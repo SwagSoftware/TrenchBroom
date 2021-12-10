@@ -20,6 +20,7 @@
 #pragma once
 
 #include "FloatType.h"
+#include "NotifierConnection.h"
 
 #include <vecmath/forward.h>
 
@@ -35,39 +36,40 @@ class QComboBox;
 class QAbstractButton;
 
 namespace TrenchBroom {
-    namespace View {
-        class MapDocument;
-        class Selection;
-        class ScaleObjectsToolPage : public QWidget {
-            Q_OBJECT
-        private:
-            std::weak_ptr<MapDocument> m_document;
+namespace View {
+class MapDocument;
+class Selection;
+class ScaleObjectsToolPage : public QWidget {
+  Q_OBJECT
+private:
+  std::weak_ptr<MapDocument> m_document;
 
-            QStackedLayout* m_book;
+  QStackedLayout* m_book;
 
-            QLineEdit* m_sizeTextBox;
-            QLineEdit* m_factorsTextBox;
+  QLineEdit* m_sizeTextBox;
+  QLineEdit* m_factorsTextBox;
 
-            QComboBox* m_scaleFactorsOrSize;
-            QAbstractButton* m_button;
-        public:
-            explicit ScaleObjectsToolPage(std::weak_ptr<MapDocument> document, QWidget* parent = nullptr);
-            ~ScaleObjectsToolPage() override;
-            void activate();
-        private:
-            void bindObservers();
-            void unbindObservers();
+  QComboBox* m_scaleFactorsOrSize;
+  QAbstractButton* m_button;
 
-            void createGui();
-            void updateGui();
+  NotifierConnection m_notifierConnection;
 
-            bool canScale() const;
-            std::optional<vm::vec3> getScaleFactors() const;
+public:
+  explicit ScaleObjectsToolPage(std::weak_ptr<MapDocument> document, QWidget* parent = nullptr);
+  void activate();
 
-            void selectionDidChange(const Selection& selection);
+private:
+  void connectObservers();
 
-            void applyScale();
-        };
-    }
-}
+  void createGui();
+  void updateGui();
 
+  bool canScale() const;
+  std::optional<vm::vec3> getScaleFactors() const;
+
+  void selectionDidChange(const Selection& selection);
+
+  void applyScale();
+};
+} // namespace View
+} // namespace TrenchBroom

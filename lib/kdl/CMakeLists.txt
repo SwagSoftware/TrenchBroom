@@ -25,6 +25,7 @@ target_sources(kdl INTERFACE
     "${KDL_INCLUDE_DIR}/kdl/collection_utils.h"
     "${KDL_INCLUDE_DIR}/kdl/compact_trie_forward.h"
     "${KDL_INCLUDE_DIR}/kdl/compact_trie.h"
+    "${KDL_INCLUDE_DIR}/kdl/deref_iterator.h"
     "${KDL_INCLUDE_DIR}/kdl/enum_array.h"
     "${KDL_INCLUDE_DIR}/kdl/result.h"
     "${KDL_INCLUDE_DIR}/kdl/result_combine.h"
@@ -49,6 +50,7 @@ target_sources(kdl INTERFACE
     "${KDL_INCLUDE_DIR}/kdl/string_utils.h"
     "${KDL_INCLUDE_DIR}/kdl/transform_range.h"
     "${KDL_INCLUDE_DIR}/kdl/tuple_io.h"
+    "${KDL_INCLUDE_DIR}/kdl/tuple_utils.h"
     "${KDL_INCLUDE_DIR}/kdl/vector_set_forward.h"
     "${KDL_INCLUDE_DIR}/kdl/vector_set.h"
     "${KDL_INCLUDE_DIR}/kdl/vector_utils.h"
@@ -60,6 +62,11 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "App
     target_compile_options(kdl INTERFACE -Wall -Wextra -Wconversion -Wshadow-all -pedantic -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-padded -Wno-exit-time-destructors)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(kdl INTERFACE -Wall -Wextra -Wconversion -Wshadow=local -pedantic)
+
+    # gcc <= 7 warns about unused structured bindings, see https://github.com/TrenchBroom/TrenchBroom/issues/3751
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8)
+        target_compile_options(kdl INTERFACE -Wno-unused-variable)
+    endif()
 elseif(MSVC EQUAL 1)
     target_compile_options(kdl INTERFACE /W4 /EHsc /MP)
 

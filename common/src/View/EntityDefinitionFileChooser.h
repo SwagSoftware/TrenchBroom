@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "NotifierConnection.h"
+
 #include <memory>
 
 #include <QListWidget>
@@ -28,51 +30,56 @@ class QListWidget;
 class QLabel;
 
 namespace TrenchBroom {
-    namespace View {
-        class MapDocument;
+namespace View {
+class MapDocument;
 
-        class SingleSelectionListWidget : public QListWidget {
-            Q_OBJECT
-        private:
-            bool m_allowDeselectAll;
-        public:
-            explicit SingleSelectionListWidget(QWidget* parent = nullptr);
-            void setAllowDeselectAll(bool allow);
-            bool allowDeselectAll() const;
-        protected: // QAbstractItemView overrides
-            void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) override;
-            //QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex& index, const QEvent* event) const override;
-        };
+class SingleSelectionListWidget : public QListWidget {
+  Q_OBJECT
+private:
+  bool m_allowDeselectAll;
 
-        class EntityDefinitionFileChooser : public QWidget {
-            Q_OBJECT
-        private:
-            std::weak_ptr<MapDocument> m_document;
+public:
+  explicit SingleSelectionListWidget(QWidget* parent = nullptr);
+  void setAllowDeselectAll(bool allow);
+  bool allowDeselectAll() const;
 
-            SingleSelectionListWidget* m_builtin;
-            QLabel* m_external;
-            QPushButton* m_chooseExternal;
-            QPushButton* m_reloadExternal;
-        public:
-            explicit EntityDefinitionFileChooser(std::weak_ptr<MapDocument> document, QWidget* parent = nullptr);
-            ~EntityDefinitionFileChooser() override;
-        private:
-            void createGui();
-            void bindEvents();
+protected: // QAbstractItemView overrides
+  void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) override;
+  // QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex& index, const QEvent*
+  // event) const override;
+};
 
-            void bindObservers();
-            void unbindObservers();
+class EntityDefinitionFileChooser : public QWidget {
+  Q_OBJECT
+private:
+  std::weak_ptr<MapDocument> m_document;
 
-            void documentWasNewed(MapDocument* document);
-            void documentWasLoaded(MapDocument* document);
-            void entityDefinitionsDidChange();
+  SingleSelectionListWidget* m_builtin;
+  QLabel* m_external;
+  QPushButton* m_chooseExternal;
+  QPushButton* m_reloadExternal;
 
-            void updateControls();
+  NotifierConnection m_notifierConnection;
 
-            void builtinSelectionChanged();
-            void chooseExternalClicked();
-            void reloadExternalClicked();
-        };
-    }
-}
+public:
+  explicit EntityDefinitionFileChooser(
+    std::weak_ptr<MapDocument> document, QWidget* parent = nullptr);
 
+private:
+  void createGui();
+  void bindEvents();
+
+  void connectObservers();
+
+  void documentWasNewed(MapDocument* document);
+  void documentWasLoaded(MapDocument* document);
+  void entityDefinitionsDidChange();
+
+  void updateControls();
+
+  void builtinSelectionChanged();
+  void chooseExternalClicked();
+  void reloadExternalClicked();
+};
+} // namespace View
+} // namespace TrenchBroom

@@ -26,37 +26,46 @@
 #include <vector>
 
 namespace TrenchBroom {
-    namespace IO {
-        class ParserStatus;
+namespace IO {
+class ParserStatus;
 
-        /**
-         * MapReader subclass for loading the clipboard contents, rather than an entire .map
-         */
-        class NodeReader : public MapReader {
-        private:
-            std::vector<Model::Node*> m_nodes;
-        public:
-            /**
-             * Creates a new parser where the given string is expected to be formatted in the given source map format,
-             * and the created objects are converted to the given target format.
-             *
-             * @param str the string to parse
-             * @param sourceMapFormat the expected format of the given string
-             * @param targetMapFormat the format to convert the created objects to
-             */
-            NodeReader(std::string_view str, Model::MapFormat sourceMapFormat, Model::MapFormat targetMapFormat);
+/**
+ * MapReader subclass for loading the clipboard contents, rather than an entire .map
+ */
+class NodeReader : public MapReader {
+private:
+  std::vector<Model::Node*> m_nodes;
 
-            static std::vector<Model::Node*> read(const std::string& str, Model::MapFormat preferredMapFormat, const vm::bbox3& worldBounds, ParserStatus& status);
-        private:
-            static std::vector<Model::Node*> readAsFormat(Model::MapFormat sourceMapFormat, Model::MapFormat targetMapFormat, const std::string& str, const vm::bbox3& worldBounds, ParserStatus& status);
-        private: // implement MapReader interface
-            Model::Node* onWorldspawn(const std::vector<Model::EntityProperty>& properties, const ExtraAttributes& extraAttributes, ParserStatus& status) override;
-            void onWorldspawnFilePosition(size_t lineNumber, size_t lineCount, ParserStatus& status) override;
-            void onLayer(Model::LayerNode* layer, ParserStatus& status) override;
-            void onNode(Model::Node* parent, Model::Node* node, ParserStatus& status) override;
-            void onUnresolvedNode(const ParentInfo& parentInfo, Model::Node* node, ParserStatus& status) override;
-            void onBrush(Model::Node* parent, Model::BrushNode* brush, ParserStatus& status) override;
-        };
-    }
-}
+public:
+  /**
+   * Creates a new parser where the given string is expected to be formatted in the given source map
+   * format, and the created objects are converted to the given target format.
+   *
+   * @param str the string to parse
+   * @param sourceMapFormat the expected format of the given string
+   * @param targetMapFormat the format to convert the created objects to
+   * @param entityPropertyConfig the entity property config to use
+   */
+  NodeReader(
+    std::string_view str, Model::MapFormat sourceMapFormat, Model::MapFormat targetMapFormat,
+    const Model::EntityPropertyConfig& entityPropertyConfig);
 
+  static std::vector<Model::Node*> read(
+    const std::string& str, Model::MapFormat preferredMapFormat, const vm::bbox3& worldBounds,
+    const Model::EntityPropertyConfig& entityPropertyConfig, ParserStatus& status);
+
+private:
+  static std::vector<Model::Node*> readAsFormat(
+    Model::MapFormat sourceMapFormat, Model::MapFormat targetMapFormat, const std::string& str,
+    const vm::bbox3& worldBounds, const Model::EntityPropertyConfig& entityPropertyConfig,
+    ParserStatus& status);
+
+private: // implement MapReader interface
+  Model::Node* onWorldNode(
+    std::unique_ptr<Model::WorldNode> worldNode, ParserStatus& status) override;
+  void onLayerNode(std::unique_ptr<Model::Node> layerNode, ParserStatus& status) override;
+  void onNode(
+    Model::Node* parentNode, std::unique_ptr<Model::Node> node, ParserStatus& status) override;
+};
+} // namespace IO
+} // namespace TrenchBroom

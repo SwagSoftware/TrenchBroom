@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "NotifierConnection.h"
+
 #include <memory>
 
 #include <QWidget>
@@ -27,31 +29,32 @@ class QAbstractButton;
 class QLineEdit;
 
 namespace TrenchBroom {
-    namespace View {
-        class MapDocument;
-        class Selection;
+namespace View {
+class MapDocument;
+class Selection;
 
-        class MoveObjectsToolPage : public QWidget {
-            Q_OBJECT
-        private:
-            std::weak_ptr<MapDocument> m_document;
+class MoveObjectsToolPage : public QWidget {
+  Q_OBJECT
+private:
+  std::weak_ptr<MapDocument> m_document;
 
-            QLineEdit* m_offset;
-            QAbstractButton* m_button;
-        public:
-            explicit MoveObjectsToolPage(std::weak_ptr<MapDocument> document, QWidget* parent = nullptr);
-            ~MoveObjectsToolPage() override;
-        private:
-            void bindObservers();
-            void unbindObservers();
+  QLineEdit* m_offset;
+  QAbstractButton* m_button;
 
-            void createGui();
-            void updateGui();
+  NotifierConnection m_notifierConnection;
 
-            void selectionDidChange(const Selection& selection);
+public:
+  explicit MoveObjectsToolPage(std::weak_ptr<MapDocument> document, QWidget* parent = nullptr);
 
-            void applyMove();
-        };
-    }
-}
+private:
+  void connectObservers();
 
+  void createGui();
+  void updateGui();
+
+  void selectionDidChange(const Selection& selection);
+
+  void applyMove();
+};
+} // namespace View
+} // namespace TrenchBroom

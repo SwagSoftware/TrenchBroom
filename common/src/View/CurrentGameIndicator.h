@@ -19,17 +19,16 @@
 
 #pragma once
 
+#include "View/DialogHeader.h"
+
 #include <string>
 
-#include <QWidget>
-
 namespace TrenchBroom {
-    namespace View {
-        class CurrentGameIndicator : public QWidget {
-            Q_OBJECT
-        public:
-            explicit CurrentGameIndicator(const std::string& gameName, QWidget* parent = nullptr);
-        };
-    }
-}
-
+namespace View {
+class CurrentGameIndicator : public DialogHeader {
+  Q_OBJECT
+public:
+  explicit CurrentGameIndicator(const std::string& gameName, QWidget* parent = nullptr);
+};
+} // namespace View
+} // namespace TrenchBroom

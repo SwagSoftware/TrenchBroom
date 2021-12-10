@@ -20,86 +20,95 @@
 #include "Assets/Texture.h"
 #include "Assets/TextureCollection.h"
 #include "Assets/TextureManager.h"
-#include "Model/BrushNode.h"
 #include "Model/BrushFace.h"
+#include "Model/BrushNode.h"
 #include "Model/ChangeBrushFaceAttributesRequest.h"
 #include "Model/Entity.h"
 #include "Model/EntityNode.h"
 #include "Model/GroupNode.h"
 #include "Model/LayerNode.h"
 #include "Model/WorldNode.h"
-#include "View/MapDocumentTest.h"
 #include "View/MapDocument.h"
+#include "View/MapDocumentTest.h"
 
 #include <cassert>
+
+#include "TestUtils.h"
 
 #include "Catch2.h"
 
 namespace TrenchBroom {
-    namespace View {
-        class UndoTest : public MapDocumentTest {};
+namespace View {
+TEST_CASE_METHOD(MapDocumentTest, "UndoTest.setTexturesAfterRestore", "[UndoTest]") {
+  document->setEnabledTextureCollections(
+    std::vector<IO::Path>{IO::Path("fixture/test/IO/Wad/cr8_czg.wad")});
 
-        TEST_CASE_METHOD(UndoTest, "UndoTest.setTexturesAfterRestore", "[UndoTest]") {
-            document->setEnabledTextureCollections(std::vector<IO::Path>{ IO::Path("fixture/test/IO/Wad/cr8_czg.wad") });
+  Model::BrushNode* brushNode = createBrushNode("coffin1");
+  addNode(*document, document->parentForNodes(), brushNode);
 
-            Model::BrushNode* brushNode = createBrushNode("coffin1");
-            document->addNode(brushNode, document->parentForNodes());
+  const Assets::Texture* texture = document->textureManager().texture("coffin1");
+  CHECK(texture != nullptr);
+  CHECK(texture->usageCount() == 6u);
 
-            const Assets::Texture* texture = document->textureManager().texture("coffin1");
-            CHECK(texture != nullptr);
-            CHECK(texture->usageCount() == 6u);
+  for (const Model::BrushFace& face : brushNode->brush().faces()) {
+    CHECK(face.texture() == texture);
+  }
 
-            for (const Model::BrushFace& face : brushNode->brush().faces()) {
-                CHECK(face.texture() == texture);
-            }
-            
-            SECTION("translate brush") {
-                document->translateObjects(vm::vec3(1, 1, 1));
-                CHECK(texture->usageCount() == 6u);
+  SECTION("translate brush") {
+    document->select(brushNode);
+    document->translateObjects(vm::vec3(1, 1, 1));
+    CHECK(texture->usageCount() == 6u);
 
-                document->undoCommand();
-                CHECK(texture->usageCount() == 6u);
-            }
+    document->undoCommand();
+    CHECK(texture->usageCount() == 6u);
+  }
 
-            SECTION("select top face, move texture") {
-                auto topFaceIndex = brushNode->brush().findFace(vm::vec3::pos_z());
-                REQUIRE(topFaceIndex.has_value());
-                
-                document->select(Model::BrushFaceHandle(brushNode, *topFaceIndex));
+  SECTION("delete brush") {
+    document->select(brushNode);
+    document->deleteObjects();
+    CHECK(texture->usageCount() == 0u);
 
-                Model::ChangeBrushFaceAttributesRequest request;
-                request.setXOffset(static_cast<float>(12.34f));
-                REQUIRE(document->setFaceAttributes(request));
+    document->undoCommand();
+    CHECK(texture->usageCount() == 6u);
+  }
 
-                document->undoCommand(); // undo move
-                CHECK(texture->usageCount() == 6u);
-                REQUIRE(document->hasSelectedBrushFaces());
+  SECTION("select top face, move texture") {
+    auto topFaceIndex = brushNode->brush().findFace(vm::vec3::pos_z());
+    REQUIRE(topFaceIndex.has_value());
 
-                document->undoCommand(); // undo select
-                CHECK(texture->usageCount() == 6u);
-                REQUIRE(!document->hasSelectedBrushFaces());
-            }            
+    document->select(Model::BrushFaceHandle(brushNode, *topFaceIndex));
 
-            for (const Model::BrushFace& face : brushNode->brush().faces()) {
-                CHECK(face.texture() == texture);
-            }
-        }
+    Model::ChangeBrushFaceAttributesRequest request;
+    request.setXOffset(static_cast<float>(12.34f));
+    REQUIRE(document->setFaceAttributes(request));
 
-        TEST_CASE_METHOD(UndoTest, "UndoTest.undoRotation", "[UndoTest]") {
-            auto* entityNode = new Model::EntityNode({
-                {Model::PropertyKeys::Classname, "test"}
-            });
+    document->undoCommand(); // undo move
+    CHECK(texture->usageCount() == 6u);
+    REQUIRE(document->hasSelectedBrushFaces());
 
-            document->addNode(entityNode, document->parentForNodes());            
-            CHECK(!entityNode->entity().hasProperty("angle"));
+    document->undoCommand(); // undo select
+    CHECK(texture->usageCount() == 6u);
+    REQUIRE(!document->hasSelectedBrushFaces());
+  }
 
-            document->select(entityNode);
-            document->rotateObjects(vm::vec3::zero(), vm::vec3::pos_z(), vm::to_radians(15.0));
-            CHECK(entityNode->entity().hasProperty("angle"));
-            CHECK(*entityNode->entity().property("angle") == "15");
-
-            document->undoCommand();
-            CHECK(!entityNode->entity().hasProperty("angle"));
-        }
-    }
+  for (const Model::BrushFace& face : brushNode->brush().faces()) {
+    CHECK(face.texture() == texture);
+  }
 }
+
+TEST_CASE_METHOD(MapDocumentTest, "UndoTest.undoRotation", "[UndoTest]") {
+  auto* entityNode = new Model::EntityNode{{}, {{Model::EntityPropertyKeys::Classname, "test"}}};
+
+  addNode(*document, document->parentForNodes(), entityNode);
+  CHECK(!entityNode->entity().hasProperty("angle"));
+
+  document->select(entityNode);
+  document->rotateObjects(vm::vec3::zero(), vm::vec3::pos_z(), vm::to_radians(15.0));
+  CHECK(entityNode->entity().hasProperty("angle"));
+  CHECK(*entityNode->entity().property("angle") == "15");
+
+  document->undoCommand();
+  CHECK(!entityNode->entity().hasProperty("angle"));
+}
+} // namespace View
+} // namespace TrenchBroom

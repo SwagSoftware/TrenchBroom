@@ -27,8 +27,8 @@
 
 #include <kdl/result_forward.h>
 
-#include <vecmath/forward.h>
 #include <vecmath/bbox.h>
+#include <vecmath/forward.h>
 #include <vecmath/util.h>
 
 #include <optional>
@@ -36,81 +36,90 @@
 #include <vector>
 
 namespace TrenchBroom {
-    namespace Assets {
-        enum class PitchType;
-        class EntityModelFrame;
-        struct ModelSpecification;
-    }
+namespace Assets {
+enum class PitchType;
+class EntityModelFrame;
+struct ModelSpecification;
+} // namespace Assets
 
-    namespace Model {
-        class EntityNode : public EntityNodeBase, public Object {
-        public:
-            static const HitType::Type EntityHitType;
-            static const vm::bbox3 DefaultBounds;
-        private:
-            struct CachedBounds {
-                vm::bbox3 modelBounds;
-                vm::bbox3 logicalBounds;
-                vm::bbox3 physicalBounds;
-            };
-            mutable std::optional<CachedBounds> m_cachedBounds;
-        public:
-            EntityNode();
-            explicit EntityNode(Entity entity);
-            explicit EntityNode(std::initializer_list<EntityProperty> properties);
+namespace Model {
+struct EntityPropertyConfig;
 
-            FloatType area(vm::axis::type axis) const;
-        public: // entity model
-            const vm::bbox3& modelBounds() const;
-            void setModelFrame(const Assets::EntityModelFrame* modelFrame);
-        private: // implement Node interface
-            const vm::bbox3& doGetLogicalBounds() const override;
-            const vm::bbox3& doGetPhysicalBounds() const override;
+class EntityNode : public EntityNodeBase, public Object {
+public:
+  static const HitType::Type EntityHitType;
+  static const vm::bbox3 DefaultBounds;
 
-            Node* doClone(const vm::bbox3& worldBounds) const override;
+private:
+  struct CachedBounds {
+    vm::bbox3 modelBounds;
+    vm::bbox3 logicalBounds;
+    vm::bbox3 physicalBounds;
+  };
+  mutable std::optional<CachedBounds> m_cachedBounds;
 
-            bool doCanAddChild(const Node* child) const override;
-            bool doCanRemoveChild(const Node* child) const override;
-            bool doRemoveIfEmpty() const override;
+public:
+  explicit EntityNode(Entity entity);
+  EntityNode(
+    const Model::EntityPropertyConfig& entityPropertyConfig,
+    std::initializer_list<EntityProperty> properties);
 
-            bool doShouldAddToSpacialIndex() const override;
+public: // entity model
+  const vm::bbox3& modelBounds() const;
+  void setModelFrame(const Assets::EntityModelFrame* modelFrame);
 
-            void doChildWasAdded(Node* node) override;
-            void doChildWasRemoved(Node* node) override;
+private: // implement Node interface
+  const vm::bbox3& doGetLogicalBounds() const override;
+  const vm::bbox3& doGetPhysicalBounds() const override;
 
-            void doNodePhysicalBoundsDidChange() override;
-            void doChildPhysicalBoundsDidChange() override;
+  FloatType doGetProjectedArea(vm::axis::type axis) const override;
 
-            bool doSelectable() const override;
+  Node* doClone(const vm::bbox3& worldBounds) const override;
 
-            void doPick(const vm::ray3& ray, PickResult& pickResult) override;
-            void doFindNodesContaining(const vm::vec3& point, std::vector<Node*>& result) override;
+  bool doCanAddChild(const Node* child) const override;
+  bool doCanRemoveChild(const Node* child) const override;
+  bool doRemoveIfEmpty() const override;
 
-            void doGenerateIssues(const IssueGenerator* generator, std::vector<Issue*>& issues) override;
-            void doAccept(NodeVisitor& visitor) override;
-            void doAccept(ConstNodeVisitor& visitor) const override;
+  bool doShouldAddToSpacialIndex() const override;
 
-            std::vector<Node*> nodesRequiredForViewSelection() override;
-        private: // implement EntityNodeBase interface
-            void doPropertiesDidChange(const vm::bbox3& oldBounds) override;
-            vm::vec3 doGetLinkSourceAnchor() const override;
-            vm::vec3 doGetLinkTargetAnchor() const override;
-        private: // implement Object interface
-            Node* doGetContainer() override;
-            LayerNode* doGetContainingLayer() override;
-            GroupNode* doGetContainingGroup() override;
+  void doChildWasAdded(Node* node) override;
+  void doChildWasRemoved(Node* node) override;
 
-            bool doContains(const Node* node) const override;
-            bool doIntersects(const Node* node) const override;
-        private:
-            void invalidateBounds();
-            void validateBounds() const;
-        private: // implement Taggable interface
-            void doAcceptTagVisitor(TagVisitor& visitor) override;
-            void doAcceptTagVisitor(ConstTagVisitor& visitor) const override;
-        private:
-            deleteCopyAndMove(EntityNode)
-        };
-    }
-}
+  void doNodePhysicalBoundsDidChange() override;
+  void doChildPhysicalBoundsDidChange() override;
 
+  bool doSelectable() const override;
+
+  void doPick(
+    const EditorContext& editorContext, const vm::ray3& ray, PickResult& pickResult) override;
+  void doFindNodesContaining(const vm::vec3& point, std::vector<Node*>& result) override;
+
+  void doGenerateIssues(const IssueGenerator* generator, std::vector<Issue*>& issues) override;
+  void doAccept(NodeVisitor& visitor) override;
+  void doAccept(ConstNodeVisitor& visitor) const override;
+
+  std::vector<Node*> nodesRequiredForViewSelection() override;
+
+private: // implement EntityNodeBase interface
+  void doPropertiesDidChange(const vm::bbox3& oldBounds) override;
+  vm::vec3 doGetLinkSourceAnchor() const override;
+  vm::vec3 doGetLinkTargetAnchor() const override;
+
+private: // implement Object interface
+  Node* doGetContainer() override;
+  LayerNode* doGetContainingLayer() override;
+  GroupNode* doGetContainingGroup() override;
+
+private:
+  void invalidateBounds();
+  void validateBounds() const;
+
+private: // implement Taggable interface
+  void doAcceptTagVisitor(TagVisitor& visitor) override;
+  void doAcceptTagVisitor(ConstTagVisitor& visitor) const override;
+
+private:
+  deleteCopyAndMove(EntityNode);
+};
+} // namespace Model
+} // namespace TrenchBroom

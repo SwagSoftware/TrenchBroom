@@ -21,142 +21,153 @@
 
 #include "Macros.h"
 
+#include <iosfwd>
 #include <string>
 
 namespace TrenchBroom {
-    namespace Model {
-        class CompilationTaskConstVisitor;
-        class CompilationTaskVisitor;
-        class ConstCompilationTaskConstVisitor;
-        class ConstCompilationTaskVisitor;
+namespace Model {
+class CompilationTaskConstVisitor;
+class CompilationTaskVisitor;
+class ConstCompilationTaskConstVisitor;
+class ConstCompilationTaskVisitor;
 
-        class CompilationTask {
-        protected:
-            bool m_enabled;
-        protected:
-            explicit CompilationTask(bool enabled);
-        public:
-            virtual ~CompilationTask();
+class CompilationTask {
+protected:
+  bool m_enabled;
 
-            virtual void accept(CompilationTaskVisitor& visitor) = 0;
-            virtual void accept(ConstCompilationTaskVisitor& visitor) const = 0;
-            virtual void accept(const CompilationTaskConstVisitor& visitor) = 0;
-            virtual void accept(const ConstCompilationTaskConstVisitor& visitor) const = 0;
+protected:
+  explicit CompilationTask(bool enabled);
 
-            bool enabled() const;
-            void setEnabled(bool enabled);
+public:
+  virtual ~CompilationTask();
 
-            virtual CompilationTask* clone() const = 0;
-            virtual bool operator==(const CompilationTask& other) const = 0;
-            bool operator!=(const CompilationTask& other) const;
+  virtual void accept(CompilationTaskVisitor& visitor) = 0;
+  virtual void accept(ConstCompilationTaskVisitor& visitor) const = 0;
+  virtual void accept(const CompilationTaskConstVisitor& visitor) = 0;
+  virtual void accept(const ConstCompilationTaskConstVisitor& visitor) const = 0;
 
-            deleteCopyAndMove(CompilationTask)
-        };
+  bool enabled() const;
+  void setEnabled(bool enabled);
 
-        class CompilationExportMap : public CompilationTask {
-        private:
-            std::string m_targetSpec;
-        public:
-            CompilationExportMap(bool enabled, const std::string& targetSpec);
+  virtual CompilationTask* clone() const = 0;
+  virtual bool operator==(const CompilationTask& other) const = 0;
+  bool operator!=(const CompilationTask& other) const;
+  virtual void appendToStream(std::ostream& str) const = 0;
 
-            void accept(CompilationTaskVisitor& visitor) override;
-            void accept(ConstCompilationTaskVisitor& visitor) const override;
-            void accept(const CompilationTaskConstVisitor& visitor) override;
-            void accept(const ConstCompilationTaskConstVisitor& visitor) const override;
+  deleteCopyAndMove(CompilationTask);
+};
 
-            const std::string& targetSpec() const;
+std::ostream& operator<<(std::ostream& str, const CompilationTask& task);
 
-            void setTargetSpec(const std::string& targetSpec);
+class CompilationExportMap : public CompilationTask {
+private:
+  std::string m_targetSpec;
 
-            CompilationExportMap* clone() const override;
-            bool operator==(const CompilationTask& other) const override;
+public:
+  CompilationExportMap(bool enabled, const std::string& targetSpec);
 
-            deleteCopyAndMove(CompilationExportMap)
-        };
+  void accept(CompilationTaskVisitor& visitor) override;
+  void accept(ConstCompilationTaskVisitor& visitor) const override;
+  void accept(const CompilationTaskConstVisitor& visitor) override;
+  void accept(const ConstCompilationTaskConstVisitor& visitor) const override;
 
-        class CompilationCopyFiles : public CompilationTask {
-        private:
-            std::string m_sourceSpec;
-            std::string m_targetSpec;
-        public:
-            CompilationCopyFiles(bool enabled, const std::string& sourceSpec, const std::string& targetSpec);
+  const std::string& targetSpec() const;
 
-            void accept(CompilationTaskVisitor& visitor) override;
-            void accept(ConstCompilationTaskVisitor& visitor) const override;
-            void accept(const CompilationTaskConstVisitor& visitor) override;
-            void accept(const ConstCompilationTaskConstVisitor& visitor) const override;
+  void setTargetSpec(const std::string& targetSpec);
 
-            const std::string& sourceSpec() const;
-            const std::string& targetSpec() const;
+  CompilationExportMap* clone() const override;
+  bool operator==(const CompilationTask& other) const override;
+  void appendToStream(std::ostream& str) const override;
 
-            void setSourceSpec(const std::string& sourceSpec);
-            void setTargetSpec(const std::string& targetSpec);
+  deleteCopyAndMove(CompilationExportMap);
+};
 
-            CompilationCopyFiles* clone() const override;
-            bool operator==(const CompilationTask& other) const override;
+class CompilationCopyFiles : public CompilationTask {
+private:
+  std::string m_sourceSpec;
+  std::string m_targetSpec;
 
-            deleteCopyAndMove(CompilationCopyFiles)
-        };
+public:
+  CompilationCopyFiles(bool enabled, const std::string& sourceSpec, const std::string& targetSpec);
 
-        class CompilationRunTool : public CompilationTask {
-        private:
-            std::string m_toolSpec;
-            std::string m_parameterSpec;
-        public:
-            CompilationRunTool(bool enabled, const std::string& toolSpec, const std::string& parameterSpec);
+  void accept(CompilationTaskVisitor& visitor) override;
+  void accept(ConstCompilationTaskVisitor& visitor) const override;
+  void accept(const CompilationTaskConstVisitor& visitor) override;
+  void accept(const ConstCompilationTaskConstVisitor& visitor) const override;
 
-            void accept(CompilationTaskVisitor& visitor) override;
-            void accept(ConstCompilationTaskVisitor& visitor) const override;
-            void accept(const CompilationTaskConstVisitor& visitor) override;
-            void accept(const ConstCompilationTaskConstVisitor& visitor) const override;
+  const std::string& sourceSpec() const;
+  const std::string& targetSpec() const;
 
-            const std::string& toolSpec() const;
-            const std::string& parameterSpec() const;
+  void setSourceSpec(const std::string& sourceSpec);
+  void setTargetSpec(const std::string& targetSpec);
 
-            void setToolSpec(const std::string& toolSpec);
-            void setParameterSpec(const std::string& parameterSpec);
+  CompilationCopyFiles* clone() const override;
+  bool operator==(const CompilationTask& other) const override;
+  void appendToStream(std::ostream& str) const override;
 
-            CompilationRunTool* clone() const override;
-            bool operator==(const CompilationTask& other) const override;
+  deleteCopyAndMove(CompilationCopyFiles);
+};
 
-            deleteCopyAndMove(CompilationRunTool)
-        };
+class CompilationRunTool : public CompilationTask {
+private:
+  std::string m_toolSpec;
+  std::string m_parameterSpec;
 
-        class CompilationTaskVisitor {
-        public:
-            virtual ~CompilationTaskVisitor();
+public:
+  CompilationRunTool(bool enabled, const std::string& toolSpec, const std::string& parameterSpec);
 
-            virtual void visit(CompilationExportMap& task) = 0;
-            virtual void visit(CompilationCopyFiles& task) = 0;
-            virtual void visit(CompilationRunTool& task) = 0;
-        };
+  void accept(CompilationTaskVisitor& visitor) override;
+  void accept(ConstCompilationTaskVisitor& visitor) const override;
+  void accept(const CompilationTaskConstVisitor& visitor) override;
+  void accept(const ConstCompilationTaskConstVisitor& visitor) const override;
 
-        class ConstCompilationTaskVisitor {
-        public:
-            virtual ~ConstCompilationTaskVisitor();
+  const std::string& toolSpec() const;
+  const std::string& parameterSpec() const;
 
-            virtual void visit(const CompilationExportMap& task) = 0;
-            virtual void visit(const CompilationCopyFiles& task) = 0;
-            virtual void visit(const CompilationRunTool& task) = 0;
-        };
+  void setToolSpec(const std::string& toolSpec);
+  void setParameterSpec(const std::string& parameterSpec);
 
-        class CompilationTaskConstVisitor {
-        public:
-            virtual ~CompilationTaskConstVisitor();
+  CompilationRunTool* clone() const override;
+  bool operator==(const CompilationTask& other) const override;
+  void appendToStream(std::ostream& str) const override;
 
-            virtual void visit(CompilationExportMap& task) const = 0;
-            virtual void visit(CompilationCopyFiles& task) const = 0;
-            virtual void visit(CompilationRunTool& task) const = 0;
-        };
+  deleteCopyAndMove(CompilationRunTool);
+};
 
-        class ConstCompilationTaskConstVisitor {
-        public:
-            virtual ~ConstCompilationTaskConstVisitor();
+class CompilationTaskVisitor {
+public:
+  virtual ~CompilationTaskVisitor();
 
-            virtual void visit(const CompilationExportMap& task) const = 0;
-            virtual void visit(const CompilationCopyFiles& task) const = 0;
-            virtual void visit(const CompilationRunTool& task) const = 0;
-        };
-    }
-}
+  virtual void visit(CompilationExportMap& task) = 0;
+  virtual void visit(CompilationCopyFiles& task) = 0;
+  virtual void visit(CompilationRunTool& task) = 0;
+};
 
+class ConstCompilationTaskVisitor {
+public:
+  virtual ~ConstCompilationTaskVisitor();
+
+  virtual void visit(const CompilationExportMap& task) = 0;
+  virtual void visit(const CompilationCopyFiles& task) = 0;
+  virtual void visit(const CompilationRunTool& task) = 0;
+};
+
+class CompilationTaskConstVisitor {
+public:
+  virtual ~CompilationTaskConstVisitor();
+
+  virtual void visit(CompilationExportMap& task) const = 0;
+  virtual void visit(CompilationCopyFiles& task) const = 0;
+  virtual void visit(CompilationRunTool& task) const = 0;
+};
+
+class ConstCompilationTaskConstVisitor {
+public:
+  virtual ~ConstCompilationTaskConstVisitor();
+
+  virtual void visit(const CompilationExportMap& task) const = 0;
+  virtual void visit(const CompilationCopyFiles& task) const = 0;
+  virtual void visit(const CompilationRunTool& task) const = 0;
+};
+} // namespace Model
+} // namespace TrenchBroom

@@ -19,58 +19,56 @@
 
 #pragma once
 
-#include "Notifier.h"
-
 #include <map>
 #include <string>
 #include <vector>
 
 namespace TrenchBroom {
-    namespace IO {
-        class EntityDefinitionLoader;
-        class ParserStatus;
-        class Path;
-    }
+namespace IO {
+class EntityDefinitionLoader;
+class ParserStatus;
+class Path;
+} // namespace IO
 
-    namespace Model {
-        class EntityNodeBase;
-    }
-
-    namespace Assets {
-        class EntityDefinition;
-        class EntityDefinitionGroup;
-        enum class EntityDefinitionSortOrder;
-        enum class EntityDefinitionType;
-
-        class EntityDefinitionManager {
-        private:
-            using Cache = std::map<std::string, EntityDefinition*>;
-            std::vector<EntityDefinition*> m_definitions;
-            std::vector<EntityDefinitionGroup> m_groups;
-            Cache m_cache;
-        public:
-            Notifier<> usageCountDidChangeNotifier;
-        public:
-            ~EntityDefinitionManager();
-
-            void loadDefinitions(const IO::Path& path, const IO::EntityDefinitionLoader& loader, IO::ParserStatus& status);
-            void setDefinitions(const std::vector<EntityDefinition*>& newDefinitions);
-            void clear();
-
-            EntityDefinition* definition(const Model::EntityNodeBase* node) const;
-            EntityDefinition* definition(const std::string& classname) const;
-            std::vector<EntityDefinition*> definitions(EntityDefinitionType type, EntityDefinitionSortOrder order) const;
-            const std::vector<EntityDefinition*>& definitions() const;
-
-            const std::vector<EntityDefinitionGroup>& groups() const;
-        private:
-            void updateIndices();
-            void updateGroups();
-            void updateCache();
-            void bindObservers();
-            void clearCache();
-            void clearGroups();
-        };
-    }
+namespace Model {
+class EntityNodeBase;
 }
 
+namespace Assets {
+class EntityDefinition;
+class EntityDefinitionGroup;
+enum class EntityDefinitionSortOrder;
+enum class EntityDefinitionType;
+
+class EntityDefinitionManager {
+private:
+  using Cache = std::map<std::string, EntityDefinition*>;
+  std::vector<EntityDefinition*> m_definitions;
+  std::vector<EntityDefinitionGroup> m_groups;
+  Cache m_cache;
+
+public:
+  ~EntityDefinitionManager();
+
+  void loadDefinitions(
+    const IO::Path& path, const IO::EntityDefinitionLoader& loader, IO::ParserStatus& status);
+  void setDefinitions(const std::vector<EntityDefinition*>& newDefinitions);
+  void clear();
+
+  EntityDefinition* definition(const Model::EntityNodeBase* node) const;
+  EntityDefinition* definition(const std::string& classname) const;
+  std::vector<EntityDefinition*> definitions(
+    EntityDefinitionType type, EntityDefinitionSortOrder order) const;
+  const std::vector<EntityDefinition*>& definitions() const;
+
+  const std::vector<EntityDefinitionGroup>& groups() const;
+
+private:
+  void updateIndices();
+  void updateGroups();
+  void updateCache();
+  void clearCache();
+  void clearGroups();
+};
+} // namespace Assets
+} // namespace TrenchBroom
