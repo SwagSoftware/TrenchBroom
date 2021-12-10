@@ -1,3 +1,57 @@
+# TrenchBroom for DOOM 3 and DOOM-3-BFG
+
+***This is still very much Work in Progress and not supported by the official TrenchBroom yet.***
+
+<img src="https://i.imgur.com/wPPYvE3.jpg">
+
+<img src="https://i.imgur.com/3g3Qmf4.jpg">
+
+
+***The goal of TrenchBroom for Doom 3 is to make mapping for Doom 3 as easy as it is for Quake.***
+
+Doom 3 also requires some extensions in order to work with TrenchBroom. The Quake 1/2/3 communities already adopted the Valve 220 .map format in the BSP compilers and I did the same with dmap in RBDOOM-3-BFG.
+I usually develop these things for RBDOOM-3-BFG but I created a separated branch for vanilla Doom 3 so everybody can adopt TrenchBroom and the new Doom 3 (Valve) .map support. You can find all relevant code snippets by looking for `TrenchBroom` in the comments
+
+https://github.com/RobertBeckebans/DOOM-3/tree/506-TrenchBroom-interop
+
+TrenchBroom's abilities for Doom 3 are still limited at the moment.
+
+You can only save maps to the Doom 3 (Valve) format but you can copy paste from the vanilla Doom 3 .map format into the Doom 3 (Valve)configuration and reset your texture alignment as you want.
+
+RBDOOM-3-BFG >= 1.3.1 also has the console command `convertMaptoValve220 <mapname>` which lets you easily convert any original Doom 3 (and BFG) .map and saves it with the _valve220.map suffix. This command prepares Doom 3 maps for editing in TrenchBroom and saves a lot of additional work in this TrenchBroom fork.
+In addition the RBDOOM-3-BFG engine framework and ingame light editor can also save light settings, new entities or placed ragdolls back to the new Doom 3 (Valve) .map format so both programs interop with each other.
+
+Here is an overview of the changes made to TrenchBroom:
+
+## New
+* Doom 3 .map parser with brushDef3, patchDef2, patchDef3 primitives
+* Doom 3 Valve .map configuration
+* Quake 3 .shader parser adopted to support .mtr materials
+* .mtr support includes support for Doom 3 diffuse stages and the lookup for them is like in idMaterial::GetEditorImage()
+* New Doom 3 OBJ parser. My TB Interop branch automatically creates OBJ files to work with TB and it also allows seamless interop with Blender 2.8x and 2.9x with the need of additional model formats for func_static entities (like misc_model for Quake 3)
+* Game FGDs for Doom 3 and Doom 3 BFG
+* Custom PNG icons for special entities like lights, speakers, particle emitters, info_location, target_* and so on
+
+## Issues
+* It doesn't allow to create bezier patches at the moment so you won't be able to edit existing Doom 3 maps
+* TrenchBroom doesn't support brush primitives like in D3Radiant or DarkRadiant
+* It has no support for BFG .resource files and .bimage files. BFG only shipped with precompressed textures and no .tga files so people who want to mod for BFG have to copy the vanilla Doom 3 base/textures/* and base/models/* to D3BFG/base/
+* Many entities work differently in Doom 3 if they have an origin. Brush work in D3 is usually stored in entity space and not world space. This is a major issue and not solved within TrenchBroom. However as a workaround you can use the convertMapToValve220 engine command to prepare a Doom 3 map for the TrenchBroom Doom 3 (Valve) configuration.
+* Doom 3's primary model formats are LWO and ASE. LWO and .md5mesh model support is missing.
+* Some ASE models can't be loaded and materials are usually all wrong if loaded
+* TrenchBroom doesn't support the "rotation" keyword and many models have the wrong orientation
+* The custom TrenchBroom build breaks compatibility for other id Tech engines, e.g. entity links work between "target[num]" and "name" and not "targetname"
+
+
+## Releases
+- Binary builds are bundled with RBDOOM-3-BFG available from Mod DB [releases](https://www.moddb.com/mods/rbdoom-3-bfg).
+You can find this customized version under tools/trenchbroom/.
+
+For feedback, questions and support join the id Tech 4 Discord: https://discord.gg/Q3E9rUFnnP , #rbdoom3bfg
+
+You can also find weekly or monthly snapshots of this TrenchBroom version in the pinned messages of #rbdoom3bfg
+
+<!-- 
 # TrenchBroom
 
 [![TrenchBroom Icon](app/resources/graphics/images/AppIcon.png)](https://www.youtube.com/watch?v=shcAvnYp9ow)
@@ -71,3 +125,5 @@ TrenchBroom is a modern cross-platform level editor for Quake-engine based games
 
 ## Changes
 See [releases](https://github.com/TrenchBroom/TrenchBroom/releases) for latest changes.
+
+-->
