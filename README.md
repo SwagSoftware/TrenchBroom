@@ -2,7 +2,7 @@
 
 ***This is still very much Work in Progress and not supported by the official TrenchBroom yet.***
 
-<img src="https://i.imgur.com/wPPYvE3.jpg">
+<img src="https://i.imgur.com/3sUxOZi.jpg">
 
 <img src="https://i.imgur.com/3g3Qmf4.jpg">
 

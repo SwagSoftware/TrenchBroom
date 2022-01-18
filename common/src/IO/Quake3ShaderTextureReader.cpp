@@ -125,8 +125,8 @@ Path Quake3ShaderTextureReader::findTexturePath(const Assets::Quake3Shader& shad
 Path Quake3ShaderTextureReader::findTexture(const Path& texturePath) const {
   if (
     !texturePath.isEmpty() && (texturePath.extension().empty() || !m_fs.fileExists(texturePath))) {
-    const auto candidates = m_fs.findItemsWithBaseName(
-      texturePath, std::vector<std::string>{"tga", "png", "jpg", "jpeg"});
+    const auto candidates =
+      m_fs.findItemsWithBaseName(texturePath, std::vector<std::string>{"tga", "png", "jpg"});
     if (!candidates.empty()) {
       return candidates.front();
     } else {
@@ -136,7 +136,7 @@ Path Quake3ShaderTextureReader::findTexture(const Path& texturePath) const {
       altPath = altPath + texturePath;
 
       const auto candidates =
-        m_fs.findItemsWithBaseName(altPath, std::vector<std::string>{"tga", "png", "jpg", "jpeg"});
+        m_fs.findItemsWithBaseName(altPath, std::vector<std::string>{"tga", "png", "jpg"});
       if (!candidates.empty()) {
         return candidates.front();
       } else {
