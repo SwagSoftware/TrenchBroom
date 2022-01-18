@@ -6231,7 +6231,7 @@ Trigger it to turn it on and off
 	spawnclass(string) : "" : "idSpring"
 ]
 
-@PointClass color(0 127 204) model({ "path" : model }) = func_static : "A brush model that just sits there, doing nothing.  Can be used for conditional walls and models.
+@SolidClass color(0 127 204) model({ "path" : model }) = func_static : "A brush model that just sits there, doing nothing.  Can be used for conditional walls and models.
 When triggered, toggles between visible and hidden (see hide).  Entity is non-solid when hidden.
 "
 [
@@ -7149,6 +7149,21 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 @PointClass color(0 255 0) size(-8 -8 -8, 8 8 8) model({ "path": "sprites/light-bulb.png", "scale": 0.03125 }) = light : "Light source.  If health is set, light becomes breakable and turns off when shot.
 "
 [
+	style(Choices) : "Appearance" : 0 =
+	[
+		0 : "Normal"
+		10: "Fluorescent flicker"
+		2 : "Slow, strong pulse"
+		11: "Slow pulse, noblack"
+		5 : "Gentle pulse"
+		1 : "Flicker A"
+		6 : "Flicker B"
+		3 : "Candle A"
+		7 : "Candle B"
+		8 : "Candle C"
+		4 : "Fast strobe"
+		9 : "Slow strobe"
+	]
 	light(integer) : "light radius" : 300
 	spawnclass(string) : "" : "idLight"
 	health(string) : "amount of damage to recieve before becoming broken.  0 is nonbreakable." : "0"
@@ -9091,6 +9106,12 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	look_max(string) : "" : "0 0 0"
 	def_attach(string) : "" : "prop_dufflebag"
 	cinematic(string) : "" : "1"
+]
+
+@PointClass base(func_static) color(0 127 204) size(-12 -12 -12, 12 12 12) = misc_model : "Inherits from a func_static but is fixed size and a FGD PointClass.
+Use it to place all kinds of models
+"
+[
 ]
 
 @PointClass color(255 127 0) size(-16 -16 0, 16 16 64) model({ "path": "sprites/camera.png", "scale": 0.03125 }) = monorail_crash_cam : "No description"
