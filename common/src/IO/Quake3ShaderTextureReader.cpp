@@ -130,7 +130,18 @@ Path Quake3ShaderTextureReader::findTexture(const Path& texturePath) const {
     if (!candidates.empty()) {
       return candidates.front();
     } else {
-      return Path();
+      // RB: HACK retry with _tb/ prefix to avoid implementing the BFG filesystem and .bimage
+      // support
+      Path altPath("_tb");
+      altPath = altPath + texturePath;
+
+      const auto candidates =
+        m_fs.findItemsWithBaseName(altPath, std::vector<std::string>{"tga", "png", "jpg", "jpeg"});
+      if (!candidates.empty()) {
+        return candidates.front();
+      } else {
+        return Path();
+      }
     }
   }
   // texture path is empty OR (the extension is not empty AND the file exists)
