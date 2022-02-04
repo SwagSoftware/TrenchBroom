@@ -23,6 +23,7 @@
 #include "Assets/PropertyDefinition.h"
 
 #include <kdl/collection_utils.h>
+#include <kdl/string_compare.h>
 #include <kdl/vector_utils.h>
 
 #include <string>
@@ -299,7 +300,7 @@ bool EntityNodeBase::hasConflictingTargetname() const {
     for (EntityNodeBase* ent : namedEntities) {
       if (ent != this) {
         const std::string* othername = ent->m_entity.property(EntityPropertyKeys::Targetname);
-        if (othername != nullptr && *othername == *targetname) {
+        if (othername != nullptr && kdl::ci::str_is_equal(*othername, *targetname)) {
           return true;
         }
       }
@@ -332,7 +333,7 @@ void EntityNodeBase::generateUniqueTargetname(std::string& result) const {
         for (EntityNodeBase* ent : namedEntities) {
           if (ent != this) {
             const std::string* othername = ent->m_entity.property(EntityPropertyKeys::Targetname);
-            if (othername != nullptr && *othername == candidate) {
+            if (othername != nullptr && kdl::ci::str_is_equal(*othername, candidate)) {
               alreadyUsed = true;
               break;
             }

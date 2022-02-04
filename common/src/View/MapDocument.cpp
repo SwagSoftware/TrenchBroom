@@ -39,6 +39,7 @@
 #include "Model/BezierPatch.h"
 #include "Model/Brush.h"
 #include "Model/BrushBuilder.h"
+#include "Model/BrushEntityWithoutModelKeyIssueGenerator.h"
 #include "Model/BrushError.h"
 #include "Model/BrushFace.h"
 #include "Model/BrushGeometry.h"
@@ -4012,6 +4013,7 @@ void MapDocument::registerIssueGenerators() {
 
   // Doom 3 specific: check that each entity has a unique name
   m_world->registerIssueGenerator(new Model::ConflictingTargetnameIssueGenerator());
+  m_world->registerIssueGenerator(new Model::BrushEntityWithoutModelKeyIssueGenerator());
 
   m_world->registerIssueGenerator(new Model::LinkTargetIssueGenerator());
   // m_world->registerIssueGenerator(new Model::NonIntegerVerticesIssueGenerator());
