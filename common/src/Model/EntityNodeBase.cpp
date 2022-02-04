@@ -287,6 +287,67 @@ bool EntityNodeBase::hasMissingSources() const {
     m_entity.hasProperty(EntityPropertyKeys::Targetname));
 }
 
+// RB: scan for other entities that have the same name key
+bool EntityNodeBase::hasConflictingTargetname() const {
+
+  // name of this entity
+  const std::string* targetname = m_entity.property(EntityPropertyKeys::Targetname);
+  if (targetname != nullptr && !targetname->empty()) {
+
+    std::vector<EntityNodeBase*> namedEntities;
+    findEntityNodesWithProperty(EntityPropertyKeys::Targetname, *targetname, namedEntities);
+    for (EntityNodeBase* ent : namedEntities) {
+      if (ent != this) {
+        const std::string* othername = ent->m_entity.property(EntityPropertyKeys::Targetname);
+        if (othername != nullptr && *othername == *targetname) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
+void EntityNodeBase::generateUniqueTargetname(std::string& result) const {
+
+  result = "<uniquenamefail>";
+
+  // classname of this entity
+  const std::string* classname = m_entity.property(EntityPropertyKeys::Classname);
+  if (classname != nullptr && !classname->empty()) {
+    if (*classname == "worldspawn") {
+      result = "worldspawn";
+    } else {
+      for (int id = 0; id < 99999; id++) {
+
+        std::string candidate = *classname;
+        candidate += "_";
+        candidate += std::to_string(id);
+
+        bool alreadyUsed = false;
+
+        std::vector<EntityNodeBase*> namedEntities;
+        findEntityNodesWithProperty(EntityPropertyKeys::Targetname, candidate, namedEntities);
+        for (EntityNodeBase* ent : namedEntities) {
+          if (ent != this) {
+            const std::string* othername = ent->m_entity.property(EntityPropertyKeys::Targetname);
+            if (othername != nullptr && *othername == candidate) {
+              alreadyUsed = true;
+              break;
+            }
+          }
+        }
+
+        if (!alreadyUsed) {
+          result = candidate;
+          return;
+        }
+      }
+    }
+  }
+}
+
 std::vector<std::string> EntityNodeBase::findMissingLinkTargets() const {
   std::vector<std::string> result;
   findMissingTargets(EntityPropertyKeys::Target, result);

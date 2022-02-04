@@ -44,6 +44,7 @@
 #include "Model/BrushGeometry.h"
 #include "Model/BrushNode.h"
 #include "Model/ChangeBrushFaceAttributesRequest.h"
+#include "Model/ConflictingTargetnameIssueGenerator.h"
 #include "Model/EditorContext.h"
 #include "Model/EmptyBrushEntityIssueGenerator.h"
 #include "Model/EmptyGroupIssueGenerator.h"
@@ -4005,9 +4006,15 @@ void MapDocument::registerIssueGenerators() {
   m_world->registerIssueGenerator(new Model::EmptyGroupIssueGenerator());
   m_world->registerIssueGenerator(new Model::EmptyBrushEntityIssueGenerator());
   m_world->registerIssueGenerator(new Model::PointEntityWithBrushesIssueGenerator());
-  m_world->registerIssueGenerator(new Model::LinkSourceIssueGenerator());
+  // RB: LinkSourceIssueGenerator would be a bug with Doom 3 because entities are supposed to have
+  // unique names even there is no other entity targeting them
+  // m_world->registerIssueGenerator(new Model::LinkSourceIssueGenerator());
+
+  // Doom 3 specific: check that each entity has a unique name
+  m_world->registerIssueGenerator(new Model::ConflictingTargetnameIssueGenerator());
+
   m_world->registerIssueGenerator(new Model::LinkTargetIssueGenerator());
-  m_world->registerIssueGenerator(new Model::NonIntegerVerticesIssueGenerator());
+  // m_world->registerIssueGenerator(new Model::NonIntegerVerticesIssueGenerator());
   m_world->registerIssueGenerator(new Model::MixedBrushContentsIssueGenerator());
   m_world->registerIssueGenerator(new Model::WorldBoundsIssueGenerator(worldBounds()));
   m_world->registerIssueGenerator(new Model::SoftMapBoundsIssueGenerator(m_game, m_world.get()));
