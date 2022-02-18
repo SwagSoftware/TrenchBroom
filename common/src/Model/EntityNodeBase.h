@@ -107,8 +107,11 @@ public: // link management
   vm::vec3 linkTargetAnchor() const;
 
   bool hasMissingSources() const;
+  bool hasMissingTargetname() const;
   bool hasConflictingTargetname() const;
   void generateUniqueTargetname(std::string& result) const;
+  bool getTargetname(std::string& result);
+
   std::vector<std::string> findMissingLinkTargets() const;
   std::vector<std::string> findMissingKillTargets() const;
 

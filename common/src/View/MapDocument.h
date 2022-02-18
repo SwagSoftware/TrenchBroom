@@ -676,6 +676,8 @@ protected:
   void unsetTextures();
   void unsetTextures(const std::vector<Model::Node*>& nodes);
 
+  void setUniqueEntityNames();
+
   void setEntityDefinitions();
   void setEntityDefinitions(const std::vector<Model::Node*>& nodes);
   void unsetEntityDefinitions();

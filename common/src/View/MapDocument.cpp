@@ -3646,6 +3646,9 @@ void MapDocument::loadAssets() {
   loadEntityModels();
   loadTextures();
   setTextures();
+
+  // RB: Doom 3 specific - give every entity a unique name if not done yet
+  setUniqueEntityNames();
 }
 
 void MapDocument::unloadAssets() {
@@ -3790,6 +3793,47 @@ void MapDocument::unsetTextures(const std::vector<Model::Node*>& nodes) {
   Model::Node::visitAll(nodes, makeUnsetTexturesVisitor());
   textureUsageCountsDidChangeNotifier();
 }
+
+// RB: give every entity a unique name like DoomEdit does
+void MapDocument::setUniqueEntityNames() {
+  m_world->accept(kdl::overload(
+    [](auto&& thisLambda, Model::WorldNode* world) {
+      world->visitChildren(thisLambda);
+    },
+    [](auto&& thisLambda, Model::LayerNode* layer) {
+      layer->visitChildren(thisLambda);
+    },
+    [](auto&& thisLambda, Model::GroupNode* group) {
+      group->visitChildren(thisLambda);
+    },
+    [=](Model::EntityNode* entityNode) {
+      // first fix missing or conflicting names for the game code
+      if (entityNode->hasMissingTargetname() || entityNode->hasConflictingTargetname()) {
+
+        std::string uniqueName;
+        entityNode->generateUniqueTargetname(uniqueName);
+
+        deselectAll();
+        select(entityNode);
+
+        setProperty(Model::EntityPropertyKeys::Targetname, uniqueName);
+      }
+
+      // second if this is a brush entity then Doom 3 can't load the model if there is no "model"
+      // key so make sure it has one and it's the same as the name
+      if (entityNode->hasChildren()) {
+
+        std::string uniqueName;
+        if (entityNode->getTargetname(uniqueName)) {
+          setProperty(Model::EntityPropertyKeys::Model, uniqueName);
+        }
+      }
+    },
+    [&](Model::BrushNode*) {}, [](Model::PatchNode*) {}));
+
+  deselectAll();
+}
+// RB end
 
 static auto makeSetEntityDefinitionsVisitor(Assets::EntityDefinitionManager& manager) {
   // this helper lambda must be captured by value

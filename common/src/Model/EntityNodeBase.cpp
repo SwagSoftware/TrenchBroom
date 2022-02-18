@@ -288,6 +288,18 @@ bool EntityNodeBase::hasMissingSources() const {
     m_entity.hasProperty(EntityPropertyKeys::Targetname));
 }
 
+// RB begin
+bool EntityNodeBase::hasMissingTargetname() const {
+
+  // name of this entity
+  const std::string* targetname = m_entity.property(EntityPropertyKeys::Targetname);
+  if (targetname != nullptr && !targetname->empty()) {
+    return false;
+  }
+
+  return true;
+}
+
 // RB: scan for other entities that have the same name key
 bool EntityNodeBase::hasConflictingTargetname() const {
 
@@ -320,6 +332,7 @@ void EntityNodeBase::generateUniqueTargetname(std::string& result) const {
     if (*classname == "worldspawn") {
       result = "worldspawn";
     } else {
+      // OPTIMIZE - this could be very slow with many unnamed entities of the same classname
       for (int id = 0; id < 99999; id++) {
 
         std::string candidate = *classname;
@@ -348,6 +361,19 @@ void EntityNodeBase::generateUniqueTargetname(std::string& result) const {
     }
   }
 }
+
+bool EntityNodeBase::getTargetname(std::string& result) {
+
+  const std::string* targetname = m_entity.property(EntityPropertyKeys::Targetname);
+  if (targetname != nullptr && !targetname->empty()) {
+
+    result = *targetname;
+    return true;
+  }
+
+  return false;
+}
+// RB end
 
 std::vector<std::string> EntityNodeBase::findMissingLinkTargets() const {
   std::vector<std::string> result;
