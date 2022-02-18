@@ -110,6 +110,8 @@ public: // link management
   bool hasMissingTargetname() const;
   bool hasConflictingTargetname() const;
   void generateUniqueTargetname(std::string& result) const;
+  void generateUniqueTargetnameForClassname(
+    const std::string& classname, std::string& result) const;
   bool getTargetname(std::string& result);
 
   std::vector<std::string> findMissingLinkTargets() const;

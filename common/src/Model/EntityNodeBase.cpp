@@ -332,32 +332,41 @@ void EntityNodeBase::generateUniqueTargetname(std::string& result) const {
     if (*classname == "worldspawn") {
       result = "worldspawn";
     } else {
-      // OPTIMIZE - this could be very slow with many unnamed entities of the same classname
-      for (int id = 0; id < 99999; id++) {
 
-        std::string candidate = *classname;
-        candidate += "_";
-        candidate += std::to_string(id);
+      generateUniqueTargetnameForClassname(*classname, result);
+    }
+  }
+}
 
-        bool alreadyUsed = false;
+void EntityNodeBase::generateUniqueTargetnameForClassname(
+  const std::string& classname, std::string& result) const {
 
-        std::vector<EntityNodeBase*> namedEntities;
-        findEntityNodesWithProperty(EntityPropertyKeys::Targetname, candidate, namedEntities);
-        for (EntityNodeBase* ent : namedEntities) {
-          if (ent != this) {
-            const std::string* othername = ent->m_entity.property(EntityPropertyKeys::Targetname);
-            if (othername != nullptr && kdl::ci::str_is_equal(*othername, candidate)) {
-              alreadyUsed = true;
-              break;
-            }
-          }
-        }
+  result = "<uniquenamefail>";
 
-        if (!alreadyUsed) {
-          result = candidate;
-          return;
+  // OPTIMIZE - this could be very slow with many unnamed entities of the same classname
+  for (int id = 0; id < 99999; id++) {
+
+    std::string candidate = classname;
+    candidate += "_";
+    candidate += std::to_string(id);
+
+    bool alreadyUsed = false;
+
+    std::vector<EntityNodeBase*> namedEntities;
+    findEntityNodesWithProperty(EntityPropertyKeys::Targetname, candidate, namedEntities);
+    for (EntityNodeBase* ent : namedEntities) {
+      if (ent != this) {
+        const std::string* othername = ent->m_entity.property(EntityPropertyKeys::Targetname);
+        if (othername != nullptr && kdl::ci::str_is_equal(*othername, candidate)) {
+          alreadyUsed = true;
+          break;
         }
       }
+    }
+
+    if (!alreadyUsed) {
+      result = candidate;
+      return;
     }
   }
 }

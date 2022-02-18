@@ -1549,8 +1549,14 @@ Model::EntityNode* MapDocument::createPointEntity(
   const Assets::PointEntityDefinition* definition, const vm::vec3& delta) {
   ensure(definition != nullptr, "definition is null");
 
+  // RB: add unique entity name right from the beginning
+  std::string uniqueName;
+  m_world->generateUniqueTargetnameForClassname(definition->name(), uniqueName);
+
   auto* entityNode = new Model::EntityNode{Model::Entity{
-    m_world->entityPropertyConfig(), {{Model::EntityPropertyKeys::Classname, definition->name()}}}};
+    m_world->entityPropertyConfig(),
+    {{Model::EntityPropertyKeys::Classname, definition->name()},
+     {Model::EntityPropertyKeys::Targetname, uniqueName}}}};
 
   std::stringstream name;
   name << "Create " << definition->name();
@@ -1590,6 +1596,16 @@ Model::EntityNode* MapDocument::createBrushEntity(const Assets::BrushEntityDefin
 
   entity.addOrUpdateProperty(
     m_world->entityPropertyConfig(), Model::EntityPropertyKeys::Classname, definition->name());
+
+  // RB: add unique entity name right from the beginning and also avoid a missing "model" key
+  std::string uniqueName;
+  m_world->generateUniqueTargetnameForClassname(definition->name(), uniqueName);
+
+  entity.addOrUpdateProperty(
+    m_world->entityPropertyConfig(), Model::EntityPropertyKeys::Targetname, uniqueName);
+  entity.addOrUpdateProperty(
+    m_world->entityPropertyConfig(), Model::EntityPropertyKeys::Model, uniqueName);
+
   auto* entityNode = new Model::EntityNode(std::move(entity));
 
   std::stringstream name;
