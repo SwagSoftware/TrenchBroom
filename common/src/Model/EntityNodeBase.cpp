@@ -382,6 +382,33 @@ bool EntityNodeBase::getTargetname(std::string& result) {
 
   return false;
 }
+
+bool EntityNodeBase::getModelname(std::string& result) {
+
+  const std::string* modelname = m_entity.property(EntityPropertyKeys::Model);
+  if (modelname != nullptr && !modelname->empty()) {
+
+    result = *modelname;
+    return true;
+  }
+
+  return false;
+}
+
+// brush entities need a "model" key that is the same as the "name" key
+bool EntityNodeBase::hasBadModelname() {
+
+  const std::string* targetname = m_entity.property(EntityPropertyKeys::Targetname);
+  if (targetname != nullptr && !targetname->empty()) {
+
+    const std::string* modelname = m_entity.property(EntityPropertyKeys::Model);
+    if (modelname != nullptr && !modelname->empty() && *targetname == *modelname) {
+      return false;
+    }
+  }
+
+  return true;
+}
 // RB end
 
 std::vector<std::string> EntityNodeBase::findMissingLinkTargets() const {

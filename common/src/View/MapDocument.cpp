@@ -567,6 +567,10 @@ void MapDocument::exportDocumentAs(const IO::ExportOptions& options) {
 }
 
 void MapDocument::doSaveDocument(const IO::Path& path) {
+
+  // RB: HACK fix all duplicated names and wrong "model" values for brush entities
+  fixBadEntityNamesAndModels();
+
   saveDocumentTo(path);
   setLastSaveModificationCount();
   setPath(path);
@@ -3664,7 +3668,7 @@ void MapDocument::loadAssets() {
   setTextures();
 
   // RB: Doom 3 specific - give every entity a unique name if not done yet
-  setUniqueEntityNames();
+  fixBadEntityNamesAndModels();
 }
 
 void MapDocument::unloadAssets() {
@@ -3811,7 +3815,8 @@ void MapDocument::unsetTextures(const std::vector<Model::Node*>& nodes) {
 }
 
 // RB: give every entity a unique name like DoomEdit does
-void MapDocument::setUniqueEntityNames() {
+void MapDocument::fixBadEntityNamesAndModels() {
+
   m_world->accept(kdl::overload(
     [](auto&& thisLambda, Model::WorldNode* world) {
       world->visitChildren(thisLambda);
@@ -3833,21 +3838,40 @@ void MapDocument::setUniqueEntityNames() {
         select(entityNode);
 
         setProperty(Model::EntityPropertyKeys::Targetname, uniqueName);
+
+        // second if this is a brush entity then Doom 3 can't load the model if there is no "model"
+        // key so make sure it has one and it's the same as the name
+        if (
+          entityNode->hasChildren() &&
+          entityNode != reinterpret_cast<Model::EntityNode*>(m_world.get())) {
+
+          setProperty(Model::EntityPropertyKeys::Model, uniqueName);
+
+          // nodesDidChange = true;
+        }
       }
 
-      // second if this is a brush entity then Doom 3 can't load the model if there is no "model"
-      // key so make sure it has one and it's the same as the name
-      if (entityNode->hasChildren()) {
-
+      // check if the name was proper set if there are any bad model keys left
+      if (
+        entityNode->hasChildren() &&
+        entityNode != reinterpret_cast<Model::EntityNode*>(m_world.get()) &&
+        entityNode->hasBadModelname()) {
         std::string uniqueName;
         if (entityNode->getTargetname(uniqueName)) {
           setProperty(Model::EntityPropertyKeys::Model, uniqueName);
+
+          // nodesDidChange = true;
         }
       }
     },
     [&](Model::BrushNode*) {}, [](Model::PatchNode*) {}));
 
   deselectAll();
+
+  // clear issues in the issue browser
+  // FIXME: seems not to work
+  const auto nodes = std::vector<Model::Node*>{m_world.get()};
+  NotifyBeforeAndAfter notifyNodes(nodesWillChangeNotifier, nodesDidChangeNotifier, nodes);
 }
 // RB end
 

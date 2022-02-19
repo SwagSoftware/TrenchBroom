@@ -31,6 +31,8 @@ Here is an overview of the changes made to TrenchBroom:
 * New Doom 3 OBJ parser. My TB Interop branch automatically creates OBJ files to work with TB and it also allows seamless interop with Blender 2.8x and 2.9x with the need of additional model formats for func_static entities (like misc_model for Quake 3)
 * Game FGDs for Doom 3 and Doom 3 BFG
 * Custom PNG icons for special entities like lights, speakers, particle emitters, info_location, target_* and so on
+* After loading a map TrenchBroom generates unique entity names and also fixes missing or bad "model" keys for brush based entitites
+* Creating new entities like a light will automatically receive unique names like light_2
 
 ## Issues
 * It doesn't allow to create bezier patches at the moment so you won't be able to edit existing Doom 3 maps
@@ -41,6 +43,7 @@ Here is an overview of the changes made to TrenchBroom:
 * Some ASE models can't be loaded and materials are usually all wrong if loaded
 * TrenchBroom doesn't support the "rotation" keyword and many models have the wrong orientation
 * The custom TrenchBroom build breaks compatibility for other id Tech engines, e.g. entity links work between "target[num]" and "name" and not "targetname"
+* Linked groups do not work yet with id Tech 4 due to name conflicts
 
 
 ## Releases
