@@ -33,6 +33,7 @@ Here is an overview of the changes made to TrenchBroom:
 * Custom PNG icons for special entities like lights, speakers, particle emitters, info_location, target_* and so on
 * After loading a map TrenchBroom generates unique entity names and also fixes missing or bad "model" keys for brush based entitites
 * Creating new entities like a light will automatically receive unique names like light_2
+* Changed Rotation Tool behaviour to use "angles" by default
 
 ## Issues
 * It doesn't allow to create bezier patches at the moment so you won't be able to edit existing Doom 3 maps
