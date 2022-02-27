@@ -51,8 +51,7 @@ public:
     void reset();
   };
   // Doom 3
-  enum class StageLighting
-  {
+  enum class StageLighting {
     None,
     Diffuse,
     Normal,
