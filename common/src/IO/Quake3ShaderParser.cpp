@@ -343,9 +343,9 @@ void Quake3ShaderParser::parseStageEntry(
         status.warn(line, param2Column, "Unknown blendFunc destination factor '" + param2 + "'");
       }
       // RB: parsing works but skip Doom 3 blends for now
-      if (!valid) {
-        stage.blendFunc.reset();
-      }
+      // if (!valid) {
+      stage.blendFunc.reset();
+      //}
     } else {
       if (kdl::ci::str_is_equal(param1, "add")) {
         stage.blendFunc.srcFactor = Assets::Quake3ShaderStage::BlendFunc::One;
