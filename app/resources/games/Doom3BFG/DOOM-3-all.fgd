@@ -9147,7 +9147,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	cinematic(string) : "" : "1"
 ]
 
-@PointClass base(func_static) color(0 127 204) size(-12 -12 -12, 12 12 12) model({{
+@PointClass base(func_static) color(0 127 204) model({{
 	proxymodel != null -> { "path": proxymodel },
 	{ "path": model }
 }})= misc_model : "Inherits from a func_static but uses a model and is a FGD PointClass so it displays correctly in TrenchBroom.

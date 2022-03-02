@@ -167,6 +167,8 @@ public:
   bool masked() const;
   void setOpaque();
 
+  bool isTranslucentMaterial() const;
+
   const std::set<std::string>& surfaceParms() const;
   void setSurfaceParms(const std::set<std::string>& surfaceParms);
 

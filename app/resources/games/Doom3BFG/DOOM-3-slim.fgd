@@ -3389,7 +3389,7 @@ PDA's contain vidoes, audio, e-mail, and security clearances.
 	proxymodel(string) : "A proxy model in OBJ file format automatically set by RBDoom so it can be displayed in TrenchBroom"
 ]
 
-@PointClass base(func_static) color(0 127 204) size(-12 -12 -12, 12 12 12) model({{
+@PointClass base(func_static) color(0 127 204) model({{
 	proxymodel != null -> { "path": proxymodel },
 	{ "path": model }
 }})= misc_model : "Inherits from a func_static but uses a model and is a FGD PointClass so it displays correctly in TrenchBroom.

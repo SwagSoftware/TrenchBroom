@@ -49,6 +49,14 @@ Assets::Texture Quake3ShaderTextureReader::doReadTexture(std::shared_ptr<File> f
       "Could not find texture path for shader '" + shader.shaderPath.asString() + "'");
   }
 
+#if 0
+  auto materialName = shader.shaderPath.asString();
+  if (materialName == "textures\\enpro\\encyl3") {
+    int i = 0;
+    i++;
+  }
+#endif
+
   auto texture = loadTextureImage(shader.shaderPath, texturePath);
   texture.setSurfaceParms(shader.surfaceParms);
   texture.setOpaque();
