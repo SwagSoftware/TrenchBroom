@@ -35,6 +35,7 @@ Here is an overview of the changes made to TrenchBroom:
 * Creating new entities like a light will automatically receive unique names like light_2
 * Changed Rotation Tool behaviour to use "angles" by default
 * Translucent materials that might cause BSP leaks have a purple rectangle border in the Texture Browser
+* Changed OBJ exporter so exported models can be easier reimported by RBDOOM-3-BFG
 
 ## Issues
 * It doesn't allow to create bezier patches at the moment so you won't be able to edit existing Doom 3 maps
